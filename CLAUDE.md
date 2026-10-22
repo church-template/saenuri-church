@@ -29,3 +29,5 @@ cd server && ./gradlew build
 cd client && pnpm install && pnpm dev
 cd client && pnpm lint && pnpm test && pnpm build
 ```
+
+@SECOND-BRAIN.md
