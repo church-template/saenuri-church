@@ -1,3 +1,6 @@
+# 프로젝트 이름 — 컨테이너·볼륨 접두사. 폴더명(server) 기본값은 교회 레포끼리 겹쳐 고정한다.
+name: saenuri-server
+
 services:
   postgres:
     image: postgres:16-alpine
