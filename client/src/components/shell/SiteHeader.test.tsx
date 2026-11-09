@@ -47,6 +47,11 @@ describe("SiteHeader", () => {
     expect(header.className).toContain("z-nav");
   });
 
+  it("concealed면 위로 숨긴다(메인 인트로 동안)", () => {
+    render(<SiteHeader variant="transparent" concealed />);
+    expect(screen.getByRole("banner").className).toContain("-translate-y-full");
+  });
+
   it("light variant는 fixed가 아니다", () => {
     const { container } = render(<SiteHeader />);
     const header = container.querySelector("header") as HTMLElement;

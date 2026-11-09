@@ -15,8 +15,8 @@ describe("PastorPage", () => {
     // 본문은 문장 span으로 쪼개 렌더된다(리딩 스포트라이트) — 블록 전체 텍스트로 확인.
     const reading = container.querySelector("[data-reading]")?.textContent?.replace(/\s+/g, " ");
     expect(reading).toContain(PASTOR.intro);
-    expect(reading).toContain(PASTOR.greeting[0]);
-    expect(screen.getByText(PASTOR.pullQuote)).toBeDefined();
+    // 인용문 미수령(빈 문자열) → 인용 밴드(직분·이름 배지) 미노출
+    expect(screen.queryByText(`${PASTOR.position} ${PASTOR.name}`)).toBeNull();
     expect(screen.getByText(PASTOR.credentials.heading)).toBeDefined();
     expect(screen.getByText(PASTOR.credentials.items[0])).toBeDefined();
     expect(screen.getByText(PASTOR.philosophy.heading)).toBeDefined();

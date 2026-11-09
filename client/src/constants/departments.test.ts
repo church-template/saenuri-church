@@ -17,8 +17,8 @@ describe("사역 부서 상수", () => {
   });
 
   it("findDepartment: slug로 부서를 찾는다", () => {
-    expect(findDepartment("youth")?.name).toBe("청년부");
-    expect(findDepartment("praise")?.name).toBe("예배부");
+    expect(findDepartment("skyblue")?.name).toBe("스카이블루 미션팀");
+    expect(findDepartment("green")?.name).toBe("그린 미션팀");
   });
 
   it("findDepartment: 없는 slug는 undefined", () => {
@@ -26,10 +26,7 @@ describe("사역 부서 상수", () => {
   });
 
   it("allDepartmentSlugs는 모든 부서 slug를 포함한다", () => {
-    const slugs = allDepartmentSlugs();
-    expect(slugs).toContain("student");
-    expect(slugs).toContain("youth");
-    expect(slugs).toContain("women");
+    expect(allDepartmentSlugs()).toEqual(["orange", "skyblue", "red", "blue", "green"]);
   });
 
   // 현재 공개 상수는 하위 부서가 없지만, 함수는 깊이 탐색을 지원한다(어드민·향후 대비) — 로컬 픽스처로 분기 커버.
@@ -68,21 +65,17 @@ describe("사역 부서 상수", () => {
     expect(DEPT_PAGE.subHeading.length).toBeGreaterThan(0);
   });
 
-  it("학생부는 보강 섹션 데이터(intro·features·info·activities·programs·gallery·invite)를 보유한다", () => {
-    const student = findDepartment("student")!;
-    expect(student.intro?.heading).toBe("학생부 소개");
-    expect(student.features).toHaveLength(3);
-    expect(student.features?.[0]).toMatchObject({ icon: "book", title: "청소년 신앙 교육" });
-    expect(student.info?.map((i) => i.label)).toEqual([
-      "담당자",
-      "모임 시간",
-      "연락처",
-      "모임 장소",
+  it("오렌지 미션팀은 확인된 보강 데이터(intro·info·invite)만 갖고, 근거 없는 활동·프로그램·사진은 없다", () => {
+    const orange = findDepartment("orange")!;
+    expect(orange.intro?.heading).toBe("오렌지 미션팀 소개");
+    expect(orange.info).toEqual([
+      { label: "대상", value: "어린이" },
+      { label: "모임", value: "주일 오전 9:30 교회학교예배" },
     ]);
-    expect(student.activities).toHaveLength(4);
-    expect(student.programs).toHaveLength(4);
-    expect(student.gallery?.length).toBeGreaterThan(0);
-    expect(student.invite?.heading).toBe("학생부에서 함께해요");
+    expect(orange.invite?.heading).toBe("오렌지 미션팀에서 함께해요");
+    expect(orange.activities).toBeUndefined();
+    expect(orange.programs).toBeUndefined();
+    expect(orange.gallery).toBeUndefined();
   });
 
   it("섹션 헤딩 상수를 노출한다(하드코딩 0)", () => {

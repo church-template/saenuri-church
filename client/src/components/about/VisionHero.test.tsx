@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { ABOUT } from "@/constants/content";
+import { CHURCH_LOGO } from "@/constants/church";
 import { VisionHero } from "./VisionHero";
 
 afterEach(() => vi.unstubAllGlobals());
@@ -15,6 +16,6 @@ describe("VisionHero", () => {
     expect(h1.textContent).toContain(ABOUT.statementHighlight);
     expect(screen.getByText(ABOUT.intro[0])).toBeDefined();
     expect(screen.getByText(ABOUT.intro[1])).toBeDefined();
-    expect(screen.getByAltText("예시교회 로고")).toBeDefined();
+    expect(screen.getByAltText(CHURCH_LOGO.alt)).toBeDefined();
   });
 });

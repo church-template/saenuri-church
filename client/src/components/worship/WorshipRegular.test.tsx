@@ -23,7 +23,8 @@ describe("WorshipRegular", () => {
 
     const sunday = WORSHIP_SERVICES.find((s) => s.name === "주일예배")!;
     expect(screen.getByText(sunday.time)).toBeDefined();
-    expect(screen.getByText(sunday.praise!)).toBeDefined();
+    // 찬양 시작 시간은 교회 자료에 없어 생략된다(praise 미지정 → 서브라인 미렌더)
+    expect(sunday.praise).toBeUndefined();
     expect(screen.getByText(sunday.notes[0])).toBeDefined();
   });
 

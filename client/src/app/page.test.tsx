@@ -51,6 +51,7 @@ vi.mock("@/lib/api/main", () => ({
 }));
 
 import Home from "./page";
+import { STORY_HERO } from "@/constants/storyHero";
 import { getMain } from "@/lib/api/main";
 
 function stubBrowserApis() {
@@ -80,7 +81,7 @@ afterEach(() => {
 describe("Home (메인)", () => {
   it("예배·설교·공지·일정 섹션과 CTA·푸터를 합성한다", async () => {
     stubBrowserApis();
-    const { container } = render(await Home());
+    render(await Home());
     // 섹션 타이틀은 h2(heading)로 좁힘 — 푸터 nav <a>와 텍스트 중복 방어
     expect(screen.getByRole("heading", { name: WORSHIP.title })).toBeDefined();
     expect(screen.getByRole("heading", { name: MAIN_SECTIONS.sermons.title })).toBeDefined();
@@ -94,23 +95,21 @@ describe("Home (메인)", () => {
     expect(screen.getByText("부활의 증인").closest("a")?.getAttribute("href")).toBe(
       "/sermons/1",
     );
-    // 콜라주 타일이 히어로와 예배시간 사이에 합성된다(MediaCollage 스펙 §5)
-    expect(container.querySelector('img[src="/collage-1.jpeg"]')).not.toBeNull();
-    // 연혁·사역 섹션이 콜라주 뒤에 합성된다(스펙 H1)
-    const collageImg = container.querySelector('img[src="/collage-1.jpeg"]')!;
-    const historyHead = screen.getByText(HISTORY.items[0].text);
+    // 스토리 히어로가 예배시간보다 앞에 합성되고, 연혁 띠(HistoryBand)는 히어로가 대신해 빠진다(Q2)
+    const heroLine = screen.getByText(STORY_HERO.split.title[0]);
+    const worshipHead = screen.getByRole("heading", { name: WORSHIP.title });
     expect(
-      collageImg.compareDocumentPosition(historyHead) & Node.DOCUMENT_POSITION_FOLLOWING,
+      heroLine.compareDocumentPosition(worshipHead) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
+    expect(screen.queryByText(HISTORY.items[0].text)).toBeNull();
     expect(screen.getByRole("heading", { name: MINISTRY.title })).toBeDefined();
   });
 
   it("히어로 카피는 줄 단위로 DOM에 존재한다(SEO)", async () => {
     stubBrowserApis();
-    const { HERO_CAPTION } = await import("@/constants/church");
-    render(await Home());
-    for (const line of HERO_CAPTION) {
-      expect(screen.getByText(line)).toBeDefined();
+    const { container } = render(await Home());
+    for (const line of STORY_HERO.split.title) {
+      expect(container.textContent).toContain(line);
     }
   });
 

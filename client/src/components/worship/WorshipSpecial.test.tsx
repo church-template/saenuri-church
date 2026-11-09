@@ -25,10 +25,10 @@ describe("WorshipSpecial", () => {
     // EventCard 제목은 h3 — 6개(slice 회귀 방지)
     expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(SPECIAL_SERVICES.length);
 
-    const first = SPECIAL_SERVICES[0]; // 송구영신 예배 — date/time/desc가 6종 중 유일값
+    const first = SPECIAL_SERVICES[0]; // 부활절 예배 — name/date/desc는 유일값, time은 공통("주일예배 시간")
     expect(screen.getByText(first.name)).toBeDefined();
     expect(screen.getByText(first.date)).toBeDefined();
-    expect(screen.getByText(first.time)).toBeDefined();
+    expect(screen.getAllByText(first.time)).toHaveLength(SPECIAL_SERVICES.length);
     expect(screen.getByText(first.desc)).toBeDefined();
   });
 });

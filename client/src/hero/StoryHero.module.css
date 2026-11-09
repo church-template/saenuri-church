@@ -1,0 +1,134 @@
+/* story-hero — 수치는 설계 문서 「시각 수치」(이슈 #1 설계 댓글)와 동일. 연출 내부 수치(각도·%·rgba)는
+   CrossHero/DeptHero 선례대로 모듈에 직접 둔다. 색·라운드·간격은 토큰. */
+.root { position: relative; height: calc(var(--steps) * 100dvh); background: var(--color-cover-dark); color: var(--color-on-dark); }
+.stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; }
+
+.dark { position: absolute; inset: 0; background: var(--color-cover-dark); }
+
+/* 장 0 배경: 33주년 단체 사진 + 약한 블러 + 옅은 네이비 */
+.splitBg { position: absolute; inset: 0; transition: opacity 0.6s; }
+.splitBg img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(0.3) blur(4px); transform: scale(1.04); }
+.splitBg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(10, 15, 31, 0.62) 0%, rgba(19, 66, 111, 0.32) 50%, rgba(10, 15, 31, 0.12) 100%); }
+.root:not([data-cur="0"]) .splitBg { opacity: 0; }
+
+/* 과거 장 배경 */
+.bg { position: absolute; inset: 0; opacity: 0; transition: opacity 0.9s ease; }
+.bg img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); transition: transform 7s ease-out; }
+.bg.on { opacity: 1; }
+.bg.on img { transform: scale(1); }
+.fade1 img { filter: sepia(0.25) saturate(0.85); }
+.fade2 img { filter: sepia(0.5) saturate(0.7); }
+.mono img { filter: grayscale(1) contrast(1.05); }
+.shade { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 0.9s; background: linear-gradient(180deg, rgba(10, 15, 31, 0.45) 0%, rgba(10, 15, 31, 0.1) 35%, rgba(10, 15, 31, 0.85) 100%); }
+/* 과거 장에만 덮개 — 장 0·인트로·"지금" 장은 사진 원래 밝기 */
+.root:not([data-cur="0"]):not([data-cur="intro"]):not([data-now]) .shade { opacity: 1; }
+
+/* 장 0 글 */
+.split { position: absolute; z-index: 5; left: var(--spacing-xl); top: var(--spacing-nav); bottom: 0; width: 46%; display: flex; flex-direction: column; justify-content: center; word-break: keep-all; text-wrap: pretty; transition: opacity 0.5s, transform 0.6s; }
+.root:not([data-cur="0"]) .split { opacity: 0; transform: translateX(-40px); pointer-events: none; }
+.eyebrow { color: var(--color-primary-on-dark); letter-spacing: 0.04em; }
+.mega { margin: var(--spacing-base) 0 var(--spacing-md); }
+.em { font-style: normal; color: var(--color-primary-on-dark); }
+.lead, .info { text-shadow: 0 1px 3px rgba(10, 15, 31, 0.6), 0 2px 16px rgba(10, 15, 31, 0.5); }
+.lead { margin: 0 0 var(--spacing-lg); font-weight: 500; }
+.info { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px var(--spacing-md); font-weight: 500; font-variant-numeric: tabular-nums; }
+.info dt { opacity: 0.8; }
+.info dd { margin: 0; }
+
+/* 장 0 카드 묶음 — 앞 카드(c3)는 인트로·마지막 장에서 풀스크린 */
+.pc { position: absolute; margin: 0; overflow: hidden; border-radius: var(--radius-lg); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+.pc img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.pc figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 10px; font-size: 14px; line-height: 1.35; color: var(--color-on-dark); background: linear-gradient(transparent, rgba(10, 15, 31, 0.75)); }
+.pile .pc figcaption { display: none; }
+.pile .pc { z-index: 4; left: var(--x); top: var(--y); width: var(--w); height: var(--h); transform: rotate(var(--r));
+  transition: left 0.9s cubic-bezier(0.65, 0, 0.35, 1), top 0.9s cubic-bezier(0.65, 0, 0.35, 1), width 0.9s cubic-bezier(0.65, 0, 0.35, 1), height 0.9s cubic-bezier(0.65, 0, 0.35, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), border-radius 0.9s, opacity 0.5s; }
+.c1 { --x: 54%; --y: 22%; --w: 29%; --h: 36%; --r: -5deg; }
+.c2 { --x: 67%; --y: 17%; --w: 29%; --h: 36%; --r: 4deg; }
+.pile .c3 { --x: 59%; --y: 44%; --w: 37%; --h: 46%; --r: -1deg; z-index: 5; }
+.root[data-cur="0"] .pile:hover .c1 { --x: 48%; --y: 16%; --r: -9deg; }
+.root[data-cur="0"] .pile:hover .c2 { --x: 70%; --y: 12%; --r: 8deg; }
+.root[data-cur="0"] .pile:hover .c3 { --y: 47%; transform: rotate(0) scale(1.03); }
+.root:not([data-cur="0"]) .c1, .root:not([data-cur="0"]) .c2 { opacity: 0; pointer-events: none; }
+.root:not([data-cur="0"]) .pile .c3 { --x: 0%; --y: 0%; --w: 100%; --h: 100%; --r: 0deg; border-radius: 0; box-shadow: none; opacity: 0; pointer-events: none; }
+.root[data-cur="intro"] .pile .c3, .root[data-now] .pile .c3 { opacity: 1; }
+.root[data-now] .pile .c3 img { object-position: 72% center; }
+
+/* 인트로: 블러 → 축소하며 선명, 배경·글·카드 순차 등장 */
+.c3 img { transition: transform 3s ease-out, filter 1.6s cubic-bezier(0.65, 0, 0.35, 1); }
+.root[data-cur="intro"] .pile .c3 img { filter: blur(10px); transform: scale(1.1); }
+.root[data-intro="run"] .pile .c3 { transition: left 1.6s cubic-bezier(0.65, 0, 0.35, 1), top 1.6s cubic-bezier(0.65, 0, 0.35, 1), width 1.6s cubic-bezier(0.65, 0, 0.35, 1), height 1.6s cubic-bezier(0.65, 0, 0.35, 1), transform 1.6s cubic-bezier(0.65, 0, 0.35, 1), border-radius 1.6s; }
+.root[data-intro="run"] .split { transition: opacity 0.9s 1.1s, transform 0.9s 1.1s; }
+.root[data-intro="run"] .pile .c1, .root[data-intro="run"] .pile .c2 { transition: opacity 0.8s 1.3s; }
+.root[data-intro="run"] .splitBg { transition: opacity 1s 0.6s; }
+.root[data-cur="intro"] .splitBg { opacity: 0; }
+
+.mark { position: absolute; inset: 0; z-index: 7; display: grid; place-content: center; text-align: center; pointer-events: none; opacity: 0; text-shadow: 0 1px 4px rgba(10, 15, 31, 0.55), 0 2px 28px rgba(10, 15, 31, 0.6); }
+.mark b { font-size: clamp(56px, 11vw, 136px); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; white-space: nowrap; } /* DESIGN 예외: 인트로 문구만 700 */
+.mark span { margin-top: var(--spacing-base); font-size: 26px; font-weight: 600; letter-spacing: 0.08em; }
+.root[data-intro="run"][data-cur="intro"] .mark { animation: mark 1.8s ease both; }
+@keyframes mark { 0% { opacity: 0; transform: translateY(12px); } 25%, 70% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-8px); } }
+
+/* 장 묶음 — 데스크톱은 무대 전체를 덮는 투명 판(자식이 각자 절대 배치) */
+.chap { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+.pileBox { position: absolute; inset: 0; }
+/* 과거 장 글 — 연도 위치 고정(top 18%), 글은 아래로 */
+.copy { position: absolute; z-index: 5; left: var(--spacing-xl); right: 46%; top: 18%; opacity: 0; transform: translateY(18px); transition: opacity 0.6s 0.25s, transform 0.6s 0.25s; word-break: keep-all; text-wrap: pretty; pointer-events: none; }
+.copy.on { opacity: 1; transform: none; }
+.yr { margin: 0; font-size: clamp(56px, 12vw, 140px); font-weight: 500; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.yr small { font-size: 0.26em; letter-spacing: -0.01em; margin-left: 0.4em; color: var(--color-on-dark-soft); }
+.ttl { margin: var(--spacing-base) 0 var(--spacing-xs); }
+.desc { margin: 0; max-width: 36em; color: var(--color-on-dark-soft); }
+.verse { margin: var(--spacing-base) 0 0; padding-left: 14px; border-left: 2px solid var(--color-primary-on-dark); }
+.verse span { display: block; }
+.verse cite { display: block; margin-top: var(--spacing-xxs); font-style: normal; opacity: 0.75; }
+
+/* 과거 장 카드 묶음 — 우하단(구텐베르크 종착) */
+.pile2 { position: absolute; z-index: 4; right: var(--spacing-xl); bottom: 28px; width: 42%; height: 62%; pointer-events: none; }
+.pile2 .pc { border: 4px solid var(--color-canvas); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18); opacity: 0; transform: translateY(40px) rotate(var(--r)); transition: opacity 0.5s, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: auto; }
+.pile2 .pc img { height: auto; aspect-ratio: 4 / 3; }
+.pile2.on .pc { opacity: 1; transform: rotate(var(--r)); }
+.pile2.on .pc:nth-child(2) { transition-delay: 0.12s; }
+.pile2.on .pc:nth-child(3) { transition-delay: 0.24s; }
+.pile2.on .pc:hover { transform: rotate(0) scale(1.04); z-index: 5; }
+.n2 .pc:nth-child(1) { --r: -5deg; width: 64%; left: 0; bottom: 18%; }
+.n2 .pc:nth-child(2) { --r: 4deg; width: 60%; right: 0; bottom: 0; }
+.n3 .pc:nth-child(1) { --r: -6deg; width: 54%; left: 0; top: 4%; }
+.n3 .pc:nth-child(2) { --r: 5deg; width: 52%; right: 0; top: 16%; }
+.n3 .pc:nth-child(3) { --r: -2deg; width: 58%; left: 18%; bottom: 0; }
+
+.credit { position: absolute; z-index: 6; right: var(--spacing-lg); bottom: var(--spacing-base); margin: 0; color: var(--color-on-dark-soft); }
+.back { all: unset; cursor: pointer; position: absolute; z-index: 6; right: var(--spacing-xl); bottom: var(--spacing-xl); border-bottom: 1px solid currentColor; padding-bottom: 2px; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); opacity: 0; pointer-events: none; transition: opacity 0.5s; }
+.root[data-now] .back { opacity: 1; pointer-events: auto; }
+.back:focus-visible { outline: 2px solid var(--color-on-dark); outline-offset: 4px; }
+.cue { position: absolute; z-index: 6; left: 50%; bottom: var(--spacing-base); transform: translateX(-50%); color: var(--color-on-dark-soft); animation: bob 1.8s ease-in-out infinite; transition: opacity 0.4s; }
+.root:not([data-cur="0"]) .cue { opacity: 0; }
+@keyframes bob { 50% { transform: translate(-50%, 4px); } }
+
+@media (max-width: 760px) {
+  .split { left: var(--spacing-md); right: var(--spacing-md); width: auto; bottom: auto; top: calc(var(--spacing-nav) + var(--spacing-base)); }
+  .lead { display: none; }
+  .c1 { --x: 6%; --y: 58%; --w: 44%; --h: 22%; }
+  .c2 { --x: 50%; --y: 56%; --w: 44%; --h: 22%; }
+  .pile .c3 { --x: 18%; --y: 68%; --w: 64%; --h: 26%; }
+  /* 휴대폰: 글 아래에 카드 묶음을 쌓는다. 카드 상자는 남은 높이(flex)만큼, 비율을 지키며 줄어든다. */
+  .chap { inset: 22% var(--spacing-md) var(--spacing-base); display: flex; flex-direction: column; }
+  .copy { position: static; }
+  .pile2 { position: relative; inset: auto; width: auto; height: auto; flex: 1 1 0; min-height: 0; margin-top: var(--spacing-base); }
+  .pileBox { position: relative; inset: auto; height: 100%; max-width: 100%; aspect-ratio: 5 / 4; margin-left: auto; }
+  .pile2 .pc figcaption { font-size: 12px; padding: 16px 8px 6px; }
+  .back { right: var(--spacing-md); bottom: var(--spacing-md); }
+}
+
+/* 짧은 휴대폰(툴바 펼친 iOS 등): 첫 화면 예배 정보는 아래 예배 섹션과 겹치므로 숨겨 카드와 겹치지 않게 */
+@media (max-width: 760px) and (max-height: 700px) {
+  .info { display: none; }
+}
+
+/* 움직임 줄이기 — 정적 세로 나열 */
+.static { background: var(--color-cover-dark); color: var(--color-on-dark); }
+.staticBlock { position: relative; overflow: hidden; padding: calc(var(--spacing-nav) + var(--spacing-xl)) var(--spacing-xl) var(--spacing-xxl); display: grid; gap: var(--spacing-xl); }
+.staticBg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.35; }
+.staticCopy, .staticCards { position: relative; }
+.staticCards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--spacing-base); }
+.staticCards .pc { position: relative; }
+.staticCards .pc img { aspect-ratio: 4 / 3; }

@@ -48,13 +48,16 @@ export function LocationContact() {
               />
             ) : (
               <div className="flex flex-col gap-base">
-                {/* eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸 */}
-                <img
-                  src={LOCATION.map.src}
-                  alt={LOCATION.map.alt}
-                  loading="lazy"
-                  className="h-auto w-full rounded-xl border border-hairline"
-                />
+                {/* 약도 이미지가 없으면(null) 지도 버튼만 둔다. */}
+                {LOCATION.map ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸
+                  <img
+                    src={LOCATION.map.src}
+                    alt={LOCATION.map.alt}
+                    loading="lazy"
+                    className="h-auto w-full rounded-xl border border-hairline"
+                  />
+                ) : null}
                 {/* 외부 지도 폴백 — 카카오·네이버 둘 다 주소 검색(실제 경로 길찾기는 각 앱에서). */}
                 <div className="grid gap-sm sm:grid-cols-2">
                   <a

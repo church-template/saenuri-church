@@ -3,14 +3,14 @@ paths:
   - "client/**"
 version: 1.0
 name: church-design-system
-description: 교회 홈페이지 템플릿의 디자인 시스템. Coinbase의 디자인 언어(차분한 단일 블루 액센트, 흰 캔버스, 400 굵기의 절제된 디스플레이 타이포, 카드 레이어링 기반의 깊이)를 베이스로 교회 콘텐츠에 맞게 재해석했다. 흰 캔버스 위에 브랜드 블루(#0052ff) 하나만 절제해서 쓰고, 페이지 리듬은 흰 섹션 ↔ 연회색 밴드 ↔ 풀블리드 다크/미디어 히어로의 교차로 만든다. 신뢰감과 따뜻함, 그리고 설교·공지·일정 등 텍스트 콘텐츠의 가독성이 최우선이다.
+description: 교회 홈페이지 템플릿의 디자인 시스템. Coinbase의 디자인 언어(차분한 단일 블루 액센트, 흰 캔버스, 400 굵기의 절제된 디스플레이 타이포, 카드 레이어링 기반의 깊이)를 베이스로 교회 콘텐츠에 맞게 재해석했다. 흰 캔버스 위에 브랜드 컬러(primary, 새누리 네이비 #13426f) 하나만 절제해서 쓰고, 페이지 리듬은 흰 섹션 ↔ 연회색 밴드 ↔ 풀블리드 다크/미디어 히어로의 교차로 만든다. 신뢰감과 따뜻함, 그리고 설교·공지·일정 등 텍스트 콘텐츠의 가독성이 최우선이다.
 
 colors:
   # primary는 교회별로 교체 가능한 유일한 브랜드 토큰이다 (§프로젝트 규칙 참고)
-  primary: "#0052ff"
-  primary-active: "#003ecc"
+  primary: "#13426f"
+  primary-active: "#0d3256"
   primary-disabled: "#a8b8cc"
-  primary-soft: "#e8efff"          # 블루 틴트 배경 (배지, 선택 상태)
+  primary-soft: "#e7eef5"          # 네이비 틴트 배경 (배지, 선택 상태)
   ink: "#0a0b0d"
   body: "#5b616e"
   body-strong: "#0a0b0d"
@@ -311,7 +311,7 @@ components:
 
 1. **교회별 브랜드 컬러 교체**: `{colors.primary}` 계열 4개 토큰(primary, primary-active,
    primary-disabled, primary-soft)만 교체하면 다른 교회에 재사용할 수 있어야 한다.
-   이외의 어떤 곳에도 파란색 hex를 인라인으로 박지 않는다. 기본값은 #0052ff.
+   이외의 어떤 곳에도 파란색 hex를 인라인으로 박지 않는다. 현재 값은 새누리 네이비 #13426f(템플릿 원본 기본값은 #0052ff).
 2. **폰트는 Pretendard 하나**: 모든 텍스트는 Pretendard Variable. CDN 또는 next/font로
    self-host. 라틴 전용 폰트를 추가하지 않는다.
 3. **히어로 연동**: 메인 히어로는 십자가 열쇠구멍 연출(가이드 `14A. CrossHero`),
@@ -331,7 +331,7 @@ components:
 - **Primary** (`{colors.primary}`): 유일한 액션 컬러. 기본 CTA 필, 로고, 인라인 링크.
 - **Primary Active** (`{colors.primary-active}`): 프레스 상태.
 - **Primary Soft** (`{colors.primary-soft}`): 블루 틴트 배경 — 강조 배지, 선택 상태, 캘린더의 오늘 표시.
-- **Primary On Dark** (`{colors.primary-on-dark}`): 다크 밴드 위 액센트(#0052ff는 다크 위 대비 부족) — `challenge-today-band` 전용.
+- **Primary On Dark** (`{colors.primary-on-dark}`): 다크 밴드·사진 위 액센트(네이비 primary는 다크 위 대비 부족) — `challenge-today-band`, `story-hero` 강조어.
 
 ### 서피스
 - **Canvas** (`{colors.canvas}`): 기본 페이지 바닥.
@@ -508,6 +508,13 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   reduced-motion은 폭 무관하게 정적 세로 스택(카피 → 포스터 카드 → 사진 4장) — 최종 프레임만 남기면
   포스터를 아예 못 보기 때문이다(이때만 포스터 카드가 원본 비율로 선다).
   레이아웃 대수·구간 수치는 스펙(docs/superpowers/specs/2026-07-13-collage-column-grid-design.md)이 단일 진실.
+- **`story-hero`**: 메인 히어로(새누리, 영상 없음 — `media-collage`/14A CrossHero 대체). 콘텐츠는 `constants/storyHero.ts`(`STORY_HERO`), 장 계산은 순수 함수 `hero/storyChapter.ts`.
+  **인트로**: 앞 카드 사진(주일예배)이 풀스크린 블러(10px)로 서고 가운데 "축복합니다"(clamp 56~136px, **굵기 700 — 디스플레이 500 원칙의 유일한 예외**) 1.8s → 1.6s에 걸쳐 우측 카드 자리로 축소하며 선명해짐.
+  인트로 동안 헤더 숨김(`SiteHeader concealed`), 축소 끝(≈3.7s)에 하강. 인트로 중 스크롤이 오면 즉시 종료.
+  **장 0(스플릿)**: 단체 사진 배경(blur 4px + 옅은 네이비 그라데이션) 위 좌측 글(eyebrow·`display-mega`·소개·예배 정보, 버튼 없음) + 우측 기울어 겹친 카드 3장(hover 시 흩어짐).
+  **과거 장**: 과거→현재 시간순, 글은 좌상단(연도 숫자 위치 모든 장 동일, top 18%), 사진 2~3장은 우하단에 기울여 겹침(구텐베르크: 시작 좌상·종착 우하), 캡션은 카드 안쪽 하단. 과거일수록 바램(sepia .25 → .5, 화재 장 grayscale).
+  카드는 확대 없음(사진 크게 보기는 추후 교회 둘러보기 페이지). **마지막 "지금" 장**: 앞 카드가 덮개 없이 풀스크린, 우하단 "처음으로" 링크.
+  날짜는 "7월 8일"·"~ 2006년"처럼 풀어 쓴다(점 표기 금지). reduced-motion은 인트로·고정 없이 정적 세로 나열. 수치는 이슈 #1 설계 댓글이 단일 진실.
 - **`reading-spotlight`**: 목회자 인사말(`/about/pastor`) 본문의 리딩 강조. 본문을 **문장 span으로 쪼개** 스크롤에
   따라 **한 문장씩** 켠다 — 켜진 문장만 `{colors.ink}` + `{typography.body-xl}`(32px/600)로 부풀고, 나머지는
   `{typography.body-lg}`(24px/400) + `{colors.muted-soft}`로 흐리다(형광펜 배경 없음 — 단일 액센트·문서 톤 유지).
@@ -580,7 +587,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   `CHALLENGE_PARTICIPATE` 미보유·이력 0건이면 섹션째 비노출(manage-hub 관례, Reveal은 null 체크 뒤 내부 래핑).
 - **`challenge-today-band`**: 챌린지 상세의 "오늘의 통독" 다크 밴드(C-2 몰입형). `{colors.surface-dark}` 배경 +
   on-dark 텍스트, 모바일 좌우 풀블리드. 초대형 타이포 `{typography.display-xl}`(모바일 clamp 축소), 구절 강조는
-  `{colors.primary-on-dark}`(#0052ff의 다크 위 대비 보정 — 이 밴드 전용). CTA "다 읽었어요"는 풀폭(모바일)
+  `{colors.primary-on-dark}`(primary의 다크 위 대비 보정). CTA "다 읽었어요"는 풀폭(모바일)
   56px primary 필. 기록 완료 상태는 밴드 내 반투명 카드 + `{rounded.full}` 체크 플레이트. 문구는 일상어만
   (스트릭→"N일 연속으로 읽고 있어요", 페이스→"목표보다 N일 빨라요"). UPCOMING=D-day, ENDED=완주 응원 문구.
 - **`reading-calendar`**: 벽걸이 달력식 월 그리드(히트맵 아님, EventCalendar의 monthMatrix 재사용). 읽은 날

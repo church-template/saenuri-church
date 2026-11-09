@@ -19,11 +19,13 @@ export interface SiteHeaderProps {
   variant?: "light" | "transparent";
   /** transparent 전용 — 히어로 이탈 시 fixed 유지 + 라이트 스킨. HeroHeaderSync(T8)가 제어. */
   solid?: boolean;
+  /** transparent 전용 — 메인 인트로 동안 위로 숨긴다(StoryHero가 제어). 탭 이동은 유지. */
+  concealed?: boolean;
 }
 
 // 전역 헤더. light=서브페이지(흐름·80px), transparent=히어로 위(fixed·on-dark, 메인 T8/부서 T9).
 // 데스크톱은 호버/포커스 시 풀폭 메가메뉴(우리은행 GNB 방식, 스펙 M2), 모바일은 햄버거 시트.
-export function SiteHeader({ variant = "light", solid = false }: SiteHeaderProps) {
+export function SiteHeader({ variant = "light", solid = false, concealed = false }: SiteHeaderProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
@@ -38,7 +40,8 @@ export function SiteHeader({ variant = "light", solid = false }: SiteHeaderProps
 
   const headerCls = isTransparent
     ? cn(
-        "fixed inset-x-0 top-0 z-nav transition-colors duration-200",
+        "fixed inset-x-0 top-0 z-nav transition-[color,background-color,transform,opacity] duration-700",
+        concealed ? "-translate-y-full opacity-0" : null,
         lightSkin
           ? "border-b border-hairline bg-canvas text-ink"
           : "bg-transparent text-on-dark",
