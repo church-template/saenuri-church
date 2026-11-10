@@ -1,0 +1,55 @@
+/* snap-card — 홈 story-hero의 기울인 사진 카드를 세부 페이지로 가져온 것.
+   블로그 원본이 약 800px라 크게 깔지 않고 작은 카드로 쓴다. 기울기·겹침 수치는 연출 수치.
+   rotate/scale/translate는 Tailwind v4에서 속성으로 컴파일되므로 여기서도 속성을 쓴다. */
+.snap {
+  margin: 0;
+  padding: var(--spacing-xs) var(--spacing-xs) 0;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  rotate: var(--snap-tilt, 0deg);
+  transition: rotate 0.3s ease, scale 0.3s ease, translate 0.3s ease;
+}
+.snap img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+.snap figcaption {
+  padding: var(--spacing-xs) var(--spacing-xxs) var(--spacing-sm);
+}
+.snap:hover {
+  rotate: 0deg;
+  scale: 1.03;
+}
+.tiltA { --snap-tilt: 2.5deg; }
+.tiltB { --snap-tilt: -2deg; }
+
+/* 사진 더미 — 최대 3장을 겹쳐 놓고, 올리면 흩어진다. */
+.pile {
+  position: relative;
+  aspect-ratio: 11 / 10;
+}
+.pile .snap {
+  position: absolute;
+  width: 66%;
+}
+.pile .snap:nth-child(1) { left: 0; top: 2%; --snap-tilt: -5deg; }
+.pile .snap:nth-child(2) { right: 0; top: 14%; --snap-tilt: 4deg; }
+.pile .snap:nth-child(3) { left: 12%; top: 40%; --snap-tilt: -1.5deg; }
+.pile:hover .snap:nth-child(1) { translate: -4% -3%; }
+.pile:hover .snap:nth-child(2) { translate: 4% -4%; }
+.pile:hover .snap:nth-child(3) { translate: 0 5%; }
+/* 한 장뿐이면 겹칠 게 없다 — 제 크기로 한 장만 기울여 둔다. */
+.pile[data-count="1"] { aspect-ratio: auto; }
+.pile[data-count="1"] .snap { position: static; width: 100%; --snap-tilt: 2deg; }
+.pile[data-count="2"] { aspect-ratio: 4 / 3; }
+
+@media (prefers-reduced-motion: reduce) {
+  .snap { transition: none; }
+  .snap:hover { rotate: var(--snap-tilt, 0deg); scale: 1; }
+  .pile:hover .snap { translate: none; }
+}

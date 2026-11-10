@@ -45,6 +45,15 @@
   --color-symbol-red: #a81e2c;
   --color-symbol-orange: #b8590a;
 
+  /* --- 미션팀 색 (constants/departments.ts team — 브랜드 팔레트 아님).
+   *     새누리교회는 부서를 색깔 이름으로 부른다. 팀 식별용 작은 점(team-dot)에만 쓴다.
+   *     글자색·큰 색면·버튼 금지(오렌지·스카이블루는 흰 바탕 글자 대비 미달). --- */
+  --color-team-orange: #e8801c;
+  --color-team-skyblue: #3aa0dc;
+  --color-team-red: #cf3b2b;
+  --color-team-blue: #2563c9;
+  --color-team-green: #2f8f52;
+
   /* --- 외부 지도 서비스 브랜드색 (카카오·네이버 "…에서 보기" 버튼 전용).
    *     단일 액센트 원칙의 의도적 예외 — 제3자 공식 버튼색이라 교회 브랜드 팔레트 아님.
    *     button-kakao/naver 외엔 쓰지 않는다(큰 색면·다른 CTA 금지). --- */

@@ -1,0 +1,45 @@
+/* generation-ladder — 세대 순서로 내려가는 한 줄. 왼쪽 세로선 위에 팀 색 점이 놓인다. */
+.ladder {
+  position: relative;
+  margin: 0;
+  padding: 0 0 0 var(--spacing-xxl);
+  list-style: none;
+}
+.ladder::before {
+  content: "";
+  position: absolute;
+  left: var(--spacing-xs);
+  top: var(--spacing-xl);
+  bottom: var(--spacing-xl);
+  width: 2px;
+  background: var(--color-hairline);
+}
+.row {
+  position: relative;
+  display: grid;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl) 0;
+  border-bottom: 1px solid var(--color-hairline);
+}
+.row:last-child { border-bottom: 0; }
+.dot {
+  position: absolute;
+  left: calc(-1 * var(--spacing-xxl));
+  top: var(--spacing-xl);
+  width: var(--spacing-md);
+  height: var(--spacing-md);
+  margin-top: var(--spacing-xxs);
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 0 var(--spacing-xxs) var(--color-canvas); /* 세로선을 점 둘레에서 끊는다 */
+}
+.photo { max-width: 22rem; }
+
+@media (min-width: 48rem) {
+  .row {
+    grid-template-columns: 1fr 21rem;
+    gap: var(--spacing-xxl);
+    align-items: center;
+    padding: var(--spacing-xxl) 0;
+  }
+  .dot { top: 50%; margin-top: calc(-0.5 * var(--spacing-md)); }
+}
