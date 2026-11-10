@@ -6,6 +6,7 @@ import { CtaBand } from "@/components/shell/CtaBand";
 import { SiteFooter } from "@/components/shell/SiteFooter";
 import { MarkdownContent } from "@/components/common/MarkdownContent";
 import DeptHero from "@/hero/DeptHero";
+import { cn } from "@/lib/utils";
 import { DeptLeader } from "@/components/departments/DeptLeader";
 import { SubDepartments } from "@/components/departments/SubDepartments";
 import { DeptFeatures } from "@/components/departments/DeptFeatures";
@@ -14,9 +15,13 @@ import { DeptActivities } from "@/components/departments/DeptActivities";
 import { DeptPrograms } from "@/components/departments/DeptPrograms";
 import { DeptGallery } from "@/components/departments/DeptGallery";
 import { DeptInvite } from "@/components/departments/DeptInvite";
+import { DeptSnapPile } from "@/components/departments/DeptSnapPile";
+import { DeptYear } from "@/components/departments/DeptYear";
+import { TeamNav } from "@/components/departments/TeamNav";
 import {
   allDepartmentSlugs,
   findDepartment,
+  DEPARTMENTS,
   DEPT_SECTIONS,
 } from "@/constants/departments";
 
@@ -67,13 +72,24 @@ export default async function DepartmentDetailPage({
       <SiteHeader variant="transparent" solid />
       <main className="flex-1">
         <DeptHero title={dept.name} caption={caption} media={dept.media} />
-        <Container as="section" className="py-section">
-          {dept.leader ? <DeptLeader name={dept.leader} /> : null}
-          {dept.description ? (
-            <MarkdownContent source={dept.description} className="mt-base" />
-          ) : null}
+        {/* 소개 옆 사진 더미 — 사진이 있는 팀만 2컬럼, 없으면 기존처럼 글만. */}
+        <Container
+          as="section"
+          className={cn(
+            "py-section",
+            dept.snaps?.length ? "grid items-center gap-xxl lg:grid-cols-[1fr_26rem]" : null,
+          )}
+        >
+          <div>
+            {dept.leader ? <DeptLeader name={dept.leader} /> : null}
+            {dept.description ? (
+              <MarkdownContent source={dept.description} className="mt-base" />
+            ) : null}
+          </div>
+          {dept.snaps?.length ? <DeptSnapPile snaps={dept.snaps} /> : null}
         </Container>
-        {/* 서사 퍼널: 소개 → 사진(감정 후크) → 활동·프로그램(무엇을) → 알림(언제/어디서) → 초대. */}
+        {dept.year?.length ? <DeptYear heading={DEPT_SECTIONS.year} items={dept.year} /> : null}
+        {/* 서사 퍼널: 소개 → 한 해·사진(감정 후크) → 활동·프로그램(무엇을) → 알림(언제/어디서) → 다섯 팀 내비 → 초대. */}
         {dept.intro && dept.features?.length ? (
           <DeptFeatures
             heading={dept.intro.heading}
@@ -91,6 +107,14 @@ export default async function DepartmentDetailPage({
           <DeptPrograms heading={DEPT_SECTIONS.programs} items={dept.programs} />
         ) : null}
         {dept.info?.length ? <DeptInfo heading={DEPT_SECTIONS.info} items={dept.info} /> : null}
+        {dept.team ? (
+          <TeamNav
+            eyebrow={DEPT_SECTIONS.teamNavEyebrow}
+            heading={DEPT_SECTIONS.teamNav}
+            departments={DEPARTMENTS}
+            current={dept.slug}
+          />
+        ) : null}
         {dept.invite ? (
           <DeptInvite heading={dept.invite.heading} body={dept.invite.body} />
         ) : null}

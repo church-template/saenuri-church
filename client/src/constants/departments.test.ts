@@ -78,6 +78,31 @@ describe("사역 부서 상수", () => {
     expect(orange.gallery).toBeUndefined();
   });
 
+  it("최상위 미션팀은 모두 팀 색·세대 라벨·한 줄 소개를 갖고, 세대 순서(어린이→여성도)로 놓인다", () => {
+    expect(DEPARTMENTS.map((d) => d.team)).toEqual(["orange", "skyblue", "red", "blue", "green"]);
+    for (const d of DEPARTMENTS) {
+      expect(d.generation?.length).toBeGreaterThan(0);
+      expect(d.summary?.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("스카이블루를 뺀 팀은 대표 사진이 기본 이미지가 아니고, 모든 팀이 사진 카드를 갖는다", () => {
+    for (const d of DEPARTMENTS) {
+      expect(d.snaps?.length).toBeGreaterThan(0);
+    }
+    for (const slug of ["orange", "red", "blue", "green"]) {
+      const m = findDepartment(slug)!.media;
+      expect(m.src).toBe(`/dept/${slug}.webp`);
+    }
+  });
+
+  it("한 해 활동은 블로그로 확인된 오렌지 팀에만 있다", () => {
+    expect(findDepartment("orange")!.year?.map((y) => y.title)).toEqual(["어린이주일", "여름성경학교"]);
+    for (const slug of ["skyblue", "red", "blue", "green"]) {
+      expect(findDepartment(slug)!.year).toBeUndefined();
+    }
+  });
+
   it("섹션 헤딩 상수를 노출한다(하드코딩 0)", () => {
     expect(DEPT_SECTIONS.info).toBe("알림 사항");
     expect(DEPT_SECTIONS.activities.length).toBeGreaterThan(0);

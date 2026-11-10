@@ -345,6 +345,11 @@ components:
 - **Body** (`{colors.body}`): 기본 본문 — 약간 차가운 회색.
 - **Muted** (`{colors.muted}`): 날짜, 부제, 푸터 보조.
 
+### 미션팀 색 (팀 식별 전용)
+- **Team Orange·Skyblue·Red·Blue·Green** (CSS `--color-team-*` / 유틸 `bg-team-*`): 새누리교회는 부서를 색깔 이름의
+  미션팀으로 부른다. 팀을 가리키는 **작은 점(`team-dot`)에만** 쓴다. 글자색·큰 색면·버튼·배지 채움으로 쓰지 않는다
+  (오렌지·스카이블루는 흰 바탕에서 글자 대비가 모자란다). 현재 팀 표시는 색만으로 하지 않고 굵기·테두리를 함께 쓴다.
+
 ### 시맨틱 (폼 전용)
 - **Success** (`{colors.semantic-success}`) / **Error** (`{colors.semantic-error}`):
   폼 검증 메시지의 텍스트 색으로만 쓴다. 배경 채움·버튼 색으로 쓰지 않는다.
@@ -574,6 +579,19 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   `{typography.title-md}` + 인도자 `{typography.datetime}` `{colors.muted}`. `sermon-card` 호버(soft drop +
   썸네일 1.03 줌) 재사용. `/departments/{slug}`로 링크, 목록 카드 이미지 = 상세 히어로 이미지(목록↔상세 시각 연속성).
 - **`church-photos`**: 교회사진(`/about/photos`) 공개 페이지. 카테고리 토글(`Tabs` 재사용, 교회 내부/외부)로 사진 그리드를 통째 교체, 썸네일 클릭 시 `Dialog` 확대 모달(좌우 이동·키보드, 이동은 활성 그룹 내부). 콘텐츠는 `CHURCH_PHOTOS` 상수(`public/photos/**` 정적 에셋) 주입, 갤러리 미재사용(자체 컴포넌트)·`<img>` 프레젠테이션 셸. 정적 생성(API 호출 0).
+- **`generation-ladder`**: 미션팀 목록(`/departments`). 카드 그리드 대신 **세대 순서(어린이→어른)로 한 줄에 세운다** —
+  "3대가 함께"를 구조로 보여 준다. 왼쪽 2px `{colors.hairline}` 세로선 위에 `team-dot`, 행 = 세대 라벨 `{typography.datetime}` `{colors.muted}` +
+  팀 이름 `{typography.title-lg}` + 한 줄 소개 `{typography.body-md}` + "자세히 보기" 텍스트 링크(48px 터치 타깃) + 우측 `snap-card`(사진이 확인된 팀만).
+  설명은 처음부터 다 보인다(호버로 숨기지 않음 — 고령·모바일). 모바일은 글 아래 사진으로 세로 스택. 데이터는 `DEPARTMENTS`의 `team`·`generation`·`summary`·`snaps`.
+- **`snap-card`** / **`snap-pile`**: 홈 `story-hero`의 기울인 사진 카드를 세부 페이지로 가져온 것. 흰 테두리(`{colors.canvas}` 패딩) +
+  1px hairline + `{rounded.lg}` + soft drop(그림자 단계 추가 없음) + 캡션 `{typography.caption}`. ±2~5도 기울고 hover 시 바로 서며 1.03배.
+  원본이 약 800px인 스냅 사진을 크게 깔지 않고 작게 쓰기 위한 형태다. `snap-pile`은 상세 소개 옆에 1~3장을 겹쳐 놓고 hover 시 흩어진다
+  (사진이 없으면 미노출·글만). **캡션은 사진에 실제로 찍힌 것만 적는다** — 시기·행사·소속 팀을 추정해 붙이지 않는다. reduced-motion은 정적.
+- **`dept-year`**: 상세의 "함께하는 한 해" 구간. `{colors.surface-soft}` 밴드, 항목 = 상단 2px `{colors.ink}` 룰 + 시기 `{typography.datetime}` +
+  제목 `{typography.title-md}` + 설명 + (선택) `snap-card`. **교회·블로그로 확인된 활동이 있는 팀에만 노출**(없으면 구간째 미노출 — 지어내지 않는다).
+- **`team-nav`**: 상세 하단 다섯 팀 내비. `team-dot` + 팀 이름 + 세대 라벨의 링크 5개(모바일 2열 → 3열 → 5열). 현재 팀은 `aria-current="page"` +
+  1px `{colors.ink}` 테두리 + 굵은 이름(색 단독 구분 금지).
+- **`team-dot`**: 팀 색 원형 점(`{rounded.full}`). 미션팀 색의 유일한 사용처. 팀 색이 없는 부서는 `{colors.primary}`로 폴백.
 - **`dept-tree`**: 사역(부서) 목록 = 최상위 부서 카드 그리드(조직도 다이어그램 아님 — 탐색 목적·고령 터치·단일 액센트).
   공개 인트로는 **프론트 상수(`DEPARTMENTS`) 구동**(메인처럼 자립, 백엔드 불필요·정적 생성). 하위부서는
   인덱스에 펼치지 않고 각 상세의 `SubDepartments`에서만 노출. (백엔드 `department`는 교인 정보관리·어드민 별개.)
@@ -688,6 +706,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 
 ### Don't
 - 두 번째 브랜드 컬러를 도입하지 않는다 — **단, 외부 지도 서비스 공식 버튼(`button-kakao`·`button-naver`)은 예외**(제3자 브랜드색, 해당 버튼에만).
+  미션팀 색(`team-dot`)도 예외 — 팀 식별용 작은 점에만.
 - 디스플레이를 700+로 볼드하지 않는다.
 - 그림자 단계를 추가하지 않는다.
 - CTA에 직각 모서리를 쓰지 않는다.
