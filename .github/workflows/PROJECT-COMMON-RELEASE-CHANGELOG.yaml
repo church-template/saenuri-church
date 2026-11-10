@@ -50,7 +50,9 @@
 name: RELEASE CHANGELOG
 
 on:
-  pull_request_target:
+  # pull_request_target 대신 pull_request — 같은 저장소 PR만 처리하므로 포크용 권한 상승이 필요 없고,
+  # GitHub의 공개 저장소 pull_request_target 기본 차단(2026-12-02~)에도 영향받지 않는다.
+  pull_request:
     types: [opened]
     branches: ["main"]
 
