@@ -12,7 +12,8 @@ describe("AboutPage", () => {
     expect(screen.getByText(ABOUT.title)).toBeDefined();
     expect(screen.getByRole("heading", { level: 1 }).textContent).toContain(ABOUT.statement);
     expect(screen.getByText(ABOUT.intro[0])).toBeDefined();
-    expect(screen.getByText(ABOUT.symbolism[0].lines[0])).toBeDefined();
+    // 로고 상징 의미 미수령(빈 배열) → 상징 섹션 미노출
+    expect(screen.queryByText(ABOUT.symbolismHeading)).toBeNull();
     expect(container.textContent).toContain(ABOUT.hope.body.map((seg) => seg.text).join(""));
     expect(screen.getByText(VISION.points[0])).toBeDefined();
     expect(screen.getByText(ABOUT.story.paragraphs[0])).toBeDefined();

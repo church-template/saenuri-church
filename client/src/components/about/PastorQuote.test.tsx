@@ -1,7 +1,10 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { PASTOR } from "@/constants/content";
 import { PastorQuote } from "./PastorQuote";
+
+// 인용문은 교회 자료 수령 전이라 상수가 비어 있다 — 컴포넌트 동작은 픽스처로 검증한다.
+const PASTOR = vi.hoisted(() => ({ pullQuote: "모든 것이 하나님의 은혜입니다.", position: "담임목사", name: "황영기" }));
+vi.mock("@/constants/content", () => ({ PASTOR }));
 
 afterEach(() => vi.unstubAllGlobals());
 

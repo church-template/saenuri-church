@@ -20,3 +20,9 @@ docs/superpowers/
 
 # archify 작업·검증 산출물(최종 다이어그램은 docs/diagrams/)
 .archify/
+
+# projectops UI 시안 작업물(로컬 전용)
+docs/projectops/
+
+# Playwright MCP 캡처·로그
+.playwright-mcp/

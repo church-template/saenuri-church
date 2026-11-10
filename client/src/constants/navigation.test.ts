@@ -3,11 +3,11 @@ import { NAV_PRIMARY, NAV_LOGIN, NAV_MYPAGE, FOOTER_COLUMNS } from "./navigation
 import { allDepartmentSlugs } from "./departments";
 
 describe("navigation IA", () => {
-  it("최상위 메뉴는 4종(교회안내·예배·설교·사역·교회소식)", () => {
+  it("최상위 메뉴는 4종(교회안내·예배·설교·미션팀·교회소식)", () => {
     expect(NAV_PRIMARY.map((i) => i.label)).toEqual([
       "교회안내",
       "예배·설교",
-      "사역",
+      "미션팀",
       "교회소식",
     ]);
   });
@@ -45,8 +45,8 @@ describe("navigation IA", () => {
     ]);
   });
 
-  it("사역 하위 링크는 모두 DEPARTMENTS의 부서 slug로 연결된다(드리프트 감시)", () => {
-    const ministry = NAV_PRIMARY.find((i) => i.label === "사역");
+  it("미션팀 하위 링크는 모두 DEPARTMENTS의 부서 slug로 연결된다(드리프트 감시)", () => {
+    const ministry = NAV_PRIMARY.find((i) => i.label === "미션팀");
     const slugs = new Set(allDepartmentSlugs());
     expect(ministry?.children.length).toBeGreaterThan(0);
     for (const child of ministry!.children) {
@@ -73,7 +73,7 @@ describe("navigation IA", () => {
     expect(FOOTER_COLUMNS.map((c) => c.title)).toEqual([
       "교회안내",
       "예배·설교",
-      "사역",
+      "미션팀",
       "교회소식",
     ]);
   });

@@ -20,8 +20,9 @@ describe("LocationPage", () => {
     expect(
       screen.getByRole("link", { name: CHURCH_EMAIL }).getAttribute("href"),
     ).toBe(`mailto:${CHURCH_EMAIL}`);
-    // MAP_EMBED_SRC가 비어 있으므로 약도 이미지 + 외부 지도(카카오·네이버) 링크가 노출된다.
-    expect(screen.getByAltText(LOCATION.map.alt)).toBeDefined();
+    // MAP_EMBED_SRC·약도(LOCATION.map) 모두 없으므로 이미지 없이 외부 지도(카카오·네이버) 링크만 노출된다.
+    expect(LOCATION.map).toBeNull();
+    expect(screen.queryByRole("img")).toBeNull();
     expect(screen.getByRole("link", { name: "카카오맵에서 보기" })).toBeDefined();
     expect(screen.getByRole("link", { name: "네이버지도에서 보기" })).toBeDefined();
     // 교통 안내 섹션

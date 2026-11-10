@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, fireEvent } from "@testing-library/react";
 import type { ReactNode } from "react";
 
 vi.mock("next/navigation", () => ({ usePathname: () => "/" }));
@@ -13,17 +13,6 @@ vi.mock("next/link", () => ({
 
 import { HeroHeaderSync } from "./HeroHeaderSync";
 
-// jsdom에는 IntersectionObserver가 없다 — 콜백을 캡처해 교차 상태를 수동 발화.
-let ioCallback: IntersectionObserverCallback;
-class MockIO {
-  constructor(cb: IntersectionObserverCallback) {
-    ioCallback = cb;
-  }
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
-
 function setup(reduced = false) {
   vi.stubGlobal(
     "matchMedia",
@@ -33,70 +22,48 @@ function setup(reduced = false) {
       removeEventListener: () => {},
     })),
   );
-  vi.stubGlobal("IntersectionObserver", MockIO);
   render(
-    <HeroHeaderSync
-      media={{ type: "image", src: "/bg.jpg" }}
-      caption="카피"
-      tiles={[
-        { src: "/t1.jpg", alt: "", aspect: 1.17 },
-        { src: "/t2.jpg", alt: "", aspect: 1.78 },
-        { src: "/t3.jpg", alt: "", aspect: 1.5 },
-        { src: "/t4.jpg", alt: "", aspect: 1.78 },
-      ]}
-      posterAspect={1.32}
-    >
+    <HeroHeaderSync>
       <p>본문</p>
     </HeroHeaderSync>,
   );
 }
 
+const banner = () => screen.getByRole("banner").className;
+
 afterEach(() => {
+  vi.useRealTimers();
   vi.unstubAllGlobals();
 });
 
 describe("HeroHeaderSync", () => {
-  it("초기에는 투명(on-dark) 헤더다", () => {
+  it("인트로 동안 투명 헤더가 위로 숨겨지고, 인트로가 끝나면 내려온다", () => {
+    vi.useFakeTimers();
     setup();
-    expect(screen.getByRole("banner").className).toContain("bg-transparent");
+    expect(banner()).toContain("bg-transparent");
+    expect(banner()).toContain("-translate-y-full");
+    act(() => vi.advanceTimersByTime(3800));
+    expect(banner()).not.toContain("-translate-y-full");
   });
 
-  it("히어로 이탈 시 solid(라이트 스킨)로 전환한다", () => {
+  it("히어로를 지나 스크롤하면 solid(라이트 스킨)로 전환한다", () => {
     setup();
     act(() => {
-      ioCallback(
-        [{ isIntersecting: false } as IntersectionObserverEntry],
-        {} as IntersectionObserver,
-      );
+      Object.defineProperty(window, "scrollY", { value: 5000, configurable: true });
+      fireEvent.scroll(window);
     });
-    expect(screen.getByRole("banner").className).toContain("bg-canvas");
+    expect(banner()).toContain("bg-canvas");
+  });
+
+  it("움직임 줄이기면 처음부터 solid이고 숨기지 않는다", () => {
+    setup(true);
+    expect(banner()).toContain("bg-canvas");
+    expect(banner()).not.toContain("-translate-y-full");
   });
 
   it("본문 children은 main 랜드마크 안에 렌더된다", () => {
     setup();
     expect(screen.getByRole("main")).toBeDefined();
     expect(screen.getByText("본문")).toBeDefined();
-  });
-
-  it("히어로로 복귀 시 on-dark로 되돌아간다", () => {
-    setup();
-    act(() => {
-      ioCallback(
-        [{ isIntersecting: false } as IntersectionObserverEntry],
-        {} as IntersectionObserver,
-      );
-    });
-    act(() => {
-      ioCallback(
-        [{ isIntersecting: true } as IntersectionObserverEntry],
-        {} as IntersectionObserver,
-      );
-    });
-    expect(screen.getByRole("banner").className).toContain("bg-transparent");
-  });
-
-  it("reduced-motion이면 처음부터 라이트 스킨으로 고정한다", () => {
-    setup(true);
-    expect(screen.getByRole("banner").className).toContain("bg-canvas");
   });
 });

@@ -16,7 +16,8 @@ export default function AboutPage() {
   return (
     <>
       <VisionHero />
-      <SymbolismList />
+      {/* 로고 상징 의미를 받기 전(빈 배열)에는 섹션을 그리지 않는다. */}
+      {ABOUT.symbolism.length > 0 ? <SymbolismList /> : null}
       <HopeStatement />
       <VisionGoals />
       <ChurchStory />

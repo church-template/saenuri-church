@@ -40,7 +40,7 @@ export default function GlobalError({
             padding: "0 20px",
             borderRadius: 16,
             border: "none",
-            background: "#0052ff" /* --color-primary — 리브랜드 시 교체 */,
+            background: "#13426f" /* --color-primary — 리브랜드 시 교체(brand.test가 globals.css와 대조) */,
             color: "#ffffff" /* --color-canvas */,
             fontSize: 16,
             fontWeight: 600,

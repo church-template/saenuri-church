@@ -7,10 +7,10 @@
  * ============================================================ */
 @theme {
   /* --- 색 --- */
-  --color-primary: #0052ff;
-  --color-primary-active: #003ecc;
+  --color-primary: #13426f;
+  --color-primary-active: #0d3256;
   --color-primary-disabled: #a8b8cc;
-  --color-primary-soft: #e8efff;
+  --color-primary-soft: #e7eef5;
 
   --color-ink: #0a0b0d;
   --color-body: #5b616e;
@@ -31,7 +31,7 @@
   --color-on-primary: #ffffff;
   --color-on-dark: #ffffff;
   --color-on-dark-soft: #a8acb3;
-  --color-primary-on-dark: #4d82ff;  /* 다크 밴드 위 액센트 — #0052ff는 다크 위 대비 부족(challenge-today-band 전용) */
+  --color-primary-on-dark: #2e96ff;  /* 다크 밴드·사진 위 액센트 — 네이비 primary는 다크 위 대비 부족 */
 
   --color-success: #05b169;           /* 폼 메시지 텍스트 색으로만 */
   --color-error: #cf202f;

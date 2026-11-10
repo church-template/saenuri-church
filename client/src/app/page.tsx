@@ -9,14 +9,7 @@ import { MainFeedsError } from "@/components/main/MainFeedsError";
 import { CtaBand } from "@/components/shell/CtaBand";
 import { SiteFooter } from "@/components/shell/SiteFooter";
 import { getMain } from "@/lib/api/main";
-import { HistoryBand } from "@/components/main/HistoryBand";
 import { MinistryCards } from "@/components/main/MinistryCards";
-import {
-  HERO,
-  HERO_CAPTION,
-  HERO_POSTER_ASPECT,
-  COLLAGE_TILES,
-} from "@/constants/church";
 
 // 홈 정본 URL — 루트 layout에 canonical을 두면 전 페이지가 홈을 정본으로 가리키는 버그라
 // 페이지별로 선언한다(layout.tsx 주석 참조). title·description은 루트 default 사용.
@@ -33,22 +26,10 @@ export default async function Home() {
     return null;
   });
 
-  // 줄 단위 카피 배열 → block span 합성(가이드 13.3의 "\n" 이슈 원천 차단, 줄별 텍스트 노드 유지)
-  const caption = HERO_CAPTION.map((line, i) => (
-    <span key={i} className="block">
-      {line}
-    </span>
-  ));
-
   return (
     <>
-      <HeroHeaderSync
-        media={HERO}
-        caption={caption}
-        tiles={COLLAGE_TILES}
-        posterAspect={HERO_POSTER_ASPECT}
-      >
-        <HistoryBand />
+      {/* 연혁은 스토리 히어로가 대신한다 — HistoryBand(연혁 띠)는 메인에서 뺐다(이슈 #1 Q2). */}
+      <HeroHeaderSync>
         <MinistryCards />
         <WorshipSection />
         {/* 소식(설교·공지·일정)만 장애 격리 — 로드 실패 시 이 자리에만 폴백 */}

@@ -53,14 +53,17 @@ describe("HistoryChapter (챕터 그리드)", () => {
     expect(chapters[2].classList.contains(styles.dark)).toBe(true);
   });
 
-  it("사진을 alt=''로 렌더하고 헤딩 aria-labelledby를 연결한다", () => {
+  it("사진을 상수 alt로 렌더하고 헤딩 aria-labelledby를 연결한다", () => {
     reduced();
+    const item = HISTORY.items.find((i) => i.media?.type === "image")!;
     const { container } = render(
       <ol>
         <HistoryChapter item={item} index={0} />
       </ol>,
     );
-    expect(container.querySelector("img")?.getAttribute("alt")).toBe("");
+    expect(container.querySelector("img")?.getAttribute("alt")).toBe(
+      item.media?.type === "image" ? item.media.alt : undefined,
+    );
     const li = container.querySelector("li[id]");
     expect(li?.getAttribute("aria-labelledby")).toBe(`${item.id}-h`);
     expect(container.querySelector(`[id="${item.id}-h"]`)).not.toBeNull();

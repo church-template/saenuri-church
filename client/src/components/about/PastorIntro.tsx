@@ -39,7 +39,9 @@ export function PastorIntro() {
                   {PASTOR.name}{" "}
                   <span className={cn(typo.titleMd, "text-muted")}>{PASTOR.position}</span>
                 </h1>
-                <p className={cn(typo.datetime, "mt-xs text-muted")}>{PASTOR.degree}</p>
+                {PASTOR.degree ? (
+                  <p className={cn(typo.datetime, "mt-xs text-muted")}>{PASTOR.degree}</p>
+                ) : null}
                 {/* 기본은 bodyLg(24px) — 켜진 문장만 bodyXl(32px·600)로 부푼다. data-reading은 테스트 훅. */}
                 <div className={cn(typo.bodyLg, "mt-lg", styles.reading)} data-reading>
                   {PARAGRAPHS.map((sentences, pi) => (

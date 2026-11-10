@@ -14,7 +14,8 @@ export default function PastorPage() {
   return (
     <>
       <PastorIntro />
-      <PastorQuote />
+      {/* 인용문은 목회자 본인 문장만 — 받기 전(빈 문자열)에는 밴드를 그리지 않는다. */}
+      {PASTOR.pullQuote ? <PastorQuote /> : null}
       <PastorDossier />
     </>
   );

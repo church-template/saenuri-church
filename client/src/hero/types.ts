@@ -13,3 +13,45 @@ export interface CollageTile {
   /** 가로 / 세로 */
   aspect: number;
 }
+
+// 메인 스토리 히어로(StoryHero) — 사진으로 교회 역사를 넘기는 스크롤 연출. 콘텐츠는 constants/storyHero.ts.
+/** 과거로 갈수록 바래는 배경 톤 */
+export type StoryTone = "none" | "fade1" | "fade2" | "mono";
+
+export interface StoryCard {
+  src: string;
+  /** 카드 안쪽 하단 캡션이자 이미지 alt */
+  caption: string;
+}
+
+export interface StoryChapter {
+  id: string;
+  /** 큰 연도 숫자(예: "1990") */
+  year: string;
+  /** 연도 옆 작은 표기(예: "7월 8일", "~ 2006년") */
+  yearSuffix?: string;
+  /** 제목 — 줄 단위 */
+  title: string[];
+  desc: string;
+  verse?: { lines: string[]; cite: string };
+  bg: { src: string; tone: StoryTone; credit?: string };
+  /** 우하단에 기울여 겹치는 사진 0~3장 */
+  cards: StoryCard[];
+}
+
+export interface StoryHeroContent {
+  intro: { mark: string; sub: string };
+  split: {
+    eyebrow: string;
+    /** 제목 줄 — highlight와 같은 문자열 조각은 강조색 */
+    title: string[];
+    highlight: string;
+    lead: string[];
+    info: { label: string; value: string }[];
+    bg: string;
+    /** [뒤 왼쪽, 뒤 오른쪽, 앞(인트로·마지막 장의 풀스크린 사진)] */
+    cards: [StoryCard, StoryCard, StoryCard];
+  };
+  chapters: StoryChapter[];
+  backLabel: string;
+}

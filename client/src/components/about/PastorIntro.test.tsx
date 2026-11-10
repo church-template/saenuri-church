@@ -10,18 +10,17 @@ const readingText = (container: HTMLElement) =>
   container.querySelector("[data-reading]")?.textContent?.replace(/\s+/g, " ") ?? "";
 
 describe("PastorIntro", () => {
-  it("키커·이름·직분·학위·intro·greeting을 렌더한다", () => {
+  it("키커·이름·직분·intro를 렌더하고, 비어 있는 학위는 생략한다", () => {
     vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
     const { container } = render(<PastorIntro />);
     const h1 = screen.getByRole("heading", { level: 1 });
     expect(h1.textContent).toContain(PASTOR.name);
     expect(h1.textContent).toContain(PASTOR.position);
-    expect(screen.getByText(PASTOR.degree)).toBeDefined();
+    expect(PASTOR.degree).toBe("");
+    expect(container.querySelector("h1 + p")).toBeNull();
 
     const text = readingText(container);
     expect(text).toContain(PASTOR.intro);
-    expect(text).toContain(PASTOR.greeting[0]);
-    expect(text).toContain(PASTOR.greeting[1]);
   });
 
   it("본문을 문장 span으로 쪼개고 문단을 가로지르는 인덱스를 부여한다", () => {
