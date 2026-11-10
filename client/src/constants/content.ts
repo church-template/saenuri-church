@@ -293,6 +293,17 @@ export const WORSHIP = {
     "수인분당선 죽전역 2번 출구에서 걸어서 약 12분입니다.",
     "누리에뜰 3층 321호로 오시면 됩니다.",
   ],
+  hero: { src: "/assets/church/worship-2023.webp", alt: "새누리교회 주일예배" },
+  nextLabel: "다음 예배",
+  // 처음 오는 분을 위한 주일 흐름 — WORSHIP_SERVICES의 주일 예배 셋을 시간순으로(같은 사실).
+  flowEyebrow: "처음 오시는 분께",
+  flowHeading: "주일은 이렇게 흘러갑니다",
+  flow: [
+    { time: "오전 9:30", title: "교회학교예배", desc: "오렌지 미션팀 어린이들이 먼저 예배합니다." },
+    { time: "오전 11:00", title: "주일예배", desc: "온 성도가 함께 드리는 주일 예배입니다." },
+    { time: "오후 1:40", title: "주일오후예배", desc: "주일 오후에 드리는 예배입니다." },
+  ],
+  weekdayHeading: "주중에도 모입니다",
 };
 
 export interface WorshipService {
@@ -301,12 +312,16 @@ export interface WorshipService {
   place: string; // 기존 유지 — 메인 ScheduleCard 소비
   praise?: string; // 찬양 시간 서브라인(없으면 생략)
   notes: string[]; // 예배별 설명 3줄
+  // "다음 예배" 계산용 구조 데이터 — time(표시 문자열)과 같은 사실. 요일은 0=주일 … 6=토, 한국 시간.
+  schedule: { days: number[]; hour: number; minute: number };
+  primary?: boolean; // 예배 안내 히어로에 크게 세우는 대표 예배(주일예배)
 }
 export const WORSHIP_SERVICES: WorshipService[] = [
   {
     name: "교회학교예배",
     time: "주일 오전 9:30",
     place: "누리에뜰 321호",
+    schedule: { days: [0], hour: 9, minute: 30 },
     notes: [
       "오렌지 미션팀(어린이 주일학교)",
       "주일예배 전에 드리는 어린이 예배",
@@ -316,6 +331,8 @@ export const WORSHIP_SERVICES: WorshipService[] = [
     name: "주일예배",
     time: "주일 오전 11:00",
     place: "누리에뜰 321호",
+    schedule: { days: [0], hour: 11, minute: 0 },
+    primary: true,
     notes: [
       "온 성도가 함께 드리는 주일 예배",
     ],
@@ -324,6 +341,7 @@ export const WORSHIP_SERVICES: WorshipService[] = [
     name: "주일오후예배",
     time: "주일 오후 1:40",
     place: "누리에뜰 321호",
+    schedule: { days: [0], hour: 13, minute: 40 },
     notes: [
       "주일 오후에 드리는 예배",
     ],
@@ -332,6 +350,7 @@ export const WORSHIP_SERVICES: WorshipService[] = [
     name: "금요기도회",
     time: "금요일 저녁 9:00",
     place: "누리에뜰 321호",
+    schedule: { days: [5], hour: 21, minute: 0 },
     notes: [
       "한 주를 기도로 마무리하는 시간",
     ],
@@ -340,6 +359,7 @@ export const WORSHIP_SERVICES: WorshipService[] = [
     name: "새벽예배",
     time: "월~금 오전 5:30",
     place: "누리에뜰 321호",
+    schedule: { days: [1, 2, 3, 4, 5], hour: 5, minute: 30 },
     notes: [
       "하루를 말씀과 기도로 여는 시간",
     ],
