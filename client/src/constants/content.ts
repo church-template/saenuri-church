@@ -313,8 +313,11 @@ export const CHURCH_PHOTOS: {
 export const LOCATION = {
   title: "오시는 길",
   lead: "새누리교회를 찾아오시는 길을 안내합니다.",
-  // 약도 이미지 미수령 — null이면 외부 지도 버튼만 노출한다.
-  map: null as { src: string; alt: string } | null,
+  // null이면 외부 지도 버튼만 노출한다. 약도는 네이버 지도 배치를 참고해 단순화한 그림(축척 아님).
+  map: {
+    src: "/assets/location/map.webp",
+    alt: "새누리교회 약도 — 수인분당선 죽전역 남쪽, 엑스파크공원 아래 상가 거리에 있습니다",
+  } as { src: string; alt: string } | null,
   directionsHeading: "찾아오는 방법",
   directions: [
     {

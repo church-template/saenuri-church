@@ -73,8 +73,6 @@ const FALLBACK_THUMB = "/dept/default.webp";
 // 미션팀 — 새누리교회는 부서를 색깔 이름의 "미션팀"으로 부른다(블로그 2022년 글 기준 5개).
 // 메가메뉴 "미션팀" 카테고리와 동일 구성. 담당자·모임 장소는 교회 확인 전이라 비워 둔다
 // (옵션 필드 생략 → 해당 섹션 미노출). 사진은 블로그에서 팀이 확인된 것만 쓴다(근거는 팀별 주석).
-const teamMedia = (name: string): HeroMedia => ({ type: "image", src: FALLBACK_THUMB, alt: name });
-
 export const DEPARTMENTS: Department[] = [
   {
     slug: "orange",
@@ -121,13 +119,17 @@ export const DEPARTMENTS: Department[] = [
     name: "스카이블루 미션팀",
     description:
       "**청년부**의 한 팀입니다.\n\n20대 청년과 대학생, 미혼 30대 청년이 함께 모여 예배하고 교제합니다.",
-    media: teamMedia("스카이블루 미션팀"),
+    media: { type: "image", src: "/dept/skyblue.webp", alt: "공원 바위 앞에 모인 스카이블루 미션팀" },
     caption: ["함께 예배하고", "함께 꿈꾸는 청년"],
     team: "skyblue",
     generation: "20대 · 대학생 · 미혼 30대",
     summary: "또래 청년들이 함께 예배하고 교제하는 청년부입니다.",
-    // 홈 스토리 히어로의 "지금의 청년들" 사진 재사용 — 스카이블루 소속 여부는 교회 확인 필요.
-    snaps: [{ src: "/assets/church/youth-2023.webp", alt: "새누리교회 청년들", caption: "청년부" }],
+    // 근거: 블로그 2022년 6월 스카이블루 팀장 글 "새벽이슬 같은" — "새누리교회 스카이블루미션팀(2019~2022)" 묶음 사진.
+    snaps: [
+      { src: "/dept/skyblue.webp", alt: "공원 바위 앞에 모인 스카이블루 미션팀", caption: "스카이블루 미션팀" },
+      { src: "/dept/skyblue/1.webp", alt: "둘러앉아 식사하는 스카이블루 미션팀", caption: "함께하는 식사" },
+      { src: "/dept/skyblue/2.webp", alt: "카페에 모인 스카이블루 미션팀", caption: "카페에서" },
+    ],
     info: [{ label: "대상", value: "20대 청년·대학생·미혼 30대" }],
     invite: {
       heading: "스카이블루 미션팀에서 함께해요",

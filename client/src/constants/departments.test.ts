@@ -86,11 +86,11 @@ describe("사역 부서 상수", () => {
     }
   });
 
-  it("스카이블루를 뺀 팀은 대표 사진이 기본 이미지가 아니고, 모든 팀이 사진 카드를 갖는다", () => {
+  it("모든 팀은 대표 사진이 기본 이미지가 아니고, 사진 카드를 갖는다", () => {
     for (const d of DEPARTMENTS) {
       expect(d.snaps?.length).toBeGreaterThan(0);
     }
-    for (const slug of ["orange", "red", "blue", "green"]) {
+    for (const slug of ["orange", "skyblue", "red", "blue", "green"]) {
       const m = findDepartment(slug)!.media;
       expect(m.src).toBe(`/dept/${slug}.webp`);
     }
