@@ -38,7 +38,7 @@ export const HERO_POSTER_ASPECT = 1920 / 1456;
 
 // 풀스크린 후 등장 카피 — 줄 단위 배열이라 "\n" 이스케이프가 필요 없다.
 export const HERO_CAPTION = [
-  "가정을 세우는 교회",
+  "하나님이 기뻐하시는 사람을 세우는 교회",
   "3대가 함께하는 새누리교회",
 ];
 

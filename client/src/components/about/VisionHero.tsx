@@ -29,7 +29,7 @@ export function VisionHero() {
       <div className="grid items-center gap-xl lg:grid-cols-[1fr_auto]">
         <Reveal>
           <p className={cn(typo.titleSm, "text-primary")}>{ABOUT.title}</p>
-          <h1 className={cn(typo.displayMega, "mt-base text-ink")}>
+          <h1 className={cn(typo.displayMega, "mt-base whitespace-pre-line text-ink")}>
             {renderStatement(ABOUT.statement, ABOUT.statementHighlight)}
           </h1>
           <div className={cn(typo.bodyLg, "mt-lg max-w-[var(--container-narrow)] text-body")}>
