@@ -1,43 +1,48 @@
-import { BookOpen, GraduationCap, HeartHandshake, type LucideIcon } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 import { Container } from "@/components/shell/Container";
 import { Reveal } from "./Reveal";
+import { SectionHead } from "./SectionHead";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
-import { MINISTRY, MINISTRIES, type Ministry } from "@/constants/content";
+import { MINISTRY, MINISTRIES } from "@/constants/content";
 
-// 아이콘은 컴포넌트에서 매핑 — 상수는 직렬화 가능한 키만 보유(스펙 §3). 색은 currentColor 상속.
-const ICONS: Record<Ministry["key"], LucideIcon> = {
-  worship: BookOpen,
-  nextgen: GraduationCap,
-  serving: HeartHandshake,
-};
-
-// 카드 배경 토큰 교차 — 연혁(HistoryBand)과 시작점을 달리해 인접 중복 회피(스펙 §3).
-const CARD_TONES = [
-  { card: "bg-primary-soft", head: "text-ink", body: "text-body" },
-  { card: "bg-surface-soft", head: "text-ink", body: "text-body" },
-  { card: "bg-surface-dark", head: "text-on-dark", body: "text-on-dark-soft" },
-] as const;
-
+// 사역 카드(ministry-cards) — 사진이 주인공(DESIGN 개요). 카드 전체가 해당 소개 링크, hover 시 사진 1.03 줌.
 export function MinistryCards() {
   return (
     <section className="py-section">
       <Container>
-        <h2 className={cn(typo.displayLg, "text-ink")}>{MINISTRY.title}</h2>
+        <SectionHead
+          eyebrow={MINISTRY.eyebrow}
+          title={MINISTRY.title}
+          more={{ label: MINISTRY.more, href: MINISTRY.moreHref }}
+        />
         <div className="mt-lg grid gap-base sm:grid-cols-3">
-          {MINISTRIES.map((m, i) => {
-            const tone = CARD_TONES[i % CARD_TONES.length];
-            const Icon = ICONS[m.key];
-            return (
-              <Reveal key={m.key} delay={i * 120} className="h-full">
-                <div className={cn("h-full rounded-xl p-xl", tone.card, tone.head)}>
-                  <Icon size={32} aria-hidden />
-                  <h3 className={cn(typo.titleLg, "mt-base")}>{m.title}</h3>
-                  <p className={cn(typo.bodyMd, "mt-xs", tone.body)}>{m.desc}</p>
+          {MINISTRIES.map((m, i) => (
+            <Reveal key={m.key} delay={i * 120} className="h-full">
+              <Link
+                href={m.href}
+                className={cn(
+                  "group block h-full overflow-hidden rounded-xl bg-surface-soft",
+                  "focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
+                )}
+              >
+                <div className="relative aspect-4/3 overflow-hidden">
+                  <Image
+                    src={m.image.src}
+                    alt={m.image.alt}
+                    fill
+                    sizes="(min-width: 640px) 33vw, 100vw"
+                    className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.03]"
+                  />
                 </div>
-              </Reveal>
-            );
-          })}
+                <div className="p-lg">
+                  <h3 className={cn(typo.titleMd, "text-ink")}>{m.title}</h3>
+                  <p className={cn(typo.bodyMd, "mt-xs text-body")}>{m.desc}</p>
+                </div>
+              </Link>
+            </Reveal>
+          ))}
         </div>
       </Container>
     </section>
