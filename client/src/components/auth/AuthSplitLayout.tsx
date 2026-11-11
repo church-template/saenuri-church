@@ -1,9 +1,10 @@
 // src/components/auth/AuthSplitLayout.tsx
 import type { ReactNode } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
-import { CHURCH_NAME, HERO, HERO_CAPTION } from "@/constants/church";
+import { CHURCH_NAME, CHURCH_LOGO, HERO, HERO_CAPTION } from "@/constants/church";
 
 // 히어로 미디어에서 정지 이미지 추출 — video면 poster, image면 src (둘 다 없으면 덮개만).
 const posterSrc = HERO.type === "video" ? (HERO.poster ?? "") : HERO.src;
@@ -24,7 +25,8 @@ export function AuthSplitLayout({ children }: { children: ReactNode }) {
       </div>
       {/* 좌측 패널 — 로고·슬로건만(사진은 뒤 레이어). z-10으로 사진 위에 얹힌다. */}
       <aside className="relative z-10 hidden w-1/2 flex-col justify-between p-xl md:flex">
-        <Link href="/" className={cn(typo.titleMd, "w-fit text-on-dark")}>
+        <Link href="/" className={cn(typo.titleMd, "flex w-fit items-center gap-sm text-on-dark")}>
+          <Image src={CHURCH_LOGO.src} alt="" width={512} height={512} className="size-10 shrink-0" />
           {CHURCH_NAME}
         </Link>
         <div className="flex flex-col gap-xs">
@@ -37,7 +39,8 @@ export function AuthSplitLayout({ children }: { children: ReactNode }) {
       </aside>
       {/* 우측 폼 패널 — 모바일 단독 풀폭. 배경은 root가 담당(투명)이라 갈라지는 사진이 비친다. */}
       <main className="relative z-10 flex min-h-dvh flex-1 flex-col overflow-y-auto px-lg py-xl">
-        <Link href="/" className={cn(typo.titleMd, "w-fit text-ink md:hidden")}>
+        <Link href="/" className={cn(typo.titleMd, "flex w-fit items-center gap-sm text-ink md:hidden")}>
+          <Image src={CHURCH_LOGO.src} alt="" width={512} height={512} className="size-8 shrink-0" />
           {CHURCH_NAME}
         </Link>
         <div className="auth-hero-form flex flex-1 items-center justify-center py-lg">

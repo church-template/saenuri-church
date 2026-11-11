@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "./Container";
 import { typo } from "@/constants/typography";
@@ -5,6 +6,7 @@ import { cn } from "@/lib/utils";
 import {
   CHURCH_NAME,
   CHURCH_NAME_FULL,
+  CHURCH_LOGO,
   CHURCH_ADDRESS,
   CHURCH_PHONE,
   CHURCH_EMAIL,
@@ -20,7 +22,11 @@ export function SiteFooter() {
       {/* lg는 6열: 브랜드/교회정보가 2열을 차지해 주소가 한 줄로 들어가고, 나머지 4개 링크열이 1열씩 채운다(2+4=6). */}
       <Container className="grid gap-xl py-xxl sm:grid-cols-2 lg:grid-cols-6">
         <div className="flex flex-col gap-xs lg:col-span-2">
-          <span className={cn(typo.titleMd, "text-primary")}>{CHURCH_NAME}</span>
+          {/* 로고 + 교회명(헤더와 같은 결). 로고는 이름 옆 장식이라 alt="". */}
+          <span className={cn(typo.titleMd, "flex items-center gap-sm text-primary")}>
+            <Image src={CHURCH_LOGO.src} alt="" width={512} height={512} className="size-8 shrink-0" />
+            {CHURCH_NAME}
+          </span>
           {/* 주소는 한 줄 유지 — 좁은 컬럼에서 "260"만 다음 줄로 떨어지는 것 방지(전화·이메일은 짧아 영향 없음) */}
           <address className={cn(typo.bodyMd, "not-italic text-muted whitespace-nowrap")}>
             {CHURCH_ADDRESS}

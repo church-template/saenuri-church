@@ -6,11 +6,11 @@ import { ChurchStory } from "./ChurchStory";
 afterEach(() => vi.unstubAllGlobals());
 
 describe("ChurchStory", () => {
-  it("이야기 소제목과 모든 문단을 렌더한다", () => {
+  it("소개 소제목·네 줄 요약·모든 문단을 렌더한다", () => {
     vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
     render(<ChurchStory />);
     expect(screen.getByText(ABOUT.story.heading)).toBeDefined();
-    ABOUT.story.paragraphs.forEach((paragraph) => {
+    [...ABOUT.story.lead, ...ABOUT.story.paragraphs].forEach((paragraph) => {
       expect(screen.getByText(paragraph)).toBeDefined();
     });
   });

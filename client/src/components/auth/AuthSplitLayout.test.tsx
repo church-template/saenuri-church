@@ -54,8 +54,9 @@ describe("AuthSplitLayout", () => {
     expect(media?.className).toContain("hidden");
     expect(media?.className).toContain("md:block");
     expect(media?.querySelector("img")).not.toBeNull();
-    // 사진은 aside 안에 있지 않다(연출을 위해 풀블리드로 이동)
-    expect(container.querySelector("aside img")).toBeNull();
+    // 사진은 aside 안에 있지 않다(연출을 위해 풀블리드로 이동). aside의 img는 교회명 옆 로고뿐이다.
+    const photoSrc = media?.querySelector("img")?.getAttribute("src");
+    expect(container.querySelector(`aside img[src="${photoSrc}"]`)).toBeNull();
   });
 
   it("폼 카드 래퍼에 페이드인 훅(auth-hero-form)이 있고 children을 감싼다", () => {

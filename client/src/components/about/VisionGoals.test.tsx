@@ -6,7 +6,7 @@ import { VisionGoals } from "./VisionGoals";
 afterEach(() => vi.unstubAllGlobals());
 
 describe("VisionGoals", () => {
-  it("비전 제목과 6개 항목·아이콘을 렌더한다", () => {
+  it("핵심가치 제목과 항목·아이콘을 렌더한다", () => {
     vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
     const { container } = render(<VisionGoals />);
     expect(screen.getByText(VISION.title)).toBeDefined();
