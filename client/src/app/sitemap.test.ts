@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import sitemap from "./sitemap";
 import { getNotices } from "@/lib/api/notices";
 import { getEvents } from "@/lib/api/events";
+import { CHURCH_URL } from "@/constants/church";
 
 vi.mock("@/lib/api/notices", () => ({ getNotices: vi.fn() }));
 vi.mock("@/lib/api/events", () => ({ getEvents: vi.fn() }));
@@ -17,8 +18,8 @@ describe("sitemap", () => {
     vi.mocked(getEvents).mockRejectedValue(new Error("backend down"));
     const entries = await sitemap();
     const urls = entries.map((e) => e.url);
-    expect(urls).toContain("https://www.example.com/notices");
-    expect(urls).toContain("https://www.example.com/bulletins");
+    expect(urls).toContain(`${CHURCH_URL}/notices`);
+    expect(urls).toContain(`${CHURCH_URL}/bulletins`);
     expect(urls.some((u) => u.includes("/sermons"))).toBe(false);
     expect(urls.some((u) => u.includes("/gallery"))).toBe(false);
     expect(urls.some((u) => u.includes("/challenges"))).toBe(false);
@@ -54,9 +55,9 @@ describe("sitemap", () => {
     });
     const entries = await sitemap();
     const urls = entries.map((e) => e.url);
-    expect(urls).toContain("https://www.example.com/notices/7");
+    expect(urls).toContain(`${CHURCH_URL}/notices/7`);
     expect(
-      urls.filter((u) => u === "https://www.example.com/events/3"),
+      urls.filter((u) => u === `${CHURCH_URL}/events/3`),
     ).toHaveLength(1);
   });
 });

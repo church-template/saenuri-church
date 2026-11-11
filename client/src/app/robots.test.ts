@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import robots from "./robots";
+import { CHURCH_URL } from "@/constants/church";
 
 describe("robots", () => {
   it("회원 전용 영역을 차단하고 sitemap을 가리킨다", () => {
@@ -15,6 +16,6 @@ describe("robots", () => {
     ]) {
       expect(disallow).toContain(path);
     }
-    expect(res.sitemap).toBe("https://www.example.com/sitemap.xml");
+    expect(res.sitemap).toBe(`${CHURCH_URL}/sitemap.xml`);
   });
 });

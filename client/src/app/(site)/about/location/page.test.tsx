@@ -7,7 +7,7 @@ import LocationPage from "./page";
 afterEach(() => vi.unstubAllGlobals());
 
 describe("LocationPage", () => {
-  it("제목·연락처·약도(폴백)·교통 안내를 렌더한다", () => {
+  it("제목·연락처·약도 이미지·교통 안내를 렌더한다", () => {
     // Reveal이 useEffect에서 matchMedia를 호출 — jsdom 미구현이라 reduced 경로로 스텁(about/* 테스트 관례).
     vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
     render(<LocationPage />);
@@ -20,9 +20,8 @@ describe("LocationPage", () => {
     expect(
       screen.getByRole("link", { name: CHURCH_EMAIL }).getAttribute("href"),
     ).toBe(`mailto:${CHURCH_EMAIL}`);
-    // MAP_EMBED_SRC·약도(LOCATION.map) 모두 없으므로 이미지 없이 외부 지도(카카오·네이버) 링크만 노출된다.
-    expect(LOCATION.map).toBeNull();
-    expect(screen.queryByRole("img")).toBeNull();
+    // MAP_EMBED_SRC가 없으므로 약도 이미지(LOCATION.map) + 외부 지도(카카오·네이버) 링크가 노출된다.
+    expect(screen.getByRole("img", { name: LOCATION.map!.alt }).getAttribute("src")).toBe(LOCATION.map!.src);
     expect(screen.getByRole("link", { name: "카카오맵에서 보기" })).toBeDefined();
     expect(screen.getByRole("link", { name: "네이버지도에서 보기" })).toBeDefined();
     // 교통 안내 섹션

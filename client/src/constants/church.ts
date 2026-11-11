@@ -7,8 +7,8 @@ export const CHURCH_NAME = "새누리교회";
 // 정식 명칭 — 저작권·약관 등 공식 표기용. 헤더·푸터 로고는 약칭 CHURCH_NAME을 쓴다.
 export const CHURCH_NAME_FULL = "기독교한국침례회 새누리교회";
 // 교회 공식 도메인. 실제 배포의 정본 호스트와 일치해야 한다.
-// TODO(교회 확인): 도메인 미수령 — 배포 전 교체
-export const CHURCH_DOMAIN = "www.example.com";
+// 도메인 구입 전 임시 — Vercel 기본 주소. 도메인을 연결하면 그 호스트로 교체한다.
+export const CHURCH_DOMAIN = "saenuri-church-three.vercel.app";
 
 // 사이트 정본 URL — metadataBase·robots·sitemap·JSON-LD가 공유하는 절대 URL의 단일 출처.
 export const CHURCH_URL = `https://${CHURCH_DOMAIN}`;
