@@ -7,6 +7,7 @@ import { NoticeSection } from "@/components/main/NoticeSection";
 import { EventSection } from "@/components/main/EventSection";
 import { MainFeedsError } from "@/components/main/MainFeedsError";
 import { CtaBand } from "@/components/shell/CtaBand";
+import { Container } from "@/components/shell/Container";
 import { SiteFooter } from "@/components/shell/SiteFooter";
 import { getMain } from "@/lib/api/main";
 import { MinistryCards } from "@/components/main/MinistryCards";
@@ -36,8 +37,13 @@ export default async function Home() {
         {main ? (
           <>
             <SermonSection sermons={main.sermons} />
-            <NoticeSection notices={main.notices} />
-            <EventSection events={main.upcomingEvents} />
+            {/* 공지·일정은 한 소식 밴드에 나란히(좁은 폭은 세로) — 짧은 목록 둘을 따로 세우면 밴드만 늘어난다 */}
+            <section className="bg-surface-soft py-section">
+              <Container className="grid gap-xxl lg:grid-cols-2">
+                <NoticeSection notices={main.notices} />
+                <EventSection events={main.upcomingEvents} />
+              </Container>
+            </section>
           </>
         ) : (
           <MainFeedsError />

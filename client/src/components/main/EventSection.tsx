@@ -1,36 +1,57 @@
-import { Container } from "@/components/shell/Container";
-import { EventCard } from "@/components/cards/EventCard";
+import Link from "next/link";
 import { EmptyState } from "@/components/common/EmptyState";
+import { SectionHead } from "./SectionHead";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
-import { formatDate, formatEventTime } from "@/lib/date";
+import { formatEventTime } from "@/lib/date";
 import { MAIN_SECTIONS } from "@/constants/content";
 import type { EventCardResponse } from "@/lib/api/types";
 
-// 13.4 ⑤ 다가오는 일정 5 — soft 밴드. 시간 엣지(endAt=null·allDay)는 formatEventTime 한 곳에서 처리.
+const E = MAIN_SECTIONS.events;
+
+// 13.4 ⑤ 다가오는 일정 — 소식 밴드(page)의 오른쪽 열. 행 = 월·일 블록 + 제목 + 시간·장소(event-row).
+// 월·일은 서버 문자열에서 바로 읽는다(시간대 밀림 방지). 시간 엣지(endAt=null·allDay)는 formatEventTime 한 곳.
 // 정렬은 서버 보장(startAt asc) — 프론트 재정렬 금지.
 export function EventSection({ events }: { events: EventCardResponse[] }) {
   return (
-    <section className="bg-surface-soft py-section">
-      <Container>
-        <h2 className={cn(typo.displayLg, "text-ink")}>{MAIN_SECTIONS.events.title}</h2>
-        {events.length === 0 ? (
-          <EmptyState message={MAIN_SECTIONS.events.empty} className="mt-lg" />
-        ) : (
-          <div className="mt-lg grid gap-base sm:grid-cols-2 lg:grid-cols-3">
-            {events.map((e) => (
-              <EventCard
-                key={e.id}
-                date={formatDate(e.startAt)}
-                title={e.title}
-                time={formatEventTime(e.startAt, e.endAt, e.allDay)}
-                location={e.location}
-                href={`/events/${e.id}`}
-              />
-            ))}
-          </div>
-        )}
-      </Container>
-    </section>
+    <div>
+      <SectionHead title={E.title} more={{ label: E.more, href: E.moreHref }} />
+      {events.length === 0 ? (
+        <EmptyState message={E.empty} className="mt-lg" />
+      ) : (
+        <ul className="mt-base">
+          {events.map((e) => {
+            const meta = [formatEventTime(e.startAt, e.endAt, e.allDay), e.location].filter(Boolean).join(" · ");
+            return (
+              <li key={e.id}>
+                <Link
+                  href={`/events/${e.id}`}
+                  className={cn(
+                    "group flex items-center gap-base border-b border-hairline py-base",
+                    "focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
+                  )}
+                >
+                  <span className="w-14 shrink-0 text-center">
+                    <span className={cn(typo.caption, "block text-muted")}>{Number(e.startAt.slice(5, 7))}월</span>
+                    <span className={cn(typo.datetimeLg, "block text-ink")}>{Number(e.startAt.slice(8, 10))}</span>
+                  </span>
+                  <span className="min-w-0">
+                    <span
+                      className={cn(
+                        typo.titleSm,
+                        "block truncate text-ink transition-colors duration-150 ease-out group-hover:text-primary",
+                      )}
+                    >
+                      {e.title}
+                    </span>
+                    {meta ? <span className={cn(typo.datetime, "block text-muted")}>{meta}</span> : null}
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
   );
 }

@@ -438,29 +438,62 @@ export const SPECIAL_SERVICES: SpecialService[] = [
 
 export const CTA_BAND = {
   heading: "처음 오셨나요?",
+  lead: "누리에뜰 321호에서 주일 오전 11시에 함께 예배드려요.",
   primary: "새가족 안내",
   secondary: "오시는 길",
+  // 배경 사진은 장식 — 어두운 덮개 위 글이 주인공이라 alt="" (스크린리더는 헤드라인만 읽는다)
+  image: "/assets/church/group-33rd-2023.webp",
 };
 
 // 메인 사역 카드(스펙 2026-06-12 H4·H5) — VISION.points의 3축을 카드로 승격.
 // 아이콘은 직렬화 가능한 키만 — lucide 컴포넌트 매핑은 MinistryCards가 담당.
-export const MINISTRY = { title: "우리의 사역" };
+export const MINISTRY = { eyebrow: "MINISTRY", title: "우리의 사역", more: "교회 소개", moreHref: "/about" };
 export interface Ministry {
   key: "worship" | "nextgen" | "serving";
   title: string;
   desc: string;
+  href: string;
+  image: { src: string; alt: string };
 }
 export const MINISTRIES: Ministry[] = [
-  { key: "worship", title: "말씀과 성령의 예배", desc: "말씀과 성령의 능력으로 예배하는 교회입니다." },
-  { key: "nextgen", title: "3대가 함께", desc: "어린이부터 청년, 가정까지 미션팀으로 함께 자랍니다." },
-  { key: "serving", title: "이웃을 향한 섬김", desc: "버스킹 문화사역과 선교로 이웃에게 다가갑니다." },
+  {
+    key: "worship",
+    title: "말씀과 성령의 예배",
+    desc: "말씀과 성령의 능력으로 예배하는 교회입니다.",
+    href: "/worship",
+    image: { src: "/assets/church/worship-2023.webp", alt: "주일예배" },
+  },
+  {
+    key: "nextgen",
+    title: "3대가 함께",
+    desc: "어린이부터 청년, 가정까지 미션팀으로 함께 자랍니다.",
+    href: "/departments",
+    image: { src: "/assets/church/youth-2023.webp", alt: "청년들" },
+  },
+  {
+    key: "serving",
+    title: "이웃을 향한 섬김",
+    desc: "버스킹 문화사역과 선교로 이웃에게 다가갑니다.",
+    href: "/about",
+    image: { src: "/assets/history/2022-busking.webp", alt: "2022년 탄천 버스킹" },
+  },
 ];
+
+// 메인 예배 섹션 머리(제목은 WORSHIP.title 공유) — 주일/주중 묶음 라벨.
+export const MAIN_WORSHIP = {
+  eyebrow: "WORSHIP",
+  more: "예배 안내 자세히",
+  moreHref: "/worship",
+  primaryLabel: "대표 예배",
+  sundayLabel: "주일",
+  weekdayLabel: "주중",
+} as const;
 
 // 메인 데이터 섹션 타이틀·빈 상태 문구(가이드 13.2 빈 배열 처리) — 콘텐츠 하드코딩 금지(12장).
 export const MAIN_SECTIONS = {
-  sermons: { title: "최신 설교", empty: "등록된 설교가 없습니다" },
-  notices: { title: "공지", empty: "등록된 공지가 없습니다" },
-  events: { title: "다가오는 일정", empty: "등록된 일정이 없습니다" },
+  sermons: { eyebrow: "SERMON", title: "최신 설교", empty: "등록된 설교가 없습니다", more: "전체 설교", moreHref: "/sermons" },
+  notices: { title: "공지", empty: "등록된 공지가 없습니다", more: "전체", moreHref: "/notices" },
+  events: { title: "다가오는 일정", empty: "등록된 일정이 없습니다", more: "전체", moreHref: "/events" },
   // 소식 섹션(설교·공지·일정)만 불러오기 실패했을 때 그 자리에 표시하는 문구. 페이지 나머지는 정상.
   error: "지금은 교회 소식을 불러올 수 없어요. 잠시 후 다시 시도해 주세요.",
 } as const;

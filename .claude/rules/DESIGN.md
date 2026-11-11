@@ -509,8 +509,16 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   카드는 좌표가 있으면 "지도 보기" 링크, 픽업 텍스트가 없으면 "위치 첨부됨" 표기.
 
 ### 밴드
-- **`cta-band-dark`**: 프리푸터. "처음 오셨나요?" 헤드라인 `{typography.display-lg}` +
-  CTA 2개(primary + outline-on-dark). 상하 96px.
+- **`cta-band-dark`**: 프리푸터. 교회 단체 사진(`CTA_BAND.image`, 장식 `alt=""`) 위 `{colors.cover-dark}` 세로 그라데이션 덮개(60%→90%) +
+  "처음 오셨나요?" 헤드라인 `{typography.display-lg}` + 안내 한 줄 `{typography.body-md}` on-dark + CTA 2개(primary + outline-on-dark, 둘 다 56px). 상하 96px.
+- **`main-section-head`**: 메인 섹션 머리. 영문 eyebrow `{typography.caption-strong}` `{colors.primary}`(선택) + 제목 `{typography.display-lg}` +
+  우측 "전체 보기" 텍스트 링크(`{typography.body-strong}` primary + lucide `ArrowRight` 20px, 48px 터치 타깃). 좁은 폭은 링크가 제목 아래로 줄바꿈.
+- **`main-worship`**: 메인 예배 시간 안내(`{colors.surface-soft}` 밴드). 좌 대표 예배 카드(`next-service-band` 색 — `{colors.primary-soft}` `{rounded.xl}`,
+  라벨 caption-strong primary + 예배명 title-md + 시각 `{typography.display-xl}` tnum + 장소 안내 한 줄) : 우 시간표 카드(canvas + hairline,
+  주일/주중 묶음 행 = 예배명 title-sm + 시각 datetime) = 3:2. 주일 묶음 안에서는 "주일 " 접두를 뗀다. 모바일 세로 스택.
+- **`main-news-band`**: 메인 공지·일정 소식 밴드(`{colors.surface-soft}`). 공지(`notice-row`)와 일정을 ≥lg 2열로 나란히, 좁은 폭은 세로.
+  일정 행(`event-row`) = 월(caption muted)·일(`{typography.datetime-lg}`) 블록 + 제목 title-sm(hover primary) + 시간·장소 datetime muted, 1px 헤어라인, 행 전체 링크.
+  월·일은 서버 문자열에서 바로 읽는다(시간대 밀림 방지). 메인 최신 설교는 첫 설교를 `sermon-feature`로, 나머지를 텍스트형 `sermon-card`로(3:2).
 
 ### 연출
 - **`media-collage`**: 메인 히어로(14A)와 한 몸인 스크럽 구간(`HeroReveal`). 풀스크린 영상이
@@ -569,8 +577,8 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   `{colors.surface-dark}` 다크 밴드(내부 구분선은 on-dark·surface-dark `color-mix` 혼합). 도트 픽셀 장식·기타 스크롤
   연출은 채택하지 않음(단일 액센트·절제). 등장은 `Reveal` 재사용 + 사진 셀만 등장 신호(`data-revealed`)와
   동기된 방향성 `clip-path` 와이프(우측 사진 좌→우·미러 우→좌·모바일 일괄 좌→우, reduced-motion 정적). 모바일은 세로 스택.
-- **`ministry-cards`**: 사역 카드 3-up(모바일 1-up). lucide 아이콘(32·currentColor) + 제목 +
-  설명, 배경 토큰 교차는 history-band와 시작점을 달리한다. 동일한 Reveal 등장.
+- **`ministry-cards`**: 사역 카드 3-up(모바일 1-up). `{colors.surface-soft}` `{rounded.xl}` 카드 = 4:3 사진(`MINISTRIES[].image`) +
+  제목 `{typography.title-md}` + 설명 `{typography.body-md}`. 카드 전체가 해당 소개 링크(`href`), hover 시 사진 1.03 줌(0.3s ease). 동일한 Reveal 등장(스태거 120ms).
 - **`dept-hero`**: 부서 상세 히어로(가이드 14B). 미디어 카드가 스크롤에 따라 `clip-path`로 풀스크린
   확장(width/height 애니메이션 금지), placeholder 측정으로 시작 inset 산출. 확장 종료(0.55) 후
   카피 페이드인(0.60~, 겹침 0.05 유지). reduced-motion은 정적 70vh. 검증 코드라 내부 수치(px·rgba·#fff)는

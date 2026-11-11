@@ -31,9 +31,9 @@ describe("EventSection", () => {
       />,
     );
     expect(screen.getByText(MAIN_SECTIONS.events.title)).toBeDefined();
-    expect(screen.getByText("2026. 6. 14.")).toBeDefined();
-    expect(screen.getByText("10:00 ~ 12:00")).toBeDefined();
-    expect(screen.getByText("본당")).toBeDefined();
+    expect(screen.getByText("6월")).toBeDefined();
+    expect(screen.getByText("14")).toBeDefined();
+    expect(screen.getByText("10:00 ~ 12:00 · 본당")).toBeDefined();
     expect(screen.getByText("성가대 연습").closest("a")?.getAttribute("href")).toBe(
       "/events/3",
     );
@@ -56,7 +56,7 @@ describe("EventSection", () => {
       />,
     );
     expect(screen.getByText("전교인 야유회")).toBeDefined();
-    expect(screen.getByText("2026. 6. 20.")).toBeDefined();
+    expect(screen.getByText("20")).toBeDefined();
     expect(screen.queryByText(/\d{2}:\d{2}/)).toBeNull();
   });
 
