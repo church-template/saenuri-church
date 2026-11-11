@@ -1,15 +1,45 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-10T14:22:55Z",
-    "currentVersion": "0.3.0",
+    "lastUpdated": "2026-11-11T16:40:22Z",
+    "currentVersion": "0.4.0",
     "projectType": "spring",
     "projectTypes": [
       "spring",
       "react"
     ],
-    "totalReleases": 4
+    "totalReleases": 5
   },
   "releases": [
+    {
+      "version": "0.4.0",
+      "project_type": "spring",
+      "project_types": [
+        "spring",
+        "react"
+      ],
+      "date": "2026-11-11",
+      "pr_number": 12,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **새 기능**\n  * 새누리교회 로고를 사이트 전체에 적용했어요\n  * 교회 소개·비전 페이지에 새누리교회 내용을 담았어요\n  * 스카이블루 미션팀 사진과 오시는 길 약도를 추가했어요\n  * 교회 대표 문구를 \"하나님이 기뻐하시는 사람을 세우는 교회\"로 바꿨어요\n\n* **버그 수정**\n  * 링크 공유 미리보기 이미지의 문구를 새 대표 문구로 바꿨어요\n  * 사이트맵·RSS가 멈추던 문제를 고치고 임시 도메인을 적용했어요",
+      "parsed_changes": {
+        "새_기능": {
+          "title": "새 기능",
+          "items": [
+            "새누리교회 로고를 사이트 전체에 적용했어요",
+            "교회 소개·비전 페이지에 새누리교회 내용을 담았어요",
+            "스카이블루 미션팀 사진과 오시는 길 약도를 추가했어요",
+            "교회 대표 문구를 \"하나님이 기뻐하시는 사람을 세우는 교회\"로 바꿨어요"
+          ]
+        },
+        "버그_수정": {
+          "title": "버그 수정",
+          "items": [
+            "링크 공유 미리보기 이미지의 문구를 새 대표 문구로 바꿨어요",
+            "사이트맵·RSS가 멈추던 문제를 고치고 임시 도메인을 적용했어요"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.3.0",
       "project_type": "spring",
