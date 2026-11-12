@@ -40,7 +40,7 @@ export interface StoryChapter {
 }
 
 export interface StoryHeroContent {
-  intro: { mark: string; sub: string };
+  intro: { mark: string; sub: string; bg: string }; // 첫 화면 커튼 — bg 사진 위 문구
   split: {
     eyebrow: string;
     /** 제목 줄 — highlight와 같은 문자열 조각은 강조색 */
@@ -49,9 +49,11 @@ export interface StoryHeroContent {
     lead: string[];
     info: { label: string; value: string }[];
     bg: string;
-    /** [뒤 왼쪽, 뒤 오른쪽, 앞(인트로·마지막 장의 풀스크린 사진)] */
+    /** [뒤 왼쪽, 뒤 오른쪽, 앞(마지막 장의 풀스크린 사진)] */
     cards: [StoryCard, StoryCard, StoryCard];
   };
   chapters: StoryChapter[];
+  /** 마지막 "지금" 장 — 풀스크린 사진 위 로고 + 교회 표어 */
+  now: { logo: string; line: string };
   backLabel: string;
 }

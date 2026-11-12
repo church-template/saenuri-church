@@ -175,7 +175,7 @@ export const HISTORY = {
         "2006년 7월 이전 감사예배",
       ],
       significance: "전원교회를 꿈꾸며 내디딘 걸음",
-      media: { type: "image", src: "/assets/history/2006-hanam-thanksgiving.webp", alt: "2006년 하남 이전 감사예배" },
+      media: { type: "image", src: "/assets/history/2006-hanam-thanksgiving-sermon.webp", alt: "2006년 하남 창립기념 및 이전감사예배" },
     },
     {
       id: "2006-08",
@@ -211,6 +211,7 @@ export const HISTORY = {
         "청년 공동체의 출발",
       ],
       significance: "다음 세대가 교회의 기둥으로 자라기 시작",
+      media: { type: "image", src: "/assets/history/2012-youth.webp", alt: "지금의 청년들" },
     },
     {
       id: "2022-07",
@@ -259,7 +260,7 @@ export type PastorPhilosophyKey =
   | "nextgen"
   | "mission";
 
-// 인사말·학력·인용문은 교회에서 받기 전이라 비운다(지어내지 않음). 비어 있는 항목은 화면에서 생략된다.
+// 학력·인용문은 교회에서 받기 전이라 비운다(지어내지 않음). 비어 있는 항목은 화면에서 생략된다.
 export const PASTOR = {
   title: "목회자 인사말",
   name: "황영기",
@@ -269,10 +270,18 @@ export const PASTOR = {
   pullQuote: "",
   intro:
     "황영기 목사님은 1990년 6월 26일 목사 안수를 받고, 같은 해 7월 새누리교회를 개척해 지금까지 섬기고 있습니다.",
-  greeting: [] as string[],
+  greeting: [
+    "안녕하세요. 새누리교회 황영기 목사입니다. 새누리교회를 찾아주셔서 감사를 드립니다. 환영하고 축복합니다.",
+    "하나님의 은혜를 나누고 위로와 격려가 되었으면 좋겠습니다. 새누리교회는 누구든지 환영합니다.",
+    "오늘도 즐겁고 행복한 날 되시기 바랍니다.",
+  ],
+  // 약력 — 같은 해(year) 항목은 화면에서 큰 연도 하나 아래로 묶인다. date는 그 해 안의 날짜(없으면 "").
   credentials: {
     heading: "약력",
-    items: ["1990년 목사 안수", "1990년 새누리교회 개척, 담임목사"],
+    items: [
+      { year: "1990", date: "6월 26일", text: "목사 안수" },
+      { year: "1990", date: "7월", text: "새누리교회 개척, 담임목사" },
+    ],
   },
   philosophy: {
     heading: "목회 철학",

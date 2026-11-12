@@ -1,12 +1,13 @@
 // 메인 스토리 히어로 콘텐츠 — 사실 근거는 새누리교회 블로그 연혁 글(assets/SOURCES.md).
-// 장 순서는 과거 → 현재. 마지막 "지금" 장은 split.cards[2](예배 사진)가 덮개 없이 풀스크린으로 펼쳐진다.
+// 장 순서는 과거 → 현재. 마지막 "지금" 장은 split.cards[2](카페 단체 사진)가 덮개 없이 풀스크린으로 펼쳐진다.
 import type { StoryHeroContent } from "@/hero/types";
+import { CHURCH_LOGO, HERO_CAPTION } from "./church";
 
 const H = "/assets/history";
 const C = "/assets/church";
 
 export const STORY_HERO: StoryHeroContent = {
-  intro: { mark: "축복합니다", sub: "새누리교회" },
+  intro: { mark: "축복합니다", sub: "새누리교회", bg: `${C}/intro-sign.webp` },
   split: {
     eyebrow: "SINCE 1990 · 용인 보정동",
     title: ["열두 명의 가정예배가", "33년의 공동체가", "되었습니다"],
@@ -19,9 +20,9 @@ export const STORY_HERO: StoryHeroContent = {
     ],
     bg: `${C}/group-33rd-2023.webp`,
     cards: [
-      { src: `${H}/2022-busking.webp`, caption: "탄천 버스킹" },
-      { src: `${C}/fellowship-meal-2023.webp`, caption: "함께 나누는 식탁" },
       { src: `${C}/worship-2023.webp`, caption: "새누리교회 주일예배" },
+      { src: `${C}/praise-worship.webp`, caption: "함께 드리는 찬양" },
+      { src: `${C}/cafe-gathering.webp`, caption: "함께 모인 교회 가족" },
     ],
   },
   chapters: [
@@ -59,7 +60,8 @@ export const STORY_HERO: StoryHeroContent = {
       desc: "창립 16주년 봄부터 준비해 이전 감사예배를 드렸습니다.",
       bg: { src: `${H}/2006-hanam-outdoor.webp`, tone: "fade2" },
       cards: [
-        { src: `${H}/2006-hanam-thanksgiving.webp`, caption: "2006년 7월 하남 이전 감사예배" },
+        { src: `${H}/2006-hanam-thanksgiving-sermon.webp`, caption: "2006년 7월 창립기념 및 이전감사예배" },
+        { src: `${H}/2006-hanam-thanksgiving-choir.webp`, caption: "이전감사예배 찬양" },
         { src: `${H}/2006-hanam-outdoor.webp`, caption: "하남 감이동 전원교회" },
       ],
     },
@@ -110,11 +112,12 @@ export const STORY_HERO: StoryHeroContent = {
       desc: "태아였던 아이들까지 자라 결혼하고, 3대가 함께 예배합니다.",
       bg: { src: `${C}/group-33rd-2023.webp`, tone: "fade1" },
       cards: [
-        { src: `${H}/early-kids.webp`, caption: "그때의 꼬맹이들" },
+        { src: `${H}/early-kids-outdoor.webp`, caption: "그때의 꼬맹이들" },
+        { src: `${H}/2006-kids-door.webp`, caption: "문 앞에 모인 아이들" },
         { src: `${C}/youth-2023.webp`, caption: "지금의 청년들" },
-        { src: `${C}/group-33rd-2023.webp`, caption: "창립 33주년 감사예배" },
       ],
     },
   ],
+  now: { logo: CHURCH_LOGO.src, line: HERO_CAPTION[0] },
   backLabel: "처음으로",
 };

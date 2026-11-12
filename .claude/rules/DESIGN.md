@@ -546,11 +546,12 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   포스터를 아예 못 보기 때문이다(이때만 포스터 카드가 원본 비율로 선다).
   레이아웃 대수·구간 수치는 스펙(docs/superpowers/specs/2026-07-13-collage-column-grid-design.md)이 단일 진실.
 - **`story-hero`**: 메인 히어로(새누리, 영상 없음 — `media-collage`/14A CrossHero 대체). 콘텐츠는 `constants/storyHero.ts`(`STORY_HERO`), 장 계산은 순수 함수 `hero/storyChapter.ts`.
-  **인트로**: 앞 카드 사진(주일예배)이 풀스크린 블러(10px)로 서고 가운데 "축복합니다"(clamp 56~136px, **굵기 700 — 디스플레이 500 원칙의 유일한 예외**) 1.8s → 1.6s에 걸쳐 우측 카드 자리로 축소하며 선명해짐.
-  인트로 동안 헤더 숨김(`SiteHeader concealed`), 축소 끝(≈3.7s)에 하강. 인트로 중 스크롤이 오면 즉시 종료.
+  **인트로**: 사진판(`intro.bg`, 약한 블러 3px + 옅은 네이비 덮개) 풀스크린 위 가운데 "축복합니다"(clamp 56~136px, **굵기 700 — 디스플레이 500 원칙의 유일한 예외**)가 한 글자씩(80ms 간격) 튀어 오르고,
+  1.8s 뒤 다른 장과 같은 0.9s 크로스페이드로 장 0에 넘어간다(스크롤 칸을 차지하지 않음). 인트로 동안은 휠·터치·키보드 스크롤 입력을 막아 끝까지 보여 준다. 인트로 동안 헤더 숨김(`SiteHeader concealed`).
+  앞 카드(c3)는 장 0을 떠날 때 커지지 않는다 — 제자리에서 페이드아웃한 뒤 보이지 않을 때 풀스크린 자리로 옮긴다("지금" 장에서 풀스크린으로 페이드인).
   **장 0(스플릿)**: 단체 사진 배경(blur 4px + 옅은 네이비 그라데이션) 위 좌측 글(eyebrow·`display-mega`·소개·예배 정보, 버튼 없음) + 우측 기울어 겹친 카드 3장(hover 시 흩어짐).
   **과거 장**: 과거→현재 시간순, 글은 좌상단(연도 숫자 위치 모든 장 동일, top 18%), 사진 2~3장은 우하단에 기울여 겹침(구텐베르크: 시작 좌상·종착 우하), 캡션은 카드 안쪽 하단. 과거일수록 바램(sepia .25 → .5, 화재 장 grayscale).
-  카드는 확대 없음(사진 크게 보기는 추후 교회 둘러보기 페이지). **마지막 "지금" 장**: 앞 카드가 덮개 없이 풀스크린, 우하단 "처음으로" 링크.
+  카드는 확대 없음(사진 크게 보기는 추후 교회 둘러보기 페이지). **마지막 "지금" 장**: 앞 카드가 풀스크린, 좌하단에 흰 교회 로고(96px, 모바일 72px) + 표어 한 줄(`now.line`, `{typography.display-lg}`), 덮개 없이 글자 그림자로만 가독성 확보. 우하단 "처음으로" 링크.
   날짜는 "7월 8일"·"~ 2006년"처럼 풀어 쓴다(점 표기 금지). reduced-motion은 인트로·고정 없이 정적 세로 나열. 수치는 이슈 #1 설계 댓글이 단일 진실.
 - **`reading-spotlight`**: 목회자 인사말(`/about/pastor`) 본문의 리딩 강조. 본문을 **문장 span으로 쪼개** 스크롤에
   따라 **한 문장씩** 켠다 — 켜진 문장만 `{colors.ink}` + `{typography.body-xl}`(32px/600)로 부풀고, 나머지는
@@ -566,6 +567,10 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   지우지 않는다**(고령 가독성 > 몰입). 켜짐은 `animation-fill-mode: none` + **인덱스 등분** `animation-range`(고정·비고정
   공통)로 성립 — 구간이 배타적이라 겹침이 원천 차단된다. 미지원 브라우저·reduced-motion은 평문(`{colors.body}`)·고정 없음.
   대수·노브는 스펙(docs/superpowers/specs/2026-07-13-pastor-reading-spotlight-design.md).
+- **`pastor-dossier`**: 목회자 인사말(`/about/pastor`) 하단 `{colors.surface-soft}` 밴드. 섹션 제목은 `{typography.caption-strong}` `{colors.primary}`(eyebrow).
+  **약력** = 같은 해 항목을 큰 연도 하나(`{typography.display-mega}` tnum) 아래로 묶은 연표 — ≥lg 4:8 스플릿, 우측 행 = 날짜 `{typography.datetime}` `{colors.muted}` |
+  내용 `{typography.title-md}`, 상단 2px `{colors.ink}` 룰 + 1px 헤어라인. **목회 철학** = 2px `{colors.ink}` 룰 아래 번호(01·02·03, `{typography.display-lg}` `{colors.primary}`) +
+  선언 `{typography.display-lg}` + 우측 lucide 아이콘 40px `{colors.muted}`(좁은 폭에선 숨김), 행 1px 헤어라인. 카드 없이 문서처럼 — 적은 항목을 큰 글씨로 무게 있게(고령 가독).
 - **`history-band`**: 연혁 카드 시퀀스(참조: 우리은행 Dream). 연도 배지 + 헤드라인 + 설명의
   풀폭 라운드 밴드(`{rounded.xl}`)가 세로로 이어지고, 배경은 surface-dark·primary-soft·
   surface-soft 토큰 교차(브랜드 3색 직역 금지 — 단일 액센트 원칙). 뷰포트 진입 시 1회

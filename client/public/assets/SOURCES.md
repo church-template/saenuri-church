@@ -17,3 +17,5 @@
 
 - `history/1990-2006-*-now`: 옛 예배처소 자리의 **현재 모습**(당시 사진 아님).
 - `history/early-kids`: 촬영 연도 미상.
+- `history/early-kids-christmas`·`2006-kids-door`·`early-worship-interior`·`2006-hanam-thanksgiving-sermon`·`2006-hanam-thanksgiving-choir`: 교회 제공 원본(2026-11-12 카카오톡 수령) → 긴 변 최대 1600px, EXIF 제거.
+- `history/1990-2006-geoyeo-4-3-now`: 현재 입주한 다른 교회 간판은 모자이크 처리.

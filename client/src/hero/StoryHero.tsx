@@ -9,11 +9,11 @@ import { chapterAt } from "./storyChapter";
 import type { StoryCard, StoryChapter, StoryHeroContent } from "./types";
 import styles from "./StoryHero.module.css";
 
-// 메인 스토리 히어로(DESIGN.md story-hero). 인트로(예배 사진 → 카드 축소) → 스플릿 첫 화면 →
-// 과거→현재 장 → 마지막 "지금" 장(앞 카드가 풀스크린). 장 번호는 window 스크롤에서 chapterAt으로 계산한다.
-const INTRO_HOLD_MS = 1800; // 문구가 떠 있는 시간
-const INTRO_HEADER_MS = 3700; // 축소(1.6s)가 끝날 무렵 헤더 복귀
-const INTRO_END_MS = 4300; // 인트로 전용 전환 해제
+// 메인 스토리 히어로(DESIGN.md story-hero). 인트로(사진판 + "축복합니다", 시간이 지나면 넘어감) → 스플릿 첫 화면 →
+// 과거→현재 장 → 마지막 "지금" 장(앞 카드가 풀스크린). 모든 장은 고정 무대에서 크로스페이드로 넘어간다.
+// 장 번호는 window 스크롤에서 chapterAt으로 계산한다.
+const INTRO_HOLD_MS = 1800; // 문구가 떠 있는 시간 — 이 동안은 스크롤 입력을 막아 끝까지 보여 준다
+const SCROLL_KEYS = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "]);
 
 const TONE: Record<StoryChapter["bg"]["tone"], string> = {
   none: "",
@@ -146,49 +146,43 @@ function StaticStory({ content }: { content: StoryHeroContent }) {
 export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHeroProps) {
   const reduced = useMediaFlag(REDUCED_MQ);
   const rootRef = useRef<HTMLElement>(null);
-  const [cur, setCur] = useState<number | "intro">("intro");
+  const [cur, setCur] = useState(-1); // -1 = 인트로
   const count = content.chapters.length + 1; // 마지막 "지금" 장 번호
 
-  // 인트로 — 스크롤이 먼저 오면 즉시 끝낸다(헤더가 숨은 채 남지 않게).
+  // 인트로 — 끝까지 보여 준 뒤 INTRO_HOLD_MS에 장 0으로 크로스페이드.
+  // 그동안 휠·터치·키보드 스크롤을 막는다(overflow 잠금은 스크롤바가 사라져 화면이 옆으로 밀린다).
   useEffect(() => {
     if (reduced) return;
-    // 인트로 연출 트리거(data-intro)는 서버 HTML에 두지 않고 마운트 시점에 단다 — 문구 애니메이션(CSS)과
-    // 축소 타이머(JS)가 같은 시계로 시작해야 하이드레이션이 늦어도 문구가 먼저 사라지지 않는다.
-    // 리렌더가 필요 없는 표시용 속성이라 상태 대신 DOM에 직접 쓴다.
     const el = rootRef.current;
-    const setRun = (on: boolean) => {
-      if (!el) return;
-      if (on) el.dataset.intro = "run";
-      else delete el.dataset.intro;
+    let timer: ReturnType<typeof setTimeout>;
+    const block = (e: Event) => e.preventDefault();
+    const blockKey = (e: KeyboardEvent) => {
+      if (SCROLL_KEYS.has(e.key)) e.preventDefault();
     };
-    let timers: ReturnType<typeof setTimeout>[] = [];
+    const unlock = () => {
+      window.removeEventListener("wheel", block);
+      window.removeEventListener("touchmove", block);
+      window.removeEventListener("keydown", blockKey);
+    };
     const finish = () => {
-      timers.forEach(clearTimeout);
-      setRun(false);
-      setCur((c) => (c === "intro" ? 0 : c));
+      clearTimeout(timer);
+      unlock();
+      setCur((c) => (c === -1 ? 0 : c));
       onConcealHeader?.(false);
-      window.removeEventListener("scroll", finish);
     };
-    // 새로고침·뒤로 가기로 스크롤이 이미 히어로 아래에서 복원됐으면 인트로를 건너뛴다
-    // (화면 밖 인트로가 헤더를 숨기고 1.8초 뒤 엉뚱한 장을 띄우지 않게).
+    // 새로고침·뒤로 가기로 스크롤이 이미 히어로 아래에서 복원됐으면 인트로를 건너뛴다.
     if (el && window.scrollY > el.offsetTop) {
-      timers = [setTimeout(finish, 0)];
-      return () => timers.forEach(clearTimeout);
+      timer = setTimeout(finish, 0);
+      return () => clearTimeout(timer);
     }
     onConcealHeader?.(true);
-    setRun(true);
-    timers = [
-      setTimeout(() => setCur((c) => (c === "intro" ? 0 : c)), INTRO_HOLD_MS),
-      setTimeout(() => onConcealHeader?.(false), INTRO_HEADER_MS),
-      setTimeout(() => {
-        setRun(false);
-        window.removeEventListener("scroll", finish);
-      }, INTRO_END_MS),
-    ];
-    window.addEventListener("scroll", finish, { passive: true });
+    timer = setTimeout(finish, INTRO_HOLD_MS);
+    window.addEventListener("wheel", block, { passive: false });
+    window.addEventListener("touchmove", block, { passive: false });
+    window.addEventListener("keydown", blockKey);
     return () => {
-      timers.forEach(clearTimeout);
-      window.removeEventListener("scroll", finish);
+      clearTimeout(timer);
+      unlock();
       onConcealHeader?.(false);
     };
   }, [reduced, onConcealHeader]);
@@ -201,7 +195,7 @@ export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHe
       if (!el) return;
       const top = el.getBoundingClientRect().top + window.scrollY;
       const vh = window.innerHeight;
-      setCur((c) => (c === "intro" ? c : chapterAt(window.scrollY, top, vh, count)));
+      setCur((c) => (c === -1 ? c : chapterAt(window.scrollY, top, vh, count)));
       onSolid?.(window.scrollY > top + el.offsetHeight - vh);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -213,9 +207,35 @@ export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHe
     };
   }, [reduced, count, onSolid]);
 
-  if (reduced) return <StaticStory content={content} />;
-
   const { split, chapters, intro } = content;
+  // 인트로 화면 — 고정 무대에선 맨 앞 덮개(cur -1 동안), 움직임 줄이기에선 맨 위 정적 블록으로 쓴다.
+  const introLayer = (
+    <div className={styles.intro}>
+      {/* eslint-disable-next-line @next/next/no-img-element -- 연출 미디어 */}
+      <img src={intro.bg} alt="" fetchPriority="high" />
+      <div className={styles.mark} aria-hidden>
+        {/* 한 글자씩 떠오르게 글자마다 순번(--i)을 준다 */}
+        <b>
+          {Array.from(intro.mark).map((ch, i) => (
+            <span key={i} className={styles.ch} style={{ "--i": i } as CSSProperties}>
+              {ch}
+            </span>
+          ))}
+        </b>
+        <span className={styles.sub}>{intro.sub}</span>
+      </div>
+    </div>
+  );
+
+  if (reduced) {
+    return (
+      <>
+        <div className={styles.introStatic}>{introLayer}</div>
+        <StaticStory content={content} />
+      </>
+    );
+  }
+
   const credit = chapters.find((c, i) => c.bg.credit && cur === i + 1)?.bg.credit;
   const toTop = () =>
     window.scrollTo({ top: (rootRef.current?.offsetTop ?? 0), behavior: "smooth" });
@@ -241,6 +261,7 @@ export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHe
           </div>
         ))}
         <div className={styles.shade} />
+        {introLayer}
 
         <div className={styles.split}>
           <SplitCopy split={split} />
@@ -270,9 +291,11 @@ export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHe
           </div>
         ))}
 
-        <div className={styles.mark} aria-hidden>
-          <b>{intro.mark}</b>
-          <span>{intro.sub}</span>
+        {/* 마지막 "지금" 장 — 로고 + 표어 */}
+        <div className={styles.nowCopy} aria-hidden={cur !== count}>
+          {/* eslint-disable-next-line @next/next/no-img-element -- 장식 로고(교회명은 글로 이어진다) */}
+          <img src={content.now.logo} alt="" className={styles.nowLogo} />
+          <p className={cn(typo.displayLg, styles.nowLine)}>{content.now.line}</p>
         </div>
         {credit ? <p className={cn(typo.caption, styles.credit)}>{credit}</p> : null}
         <button
