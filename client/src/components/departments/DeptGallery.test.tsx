@@ -29,4 +29,18 @@ describe("DeptGallery", () => {
     fireEvent.keyDown(screen.getByRole("dialog"), { key: "ArrowRight" });
     expect(screen.getByText("2 / 2")).toBeDefined();
   });
+
+  it("8장씩 보이고, 더 보기를 누르면 다음 8장이 열리며 다 열리면 버튼이 사라진다", () => {
+    const many: DeptPhoto[] = Array.from({ length: 13 }, (_, i) => ({ src: `/p/${i}.webp`, alt: `사진 ${i}` }));
+    render(<DeptGallery heading="활동 사진" photos={many} moreLabel="사진 더 보기" />);
+    expect(screen.getAllByRole("button", { name: /크게 보기/ })).toHaveLength(8);
+    fireEvent.click(screen.getByRole("button", { name: "사진 더 보기" }));
+    expect(screen.getAllByRole("button", { name: /크게 보기/ })).toHaveLength(13);
+    expect(screen.queryByRole("button", { name: "사진 더 보기" })).toBeNull();
+  });
+
+  it("8장 이하면 더 보기 버튼이 없다", () => {
+    render(<DeptGallery heading="활동 사진" photos={photos} moreLabel="사진 더 보기" />);
+    expect(screen.queryByRole("button", { name: "사진 더 보기" })).toBeNull();
+  });
 });

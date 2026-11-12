@@ -65,7 +65,7 @@ describe("사역 부서 상수", () => {
     expect(DEPT_PAGE.subHeading.length).toBeGreaterThan(0);
   });
 
-  it("오렌지 미션팀은 확인된 보강 데이터(intro·info·invite)만 갖고, 근거 없는 활동·프로그램·사진은 없다", () => {
+  it("오렌지 미션팀은 확인된 보강 데이터(intro·info·invite)와 교회가 준 활동 사진만 갖고, 근거 없는 활동·프로그램은 없다", () => {
     const orange = findDepartment("orange")!;
     expect(orange.intro?.heading).toBe("오렌지 미션팀 소개");
     expect(orange.info).toEqual([
@@ -75,7 +75,8 @@ describe("사역 부서 상수", () => {
     expect(orange.invite?.heading).toBe("오렌지 미션팀에서 함께해요");
     expect(orange.activities).toBeUndefined();
     expect(orange.programs).toBeUndefined();
-    expect(orange.gallery).toBeUndefined();
+    expect(orange.gallery).toHaveLength(13);
+    expect(orange.gallery?.every((p) => p.src.startsWith("/dept/orange/") && p.src.endsWith(".webp"))).toBe(true);
   });
 
   it("최상위 미션팀은 모두 팀 색·세대 라벨·한 줄 소개를 갖고, 세대 순서(어린이→여성도)로 놓인다", () => {
@@ -108,5 +109,6 @@ describe("사역 부서 상수", () => {
     expect(DEPT_SECTIONS.activities.length).toBeGreaterThan(0);
     expect(DEPT_SECTIONS.programs.length).toBeGreaterThan(0);
     expect(DEPT_SECTIONS.gallery.length).toBeGreaterThan(0);
+    expect(DEPT_SECTIONS.galleryMore.length).toBeGreaterThan(0);
   });
 });
