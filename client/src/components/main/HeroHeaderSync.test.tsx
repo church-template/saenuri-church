@@ -42,7 +42,7 @@ describe("HeroHeaderSync", () => {
     setup();
     expect(banner()).toContain("bg-transparent");
     expect(banner()).toContain("-translate-y-full");
-    act(() => vi.advanceTimersByTime(3800));
+    act(() => vi.advanceTimersByTime(5300)); // 사진판 미로드 → 최대 대기 2.5s + 유지 2.8s
     expect(banner()).not.toContain("-translate-y-full");
   });
 

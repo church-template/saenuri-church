@@ -56,7 +56,7 @@ describe("예배·목회자·소개", () => {
     expect(existsSync(publicFile(PASTOR.image.src))).toBe(true);
   });
 
-  it("로고 의미는 다섯 미션팀 색을 세대 순서(어린이→어른)로 담는다", () => {
-    expect(ABOUT.symbolism.map((s) => s.team)).toEqual(["orange", "skyblue", "red", "blue", "green"]);
+  it("로고 의미는 여섯 미션팀 색을 세대 순서(어린이→어른)로 담는다", () => {
+    expect(ABOUT.symbolism.map((s) => s.team)).toEqual(["orange", "skyblue", "red", "blue", "green", "purple"]);
   });
 });

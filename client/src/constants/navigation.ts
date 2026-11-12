@@ -51,6 +51,7 @@ const MINISTRY_LINKS: NavLink[] = [
   { label: "레드 미션팀", href: "/departments/red", icon: "heart" },
   { label: "블루 미션팀", href: "/departments/blue", icon: "users" },
   { label: "그린 미션팀", href: "/departments/green", icon: "heart" },
+  { label: "퍼플 미션팀", href: "/departments/purple", icon: "music" },
 ];
 const NEWS_LINKS: NavLink[] = [
   { label: "공지", href: "/notices", icon: "bell" },

@@ -25,7 +25,7 @@ export interface DeptPhoto {
 }
 
 // 미션팀 색 — 팀 이름이 곧 색이라 작은 점으로만 쓴다(DESIGN.md `team-dot`, 단일 액센트 원칙의 제한적 예외).
-export type TeamColor = "orange" | "skyblue" | "red" | "blue" | "green";
+export type TeamColor = "orange" | "skyblue" | "red" | "blue" | "green" | "purple";
 
 // 기울인 사진 카드 한 장 — 캡션은 사진에 실제로 찍힌 것만 적는다(시기·행사를 추정해 붙이지 않는다).
 export interface DeptSnap {
@@ -70,7 +70,7 @@ const FALLBACK_THUMB = "/dept/default.webp";
 
 // 사진을 받으면 public/dept/{slug}.webp(히어로 2000px)·dept/{slug}/{n}.webp(갤러리 1600px)로 넣고 media를 바꾼다.
 
-// 미션팀 — 새누리교회는 부서를 색깔 이름의 "미션팀"으로 부른다(블로그 2022년 글 기준 5개).
+// 미션팀 — 새누리교회는 부서를 색깔 이름의 "미션팀"으로 부른다(블로그 2022년 글 기준 5개 + 예배·찬양 세션팀 퍼플).
 // 메가메뉴 "미션팀" 카테고리와 동일 구성. 담당자·모임 장소는 교회 확인 전이라 비워 둔다
 // (옵션 필드 생략 → 해당 섹션 미노출). 사진은 블로그에서 팀이 확인된 것만 쓴다(근거는 팀별 주석).
 export const DEPARTMENTS: Department[] = [
@@ -199,6 +199,21 @@ export const DEPARTMENTS: Department[] = [
       body: "여성도 누구나 환영합니다.",
     },
   },
+  // 세대 팀이 아니라 예배·찬양 세션팀이라 세대 줄 끝에 둔다. 사진 미확보 → 기본 이미지·스냅 없음.
+  {
+    slug: "purple",
+    name: "퍼플 미션팀",
+    description: "**예배와 찬양**을 이끄는 세션팀입니다.",
+    media: { type: "image", src: "/dept/default.webp", alt: "퍼플 미션팀" },
+    caption: ["찬양으로", "예배를 이끄는 세션팀"],
+    team: "purple",
+    generation: "예배 · 찬양",
+    summary: "예배와 찬양을 이끄는 세션팀입니다.",
+    invite: {
+      heading: "퍼플 미션팀에서 함께해요",
+      body: "찬양으로 예배를 섬기고 싶은 분이라면 누구나 환영합니다.",
+    },
+  },
 ];
 
 // 목록·상세 페이지 카피.
@@ -207,7 +222,7 @@ export const DEPT_PAGE = {
   title: "미션팀 안내",
   empty: "등록된 미션팀이 없습니다.",
   listEyebrow: "3대가 함께하는 새누리교회",
-  headline: ["어린이부터 어른까지,", "다섯 색깔 미션팀"],
+  headline: ["어린이부터 어른까지,", "여섯 색깔 미션팀"],
   lead: "새누리교회는 부서를 색깔 이름의 미션팀으로 부릅니다. 나이와 삶의 자리에 맞는 팀에서 함께 예배하고 교제해요.",
   more: "자세히 보기",
   leaderLabel: "인도",
@@ -222,7 +237,7 @@ export const DEPT_SECTIONS = {
   gallery: "활동 사진",
   year: "함께하는 한 해",
   teamNavEyebrow: "3대가 함께",
-  teamNav: "다섯 미션팀",
+  teamNav: "여섯 미션팀",
 } as const;
 
 // 카드 16:9 썸네일 — 영상이면 poster, 없으면 기본 에셋. 순수 함수(테스트 용이).

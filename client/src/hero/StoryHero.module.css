@@ -1,6 +1,7 @@
 /* story-hero — 수치는 설계 문서 「시각 수치」(이슈 #1 설계 댓글)와 동일. 연출 내부 수치(각도·%·rgba)는
    CrossHero/DeptHero 선례대로 모듈에 직접 둔다. 색·라운드·간격은 토큰. */
-.root { position: relative; height: calc(var(--steps) * 100dvh); background: var(--color-cover-dark); color: var(--color-on-dark); }
+/* --edge: 사이트 컨테이너(1200 + 패딩 24) 가장자리 — 장 글·카드를 헤더 로고·메뉴와 같은 세로줄에 맞춘다 */
+.root { --edge: max(var(--spacing-xl), calc((100% - var(--container-max)) / 2 + var(--container-padding))); position: relative; height: calc(var(--steps) * 100dvh); background: var(--color-cover-dark); color: var(--color-on-dark); }
 .stage { position: sticky; top: 0; height: 100dvh; overflow: hidden; }
 
 .dark { position: absolute; inset: 0; background: var(--color-cover-dark); }
@@ -73,23 +74,29 @@
 @keyframes ch-in { from { opacity: 0; transform: translateY(0.4em) scale(0.85); } }
 @keyframes mark-in { from { opacity: 0; transform: translateY(12px); } }
 @media (prefers-reduced-motion: reduce) { .mark .sub, .ch { animation: none; } }
+/* 스플래시 — 사진판이 준비되기 전엔 사진은 숨기고(어두운 무대) 글자 등장은 멈춰 둔다. 준비되면 함께 시작 */
+.intro img { transition: opacity 0.4s ease; }
+.root:not([data-ready]) .intro img { opacity: 0; }
+.root:not([data-ready]) .ch, .root:not([data-ready]) .mark .sub { animation-play-state: paused; }
 
 /* 장 묶음 — 데스크톱은 무대 전체를 덮는 투명 판(자식이 각자 절대 배치) */
 .chap { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
 .pileBox { position: absolute; inset: 0; }
-/* 과거 장 글 — 연도 위치 고정(top 18%), 글은 아래로 */
-.copy { position: absolute; z-index: 5; left: var(--spacing-xl); right: 46%; top: 18%; opacity: 0; transform: translateY(18px); transition: opacity 0.6s 0.25s, transform 0.6s 0.25s; word-break: keep-all; text-wrap: pretty; pointer-events: none; }
+/* 과거 장 글 — 좌상단에 연도·제목(연도 위치 모든 장 동일, top 18%), 좌하단에 설명·말씀(margin-top: auto).
+   오른쪽 끝은 카드 묶음(.pile2) 왼쪽 끝 + 간격으로 잡아 어떤 폭에서도 카드와 겹치지 않는다. */
+.copy { position: absolute; z-index: 5; left: var(--edge); right: calc(var(--edge) + 42% + var(--spacing-xl)); top: 18%; bottom: var(--spacing-xxl); display: flex; flex-direction: column; opacity: 0; transform: translateY(18px); transition: opacity 0.6s 0.25s, transform 0.6s 0.25s; word-break: keep-all; text-wrap: pretty; pointer-events: none; text-shadow: 0 1px 4px rgba(10, 15, 31, 0.55), 0 2px 24px rgba(10, 15, 31, 0.6); }
 .copy.on { opacity: 1; transform: none; }
-.yr { margin: 0; font-size: clamp(56px, 12vw, 140px); font-weight: 500; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
-.yr small { font-size: 0.26em; letter-spacing: -0.01em; margin-left: 0.4em; color: var(--color-on-dark-soft); }
+.chap:not(:has(.pile2)) .copy { right: 46%; } /* 카드가 없는 장은 카드 자리만큼 좁힐 이유가 없다 */
+.yr { margin: 0; font-size: clamp(56px, 12vw, 140px); font-weight: 500; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; white-space: nowrap; } /* "1990 7월 8일"은 한 덩어리 — 줄바꿈 금지 */
+.yr small { font-size: 0.26em; letter-spacing: -0.01em; margin-left: 0.4em; color: var(--color-on-dark); }
 .ttl { margin: var(--spacing-base) 0 var(--spacing-xs); }
-.desc { margin: 0; max-width: 36em; color: var(--color-on-dark-soft); }
+.desc { margin: auto 0 0; max-width: 36em; color: var(--color-on-dark); } /* 밝은 사진 위에서도 읽히게 흰 글자 + .copy 그림자 */
 .verse { margin: var(--spacing-base) 0 0; padding-left: 14px; border-left: 2px solid var(--color-primary-on-dark); }
 .verse span { display: block; }
 .verse cite { display: block; margin-top: var(--spacing-xxs); font-style: normal; opacity: 0.75; }
 
 /* 과거 장 카드 묶음 — 우하단(구텐베르크 종착) */
-.pile2 { position: absolute; z-index: 4; right: var(--spacing-xl); bottom: 28px; width: 42%; height: 62%; pointer-events: none; }
+.pile2 { position: absolute; z-index: 4; right: var(--edge); bottom: 28px; width: 42%; height: 62%; pointer-events: none; }
 .pile2 .pc { border: 4px solid var(--color-canvas); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18); opacity: 0; transform: translateY(40px) rotate(var(--r)); transition: opacity 0.5s, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: auto; }
 .pile2 .pc img { height: auto; aspect-ratio: 4 / 3; }
 .pile2.on .pc { opacity: 1; transform: rotate(var(--r)); }
@@ -123,10 +130,20 @@
   .c2 { --x: 50%; --y: 56%; --w: 44%; --h: 22%; }
   .pile .c3 { --x: 18%; --y: 68%; --w: 64%; --h: 26%; }
   /* 휴대폰: 글 아래에 카드 묶음을 쌓는다. 카드 상자는 남은 높이(flex)만큼, 비율을 지키며 줄어든다. */
-  .chap { inset: 22% var(--spacing-md) var(--spacing-base); display: flex; flex-direction: column; }
+  .chap { inset: calc(var(--spacing-nav) + var(--spacing-lg)) var(--spacing-md) var(--spacing-base); /* 연도를 헤더 바로 아래로 — 카드 묶음이 남은 높이를 더 쓴다 */ display: flex; flex-direction: column; }
   .copy { position: static; }
-  .pile2 { position: relative; inset: auto; width: auto; height: auto; flex: 1 1 0; min-height: 0; margin-top: var(--spacing-base); }
-  .pileBox { position: relative; inset: auto; height: 100%; max-width: 100%; aspect-ratio: 5 / 4; margin-left: auto; }
+  .pile2 { position: relative; inset: auto; width: auto; height: auto; flex: 1 1 0; min-height: 0; margin-top: var(--spacing-base); container-type: size; }
+  /* 카드 상자는 세로 계단 — 비율을 고정하고 남은 칸의 가로·세로 중 작은 쪽에 맞춘다(height 100% + max-width면 키 큰 화면에서
+     비율이 깨져 카드가 위아래로 벌어진다). 카드 4:3 기준: 3장=폭 70%·4:5 상자, 2장=폭 74%·1:1 상자에 꼭 들어가는 top 값. */
+  .pileBox { position: relative; inset: auto; margin-inline: auto; }
+  .n3 .pileBox { width: min(100cqw, 100cqh * 4 / 5); aspect-ratio: 4 / 5; }
+  .n2 .pileBox { width: min(100cqw, 100cqh); aspect-ratio: 1; }
+  .pile2 .pc { left: auto; right: auto; bottom: auto; }
+  .n3 .pc:nth-child(1) { width: 70%; left: 0; top: 0; }
+  .n3 .pc:nth-child(2) { width: 70%; right: 0; top: 28%; }
+  .n3 .pc:nth-child(3) { width: 70%; left: 6%; top: 56%; }
+  .n2 .pc:nth-child(1) { width: 74%; left: 0; top: 2%; }
+  .n2 .pc:nth-child(2) { width: 72%; right: 0; top: 42%; }
   .pile2 .pc figcaption { font-size: 12px; padding: 16px 8px 6px; }
   .back { right: var(--spacing-md); bottom: var(--spacing-md); }
   .nowCopy { left: var(--spacing-md); right: var(--spacing-md); bottom: calc(var(--spacing-md) * 3); }

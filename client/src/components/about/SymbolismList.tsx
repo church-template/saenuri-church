@@ -5,7 +5,7 @@ import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 import { ABOUT } from "@/constants/content";
 
-// 밴드2 — 회색. 다섯 미션팀 색을 넘버드 에디토리얼 리스트로(큰 색면 없이 작은 점·헤어라인만).
+// 밴드2 — 회색. 여섯 미션팀 색을 넘버드 에디토리얼 리스트로(큰 색면 없이 작은 점·헤어라인만).
 // 팀 색은 team-dot에만 쓴다 — 오렌지·스카이블루는 흰 바탕 글자 대비가 모자라 제목은 ink로 둔다(DESIGN.md).
 export function SymbolismList() {
   return (

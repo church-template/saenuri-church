@@ -15,6 +15,15 @@ function stubMotion(reduced: boolean) {
   );
 }
 
+// 인트로 사진판(DOM상 첫 fetchpriority=high 이미지)의 로드를 흉내 낸다 — jsdom은 이미지를 받지 않는다
+function loadIntro(container: HTMLElement) {
+  const img = container.querySelector(`img[src="${STORY_HERO.intro.bg}"]`);
+  if (!img) throw new Error("intro image not found");
+  act(() => {
+    fireEvent.load(img);
+  });
+}
+
 afterEach(() => {
   vi.useRealTimers();
   vi.unstubAllGlobals();
@@ -36,8 +45,33 @@ describe("StoryHero", () => {
     const { container } = render(<StoryHero content={STORY_HERO} onConcealHeader={onConcealHeader} />);
     expect(onConcealHeader).toHaveBeenLastCalledWith(true);
     expect(container.querySelector('[data-cur="-1"]')).not.toBeNull();
-    act(() => vi.advanceTimersByTime(1800));
+    loadIntro(container);
+    act(() => vi.advanceTimersByTime(2800));
     expect(onConcealHeader).toHaveBeenLastCalledWith(false);
+    expect(container.querySelector('[data-cur="0"]')).not.toBeNull();
+  });
+
+  it("스플래시 — 사진판이 오기 전엔 시간을 재지 않고, 온 뒤부터 유지 시간을 센다", () => {
+    vi.useFakeTimers();
+    stubMotion(false);
+    const { container } = render(<StoryHero content={STORY_HERO} />);
+    act(() => vi.advanceTimersByTime(2000)); // 사진 대기 중 — 아직 준비 전
+    expect(container.querySelector("[data-ready]")).toBeNull();
+    loadIntro(container);
+    expect(container.querySelector("[data-ready]")).not.toBeNull();
+    act(() => vi.advanceTimersByTime(2700));
+    expect(container.querySelector('[data-cur="-1"]')).not.toBeNull(); // 마운트 기준이었다면 이미 넘어갔을 시점
+    act(() => vi.advanceTimersByTime(100));
+    expect(container.querySelector('[data-cur="0"]')).not.toBeNull();
+  });
+
+  it("스플래시 — 사진판이 끝내 안 오면 최대 대기 후 시작한다", () => {
+    vi.useFakeTimers();
+    stubMotion(false);
+    const { container } = render(<StoryHero content={STORY_HERO} />);
+    act(() => vi.advanceTimersByTime(2500));
+    expect(container.querySelector("[data-ready]")).not.toBeNull();
+    act(() => vi.advanceTimersByTime(2800));
     expect(container.querySelector('[data-cur="0"]')).not.toBeNull();
   });
 
@@ -54,7 +88,8 @@ describe("StoryHero", () => {
     });
     expect(container.querySelector('[data-cur="-1"]')).not.toBeNull();
     expect(onConcealHeader).toHaveBeenLastCalledWith(true);
-    act(() => vi.advanceTimersByTime(1800));
+    loadIntro(container);
+    act(() => vi.advanceTimersByTime(2800));
     expect(container.querySelector('[data-cur="0"]')).not.toBeNull();
     // 인트로가 끝나면 스크롤 입력을 더 막지 않는다
     const after = new WheelEvent("wheel", { cancelable: true });

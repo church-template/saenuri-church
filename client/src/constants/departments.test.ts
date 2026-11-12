@@ -26,7 +26,7 @@ describe("사역 부서 상수", () => {
   });
 
   it("allDepartmentSlugs는 모든 부서 slug를 포함한다", () => {
-    expect(allDepartmentSlugs()).toEqual(["orange", "skyblue", "red", "blue", "green"]);
+    expect(allDepartmentSlugs()).toEqual(["orange", "skyblue", "red", "blue", "green", "purple"]);
   });
 
   // 현재 공개 상수는 하위 부서가 없지만, 함수는 깊이 탐색을 지원한다(어드민·향후 대비) — 로컬 픽스처로 분기 커버.
@@ -79,15 +79,15 @@ describe("사역 부서 상수", () => {
   });
 
   it("최상위 미션팀은 모두 팀 색·세대 라벨·한 줄 소개를 갖고, 세대 순서(어린이→여성도)로 놓인다", () => {
-    expect(DEPARTMENTS.map((d) => d.team)).toEqual(["orange", "skyblue", "red", "blue", "green"]);
+    expect(DEPARTMENTS.map((d) => d.team)).toEqual(["orange", "skyblue", "red", "blue", "green", "purple"]);
     for (const d of DEPARTMENTS) {
       expect(d.generation?.length).toBeGreaterThan(0);
       expect(d.summary?.length).toBeGreaterThan(0);
     }
   });
 
-  it("모든 팀은 대표 사진이 기본 이미지가 아니고, 사진 카드를 갖는다", () => {
-    for (const d of DEPARTMENTS) {
+  it("사진이 확인된 팀은 대표 사진이 기본 이미지가 아니고, 사진 카드를 갖는다", () => {
+    for (const d of DEPARTMENTS.filter((d) => d.slug !== "purple")) {
       expect(d.snaps?.length).toBeGreaterThan(0);
     }
     for (const slug of ["orange", "skyblue", "red", "blue", "green"]) {
@@ -98,7 +98,7 @@ describe("사역 부서 상수", () => {
 
   it("한 해 활동은 블로그로 확인된 오렌지 팀에만 있다", () => {
     expect(findDepartment("orange")!.year?.map((y) => y.title)).toEqual(["어린이주일", "여름성경학교"]);
-    for (const slug of ["skyblue", "red", "blue", "green"]) {
+    for (const slug of ["skyblue", "red", "blue", "green", "purple"]) {
       expect(findDepartment(slug)!.year).toBeUndefined();
     }
   });

@@ -53,6 +53,7 @@
   --color-team-red: #cf3b2b;
   --color-team-blue: #2563c9;
   --color-team-green: #2f8f52;
+  --color-team-purple: #7a4cc2;
 
   /* --- 외부 지도 서비스 브랜드색 (카카오·네이버 "…에서 보기" 버튼 전용).
    *     단일 액센트 원칙의 의도적 예외 — 제3자 공식 버튼색이라 교회 브랜드 팔레트 아님.

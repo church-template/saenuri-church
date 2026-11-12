@@ -89,7 +89,7 @@ export default async function DepartmentDetailPage({
           {dept.snaps?.length ? <DeptSnapPile snaps={dept.snaps} /> : null}
         </Container>
         {dept.year?.length ? <DeptYear heading={DEPT_SECTIONS.year} items={dept.year} /> : null}
-        {/* 서사 퍼널: 소개 → 한 해·사진(감정 후크) → 활동·프로그램(무엇을) → 알림(언제/어디서) → 다섯 팀 내비 → 초대. */}
+        {/* 서사 퍼널: 소개 → 한 해·사진(감정 후크) → 활동·프로그램(무엇을) → 알림(언제/어디서) → 여섯 팀 내비 → 초대. */}
         {dept.intro && dept.features?.length ? (
           <DeptFeatures
             heading={dept.intro.heading}
