@@ -59,7 +59,8 @@ export const STORY_HERO: StoryHeroContent = {
       desc: "창립 16주년 봄부터 준비해 이전 감사예배를 드렸습니다.",
       bg: { src: `${H}/2006-hanam-outdoor.webp`, tone: "fade2" },
       cards: [
-        { src: `${H}/2006-hanam-thanksgiving.webp`, caption: "2006년 7월 하남 이전 감사예배" },
+        { src: `${H}/2006-hanam-thanksgiving-sermon.webp`, caption: "2006년 7월 창립기념 및 이전감사예배" },
+        { src: `${H}/2006-hanam-thanksgiving-choir.webp`, caption: "이전감사예배 찬양" },
         { src: `${H}/2006-hanam-outdoor.webp`, caption: "하남 감이동 전원교회" },
       ],
     },
@@ -110,9 +111,9 @@ export const STORY_HERO: StoryHeroContent = {
       desc: "태아였던 아이들까지 자라 결혼하고, 3대가 함께 예배합니다.",
       bg: { src: `${C}/group-33rd-2023.webp`, tone: "fade1" },
       cards: [
-        { src: `${H}/early-kids.webp`, caption: "그때의 꼬맹이들" },
+        { src: `${H}/early-kids-christmas.webp`, caption: "그때의 꼬맹이들" },
+        { src: `${H}/2006-kids-door.webp`, caption: "문 앞에 모인 아이들" },
         { src: `${C}/youth-2023.webp`, caption: "지금의 청년들" },
-        { src: `${C}/group-33rd-2023.webp`, caption: "창립 33주년 감사예배" },
       ],
     },
   ],

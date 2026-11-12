@@ -175,7 +175,7 @@ export const HISTORY = {
         "2006년 7월 이전 감사예배",
       ],
       significance: "전원교회를 꿈꾸며 내디딘 걸음",
-      media: { type: "image", src: "/assets/history/2006-hanam-thanksgiving.webp", alt: "2006년 하남 이전 감사예배" },
+      media: { type: "image", src: "/assets/history/2006-hanam-thanksgiving-sermon.webp", alt: "2006년 하남 창립기념 및 이전감사예배" },
     },
     {
       id: "2006-08",
