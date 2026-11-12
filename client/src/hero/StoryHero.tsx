@@ -9,10 +9,12 @@ import { chapterAt } from "./storyChapter";
 import type { StoryCard, StoryChapter, StoryHeroContent } from "./types";
 import styles from "./StoryHero.module.css";
 
-// 메인 스토리 히어로(DESIGN.md story-hero). 인트로(사진판 + "축복합니다", 시간이 지나면 넘어감) → 스플릿 첫 화면 →
+// 메인 스토리 히어로(DESIGN.md story-hero). 인트로(스플래시 — 사진판 + "축복합니다", 사진이 준비된 뒤 등장·유지 후 넘어감) → 스플릿 첫 화면 →
 // 과거→현재 장 → 마지막 "지금" 장(앞 카드가 풀스크린). 모든 장은 고정 무대에서 크로스페이드로 넘어간다.
 // 장 번호는 window 스크롤에서 chapterAt으로 계산한다.
-const INTRO_HOLD_MS = 1800; // 문구가 떠 있는 시간 — 이 동안은 스크롤 입력을 막아 끝까지 보여 준다
+// 스플래시 — 사진판이 준비된 순간부터 잰다(휴대폰은 사진이 늦게 와 마운트 기준이면 문구를 거의 못 본다).
+const INTRO_HOLD_MS = 2800; // 준비 후 유지 시간: 글자 등장(~1.35s) + 완성 문구 ~1.5s. 이 동안 스크롤 입력을 막는다
+const INTRO_WAIT_MAX_MS = 2500; // 사진이 끝내 안 오면 이만큼만 기다리고 시작한다
 const SCROLL_KEYS = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "]);
 
 const TONE: Record<StoryChapter["bg"]["tone"], string> = {
@@ -147,6 +149,8 @@ export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHe
   const reduced = useMediaFlag(REDUCED_MQ);
   const rootRef = useRef<HTMLElement>(null);
   const [cur, setCur] = useState(-1); // -1 = 인트로
+  const [introReady, setIntroReady] = useState(false); // 사진판 준비 전엔 글자 등장을 멈춰 둔다
+  const introImgRef = useRef<HTMLImageElement>(null);
   const count = content.chapters.length + 1; // 마지막 "지금" 장 번호
 
   // 인트로 — 끝까지 보여 준 뒤 INTRO_HOLD_MS에 장 0으로 크로스페이드.
@@ -176,12 +180,25 @@ export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHe
       return () => clearTimeout(timer);
     }
     onConcealHeader?.(true);
-    timer = setTimeout(finish, INTRO_HOLD_MS);
+    const img = introImgRef.current;
+    const start = () => {
+      clearTimeout(timer);
+      setIntroReady(true);
+      timer = setTimeout(finish, INTRO_HOLD_MS);
+    };
+    if (!img || img.complete) start();
+    else {
+      img.addEventListener("load", start, { once: true });
+      img.addEventListener("error", start, { once: true });
+      timer = setTimeout(start, INTRO_WAIT_MAX_MS);
+    }
     window.addEventListener("wheel", block, { passive: false });
     window.addEventListener("touchmove", block, { passive: false });
     window.addEventListener("keydown", blockKey);
     return () => {
       clearTimeout(timer);
+      img?.removeEventListener("load", start);
+      img?.removeEventListener("error", start);
       unlock();
       onConcealHeader?.(false);
     };
@@ -212,7 +229,7 @@ export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHe
   const introLayer = (
     <div className={styles.intro}>
       {/* eslint-disable-next-line @next/next/no-img-element -- 연출 미디어 */}
-      <img src={intro.bg} alt="" fetchPriority="high" />
+      <img ref={introImgRef} src={intro.bg} alt="" fetchPriority="high" />
       <div className={styles.mark} aria-hidden>
         {/* 한 글자씩 떠오르게 글자마다 순번(--i)을 준다 */}
         <b>
@@ -245,6 +262,7 @@ export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHe
       ref={rootRef}
       className={styles.root}
       data-cur={cur}
+      data-ready={introReady ? "" : undefined}
       data-now={cur === count ? "" : undefined}
       style={{ "--steps": count + 1 } as CSSProperties}
     >
