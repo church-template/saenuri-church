@@ -67,8 +67,8 @@ export const CHURCH_GEO: { latitude: number; longitude: number } | null = {
   latitude: 37.3202524,
   longitude: 127.1103254,
 };
-// 네이버 플레이스 안심번호(0507) — 교회 결정으로 대표번호로 사용.
-export const CHURCH_PHONE = "0507-1479-0160";
+// 교회 대표번호 — 담임목사님 휴대폰(교회 결정, 2026-11-12).
+export const CHURCH_PHONE = "010-5415-5061";
 // 교회 대표 이메일 — 도메인 메일이 아니라 실제 사용 중인 주소라 리터럴로 둔다.
 // TODO(교회 확인): 이메일 미수령 — 배포 전 교체
 export const CHURCH_EMAIL = "contact@example.com";
