@@ -1,15 +1,45 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-12T10:19:13Z",
-    "currentVersion": "0.6.0",
+    "lastUpdated": "2026-11-12T11:09:45Z",
+    "currentVersion": "0.7.0",
     "projectType": "spring",
     "projectTypes": [
       "spring",
       "react"
     ],
-    "totalReleases": 7
+    "totalReleases": 8
   },
   "releases": [
+    {
+      "version": "0.7.0",
+      "project_type": "spring",
+      "project_types": [
+        "spring",
+        "react"
+      ],
+      "date": "2026-11-12",
+      "pr_number": 15,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **새 기능**\n  * 교회 로고를 네이비 예배당 마크로 교체하고 아이콘·OG 이미지 갱신\n  * 소개 페이지 핵심가치를 번호 목록으로 변경\n\n* **버그 수정**\n  * 소개 페이지 상징 문구를 로고가 아닌 미션팀 색 기준으로 정정\n  * 사진 위 헤더에서 로고를 흰색으로 표시\n  * 최신 설교 띠 글자·버튼 대비 개선\n  * 하남 장 중복 사진을 빼고 두 장 카드 배치 조정",
+      "parsed_changes": {
+        "새_기능": {
+          "title": "새 기능",
+          "items": [
+            "교회 로고를 네이비 예배당 마크로 교체하고 아이콘·OG 이미지 갱신",
+            "소개 페이지 핵심가치를 번호 목록으로 변경"
+          ]
+        },
+        "버그_수정": {
+          "title": "버그 수정",
+          "items": [
+            "소개 페이지 상징 문구를 로고가 아닌 미션팀 색 기준으로 정정",
+            "사진 위 헤더에서 로고를 흰색으로 표시",
+            "최신 설교 띠 글자·버튼 대비 개선",
+            "하남 장 중복 사진을 빼고 두 장 카드 배치 조정"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.6.0",
       "project_type": "spring",

@@ -96,8 +96,8 @@
 .pile2.on .pc:nth-child(2) { transition-delay: 0.12s; }
 .pile2.on .pc:nth-child(3) { transition-delay: 0.24s; }
 .pile2.on .pc:hover { transform: rotate(0) scale(1.04); z-index: 5; }
-.n2 .pc:nth-child(1) { --r: -5deg; width: 64%; left: 0; bottom: 18%; }
-.n2 .pc:nth-child(2) { --r: 4deg; width: 60%; right: 0; bottom: 0; }
+.n2 .pc:nth-child(1) { --r: -5deg; width: 62%; left: 0; top: 10%; } /* 세 장 묶음처럼 겹쳐 쌓는다 */
+.n2 .pc:nth-child(2) { --r: 4deg; width: 60%; right: 0; top: 32%; }
 .n3 .pc:nth-child(1) { --r: -6deg; width: 54%; left: 0; top: 4%; }
 .n3 .pc:nth-child(2) { --r: 5deg; width: 52%; right: 0; top: 16%; }
 .n3 .pc:nth-child(3) { --r: -2deg; width: 58%; left: 18%; bottom: 0; }

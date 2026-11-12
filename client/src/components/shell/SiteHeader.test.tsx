@@ -47,6 +47,18 @@ describe("SiteHeader", () => {
     expect(header.className).toContain("z-nav");
   });
 
+  it("로고는 사진 위(transparent)에서 흰색, 스크롤 뒤(solid)·서브페이지에서는 원래 색이다", () => {
+    const logoCls = (ui: React.ReactElement) => {
+      const { container, unmount } = render(ui);
+      const cls = container.querySelector("header a img")?.className ?? "";
+      unmount();
+      return cls;
+    };
+    expect(logoCls(<SiteHeader variant="transparent" />)).toContain("invert");
+    expect(logoCls(<SiteHeader variant="transparent" solid />)).not.toContain("invert");
+    expect(logoCls(<SiteHeader />)).not.toContain("invert");
+  });
+
   it("concealed면 위로 숨긴다(메인 인트로 동안)", () => {
     render(<SiteHeader variant="transparent" concealed />);
     expect(screen.getByRole("banner").className).toContain("-translate-y-full");

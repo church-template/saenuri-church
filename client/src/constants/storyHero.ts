@@ -61,7 +61,6 @@ export const STORY_HERO: StoryHeroContent = {
       bg: { src: `${H}/2006-hanam-outdoor.webp`, tone: "fade2" },
       cards: [
         { src: `${H}/2006-hanam-thanksgiving-sermon.webp`, caption: "2006년 7월 창립기념 및 이전감사예배" },
-        { src: `${H}/2006-hanam-thanksgiving-choir.webp`, caption: "이전감사예배 찬양" },
         { src: `${H}/2006-hanam-outdoor.webp`, caption: "하남 감이동 전원교회" },
       ],
     },
