@@ -25,14 +25,20 @@ export function SermonFeature({ sermon, now, className }: { sermon: SermonCardRe
       )}
     >
       <div>
-        <p className={cn(typo.captionStrong, "text-primary-on-dark")}>{label}</p>
+        <p className={cn(typo.bodyStrong, "text-primary-on-dark")}>{label}</p>
         {sermon.scripture ? (
-          <p className={cn(typo.titleMd, "mt-base text-on-dark-soft")}>{sermon.scripture}</p>
+          <p className={cn(typo.titleMd, "mt-base text-on-dark")}>{sermon.scripture}</p>
         ) : null}
         <h2 className={cn(typo.displayLg, "mt-xs text-on-dark group-hover:underline")}>{sermon.title}</h2>
-        <p className={cn(typo.datetime, "mt-base text-on-dark-soft")}>{meta}</p>
+        <p className={cn(typo.bodyMd, "mt-base tabular-nums text-on-dark-soft")}>{meta}</p>
       </div>
-      <span className={cn(buttonVariants("pillCta"), "self-start whitespace-nowrap lg:self-auto")}>
+      {/* 네이비 primary 필은 검은 띠 위에서 묻힌다 — 흰 필로 뒤집어 띠 안의 유일한 행동을 드러낸다 */}
+      <span
+        className={cn(
+          buttonVariants("pillCta"),
+          "self-start whitespace-nowrap bg-on-dark text-ink group-hover:bg-on-dark-soft lg:self-auto",
+        )}
+      >
         {SERMON_LIST.featuredCta}
       </span>
     </Link>
