@@ -98,7 +98,11 @@ export default async function DepartmentDetailPage({
           />
         ) : null}
         {dept.gallery?.length ? (
-          <DeptGallery heading={DEPT_SECTIONS.gallery} photos={dept.gallery} />
+          <DeptGallery
+            heading={DEPT_SECTIONS.gallery}
+            photos={dept.gallery}
+            moreLabel={DEPT_SECTIONS.galleryMore}
+          />
         ) : null}
         {dept.activities?.length ? (
           <DeptActivities heading={DEPT_SECTIONS.activities} items={dept.activities} />

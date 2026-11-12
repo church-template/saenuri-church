@@ -19,6 +19,11 @@
   clip-path: inset(35% 24px 0 24px round 24px 24px 0 0); /* 첫 페인트 깜빡임 방지 근사값 */
 }
 /* 인물 사진이라 세로 크롭은 바닥부터 — 중앙 크롭이면 머리 위 여백이 먼저 잘린다 */
+/* 왼쪽 옅은 그림자 — 밝은 배경 위 흰 캡션 대비 보강 */
+.media::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(10, 11, 13, 0.55) 0%, rgba(10, 11, 13, 0.25) 40%, rgba(10, 11, 13, 0) 65%);
+}
 .media video, .media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 25%; display: block; }
 .caption {
   position: absolute; top: 50%; z-index: 3;

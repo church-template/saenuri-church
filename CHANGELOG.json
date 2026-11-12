@@ -1,15 +1,35 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-12T12:05:47Z",
-    "currentVersion": "0.8.0",
+    "lastUpdated": "2026-11-12T14:01:30Z",
+    "currentVersion": "0.9.0",
     "projectType": "spring",
     "projectTypes": [
       "spring",
       "react"
     ],
-    "totalReleases": 9
+    "totalReleases": 10
   },
   "releases": [
+    {
+      "version": "0.9.0",
+      "project_type": "spring",
+      "project_types": [
+        "spring",
+        "react"
+      ],
+      "date": "2026-11-12",
+      "pr_number": 17,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **새 기능**\n  * 오렌지 미션팀 사진 13장을 넣고 활동 사진을 8장씩 더 보기로 보여 준다",
+      "parsed_changes": {
+        "새_기능": {
+          "title": "새 기능",
+          "items": [
+            "오렌지 미션팀 사진 13장을 넣고 활동 사진을 8장씩 더 보기로 보여 준다"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.8.0",
       "project_type": "spring",

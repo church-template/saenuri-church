@@ -79,14 +79,16 @@ export const DEPARTMENTS: Department[] = [
     name: "오렌지 미션팀",
     description:
       "**어린이 주일학교**입니다.\n\n주일 오전 9시 30분 교회학교예배로 모여, 어린이들이 말씀 안에서 자라 갑니다. 여름에는 어린이 여름성경학교를 엽니다.",
-    media: { type: "image", src: "/dept/orange.webp", alt: "어버이주일 예배 강단 앞에 선 어린이들" },
+    media: { type: "image", src: "/dept/orange.webp", alt: "강단 앞에 함께 선 오렌지 미션팀 아이들과 선생님" },
     caption: ["말씀 안에서 자라는", "어린이 주일학교"],
     team: "orange",
     generation: "어린이",
     summary: "어린이 주일학교입니다. 여름에는 여름성경학교를 엽니다.",
+    // 사진 2~15는 교회가 준 오렌지 미션팀 사진(2026-11). 캡션·alt는 사진에 보이는 것만 적는다.
     snaps: [
-      { src: "/dept/orange.webp", alt: "어버이주일 예배 강단 앞에 선 어린이들", caption: "어버이주일 예배에서" },
-      { src: "/dept/orange/1.webp", alt: "오렌지 미션팀 여름성경학교 포스터", caption: "여름성경학교 포스터" },
+      { src: "/dept/orange/2.webp", alt: "어버이주일 예배 강단 앞에 선 어린이들", caption: "어버이주일 예배에서" },
+      { src: "/dept/orange/12.webp", alt: "카페에서 브이를 하는 아이들", caption: "카페에서 다 함께" },
+      { src: "/dept/orange/9.webp", alt: "산타 모자를 쓰고 무대에 선 아이들", caption: "산타 모자를 쓰고 무대에서" },
     ],
     // 근거: 블로그 2024년 5월 결산 글(어린이주일 선물), 2025년 여름성경학교 후기 글.
     year: [
@@ -99,7 +101,24 @@ export const DEPARTMENTS: Department[] = [
         when: "7월",
         title: "여름성경학교",
         desc: "찬양과 율동, 성경퀴즈, 요리 시간에 이어 선생님이 아이들의 발을 씻겨 주는 세족식으로 마칩니다.",
+        photo: { src: "/dept/orange/1.webp", alt: "오렌지 미션팀 여름성경학교 포스터", caption: "여름성경학교 포스터" },
       },
+    ],
+    // 앞 8장은 장면이 겹치지 않게 골랐다(갤러리는 8장씩 연다).
+    gallery: [
+      { src: "/dept/orange/4.webp", alt: "매트에 앉아 보드를 들고 손을 든 아이들" },
+      { src: "/dept/orange/13.webp", alt: "매트에 앉아 앞에 선 선생님의 말씀을 듣는 아이들" },
+      { src: "/dept/orange/15.webp", alt: "VICTORY 현수막 아래 매트에 앉은 아이" },
+      { src: "/dept/orange/6.webp", alt: "수첩을 들고 매트에 앉은 아이" },
+      { src: "/dept/orange/11.webp", alt: "테이블에 둘러앉아 활동하는 아이들과 선생님" },
+      { src: "/dept/orange/14.webp", alt: "강단 앞에 줄지어 선 아이들" },
+      { src: "/dept/orange/7.webp", alt: "매트에 둘러앉은 아이들과 선생님" },
+      { src: "/dept/orange/3.webp", alt: "추수감사예배 강단 앞에 선 아이들과 청소년들" },
+      { src: "/dept/orange/5.webp", alt: "매트에 앉아 보드에 답을 적는 아이" },
+      { src: "/dept/orange/8.webp", alt: "매트에 앉아 보드를 든 아이들" },
+      { src: "/dept/orange/12.webp", alt: "카페에서 브이를 하는 아이들" },
+      { src: "/dept/orange/9.webp", alt: "산타 모자를 쓰고 무대에 선 아이들" },
+      { src: "/dept/orange/10.webp", alt: "강단 앞에 함께 선 아이들과 선생님" },
     ],
     intro: {
       heading: "오렌지 미션팀 소개",
@@ -235,6 +254,7 @@ export const DEPT_SECTIONS = {
   activities: "주요 활동",
   programs: "특별 프로그램",
   gallery: "활동 사진",
+  galleryMore: "사진 더 보기",
   year: "함께하는 한 해",
   teamNavEyebrow: "3대가 함께",
   teamNav: "여섯 미션팀",

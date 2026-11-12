@@ -43,12 +43,13 @@ describe("DepartmentDetailPage (상세)", () => {
     expect(screen.queryByText(/인도 ·/)).toBeNull();
     expect(screen.queryByRole("heading", { name: DEPT_PAGE.subHeading })).toBeNull();
 
-    // 확인된 정보만: 알림 사항(대상·모임)과 초대 문구는 노출, 근거 없는 활동·프로그램·사진은 미노출
+    // 확인된 정보만: 알림 사항(대상·모임)·초대 문구·교회가 준 활동 사진은 노출, 근거 없는 활동·프로그램은 미노출
     expect(screen.getByRole("heading", { name: "알림 사항" })).toBeDefined();
     expect(screen.getByText("주일 오전 9:30 교회학교예배")).toBeDefined();
     expect(screen.getByRole("heading", { name: "오렌지 미션팀에서 함께해요" })).toBeDefined();
     expect(screen.queryByRole("heading", { name: "특별 프로그램" })).toBeNull();
-    expect(screen.queryByRole("heading", { name: "활동 사진" })).toBeNull();
+    expect(screen.getByRole("heading", { name: "활동 사진" })).toBeDefined();
+    expect(screen.getByRole("button", { name: "사진 더 보기" })).toBeDefined();
   });
 
   it("확인된 자료가 있는 팀만 한 해 구간을 보이고, 여섯 팀 내비는 현재 팀을 표시한다", async () => {
