@@ -21,7 +21,7 @@
 .mono img { filter: grayscale(1) contrast(1.05); }
 .shade { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; transition: opacity 0.9s; background: linear-gradient(180deg, rgba(10, 15, 31, 0.45) 0%, rgba(10, 15, 31, 0.1) 35%, rgba(10, 15, 31, 0.85) 100%); }
 /* 과거 장에만 덮개 — 장 0·인트로·"지금" 장은 사진 원래 밝기 */
-.root:not([data-cur="0"]):not([data-cur="intro"]):not([data-now]) .shade { opacity: 1; }
+.root:not([data-cur="0"]):not([data-cur="-1"]):not([data-now]) .shade { opacity: 1; }
 
 /* 장 0 글 */
 .split { position: absolute; z-index: 5; left: var(--spacing-xl); top: var(--spacing-nav); bottom: 0; width: 46%; display: flex; flex-direction: column; justify-content: center; word-break: keep-all; text-wrap: pretty; transition: opacity 0.5s, transform 0.6s; }
@@ -35,7 +35,7 @@
 .info dt { opacity: 0.8; }
 .info dd { margin: 0; }
 
-/* 장 0 카드 묶음 — 앞 카드(c3)는 인트로·마지막 장에서 풀스크린 */
+/* 장 0 카드 묶음 — 앞 카드(c3)는 마지막 장에서 풀스크린 */
 .pc { position: absolute; margin: 0; overflow: hidden; border-radius: var(--radius-lg); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
 .pc img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .pc figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 10px; font-size: 14px; line-height: 1.35; color: var(--color-on-dark); background: linear-gradient(transparent, rgba(10, 15, 31, 0.75)); }
@@ -47,26 +47,32 @@
 .pile .c3 { --x: 59%; --y: 44%; --w: 37%; --h: 46%; --r: -1deg; z-index: 5; }
 .root[data-cur="0"] .pile:hover .c1 { --x: 48%; --y: 16%; --r: -9deg; }
 .root[data-cur="0"] .pile:hover .c2 { --x: 70%; --y: 12%; --r: 8deg; }
-.root[data-cur="0"] .pile:hover .c3 { --y: 47%; transform: rotate(0) scale(1.03); }
+.root[data-cur="0"] .pile:hover .c3 { transform: rotate(0) scale(1.03); }
 .root:not([data-cur="0"]) .c1, .root:not([data-cur="0"]) .c2 { opacity: 0; pointer-events: none; }
 .root:not([data-cur="0"]) .pile .c3 { --x: 0%; --y: 0%; --w: 100%; --h: 100%; --r: 0deg; border-radius: 0; box-shadow: none; opacity: 0; pointer-events: none; }
-.root[data-cur="intro"] .pile .c3, .root[data-now] .pile .c3 { opacity: 1; }
+/* 앞 카드는 커지거나 줄어드는 모습을 보이지 않는다 — 크기·위치는 보이지 않을 때(투명) 순간 이동하고 보이는 건 페이드뿐.
+   장 0을 떠날 때: 제자리에서 사라진 뒤(0.5s) 풀스크린 자리로. 돌아올 때: 카드 자리로 먼저 옮긴 뒤 나타난다. */
+.pile .c3 { transition: opacity 0.5s, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), left 0s, top 0s, width 0s, height 0s, border-radius 0s; }
+.root:not([data-cur="0"]) .pile .c3 { transition: opacity 0.5s, transform 0s 0.5s, left 0s 0.5s, top 0s 0.5s, width 0s 0.5s, height 0s 0.5s, border-radius 0s 0.5s; }
+.root[data-now] .pile .c3 { opacity: 1; }
 .root[data-now] .pile .c3 img { object-position: 72% center; }
 
-/* 인트로: 블러 → 축소하며 선명, 배경·글·카드 순차 등장 */
-.c3 img { transition: transform 3s ease-out, filter 1.6s cubic-bezier(0.65, 0, 0.35, 1); }
-.root[data-cur="intro"] .pile .c3 img { filter: blur(10px); transform: scale(1.1); }
-.root[data-intro="run"] .pile .c3 { transition: left 1.6s cubic-bezier(0.65, 0, 0.35, 1), top 1.6s cubic-bezier(0.65, 0, 0.35, 1), width 1.6s cubic-bezier(0.65, 0, 0.35, 1), height 1.6s cubic-bezier(0.65, 0, 0.35, 1), transform 1.6s cubic-bezier(0.65, 0, 0.35, 1), border-radius 1.6s; }
-.root[data-intro="run"] .split { transition: opacity 0.9s 1.1s, transform 0.9s 1.1s; }
-.root[data-intro="run"] .pile .c1, .root[data-intro="run"] .pile .c2 { transition: opacity 0.8s 1.3s; }
-.root[data-intro="run"] .splitBg { transition: opacity 1s 0.6s; }
-.root[data-cur="intro"] .splitBg { opacity: 0; }
+/* 인트로(cur -1, 시간이 지나면 걷힘) — 사진판 약한 블러 + 흰 문구 가독성용 옅은 네이비 덮개. 다른 장과 같은 0.9s 크로스페이드로 걷힌다.
+   카드·글(z 4~5) 위에 덮어 인트로 동안 뒤 장면을 가린다. */
+.intro { position: absolute; inset: 0; z-index: 6; overflow: hidden; transition: opacity 0.9s ease; }
+.intro img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(3px); transform: scale(1.04); }
+.intro::after { content: ""; position: absolute; inset: 0; background: rgba(10, 15, 31, 0.35); }
+.root:not([data-cur="-1"]) .intro { opacity: 0; pointer-events: none; }
+.introStatic { position: relative; height: 100dvh; } /* 움직임 줄이기: 맨 위 정적 블록 */
 
-.mark { position: absolute; inset: 0; z-index: 7; display: grid; place-content: center; text-align: center; pointer-events: none; opacity: 0; text-shadow: 0 1px 4px rgba(10, 15, 31, 0.55), 0 2px 28px rgba(10, 15, 31, 0.6); }
+.mark { position: absolute; inset: 0; z-index: 1; display: grid; place-content: center; text-align: center; pointer-events: none; text-shadow: 0 1px 4px rgba(10, 15, 31, 0.55), 0 2px 28px rgba(10, 15, 31, 0.6); }
 .mark b { font-size: clamp(56px, 11vw, 136px); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; white-space: nowrap; } /* DESIGN 예외: 인트로 문구만 700 */
-.mark span { margin-top: var(--spacing-base); font-size: 26px; font-weight: 600; letter-spacing: 0.08em; }
-.root[data-intro="run"][data-cur="intro"] .mark { animation: mark 1.8s ease both; }
-@keyframes mark { 0% { opacity: 0; transform: translateY(12px); } 25%, 70% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-8px); } }
+.mark .sub { margin-top: var(--spacing-base); font-size: 26px; font-weight: 600; letter-spacing: 0.08em; animation: mark-in 0.8s 0.55s ease both; }
+/* 글자 등장 — 아래에서 튀어 오르며 0.08s 간격 */
+.ch { display: inline-block; animation: ch-in 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; animation-delay: calc(var(--i) * 80ms); }
+@keyframes ch-in { from { opacity: 0; transform: translateY(0.4em) scale(0.85); } }
+@keyframes mark-in { from { opacity: 0; transform: translateY(12px); } }
+@media (prefers-reduced-motion: reduce) { .mark .sub, .ch { animation: none; } }
 
 /* 장 묶음 — 데스크톱은 무대 전체를 덮는 투명 판(자식이 각자 절대 배치) */
 .chap { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
@@ -99,9 +105,15 @@
 .credit { position: absolute; z-index: 6; right: var(--spacing-lg); bottom: var(--spacing-base); margin: 0; color: var(--color-on-dark-soft); }
 .back { all: unset; cursor: pointer; position: absolute; z-index: 6; right: var(--spacing-xl); bottom: var(--spacing-xl); border-bottom: 1px solid currentColor; padding-bottom: 2px; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); opacity: 0; pointer-events: none; transition: opacity 0.5s; }
 .root[data-now] .back { opacity: 1; pointer-events: auto; }
+
+/* 마지막 "지금" 장 글 — 좌하단. 사진에 덮개를 깔지 않고 글자 그림자로만 읽히게 한다. */
+.nowCopy { position: absolute; z-index: 6; left: var(--spacing-xl); right: 40%; bottom: var(--spacing-xxl); opacity: 0; transition: opacity 0.6s 0.3s; word-break: keep-all; text-wrap: pretty; pointer-events: none; text-shadow: 0 1px 4px rgba(10, 15, 31, 0.55), 0 2px 24px rgba(10, 15, 31, 0.6); }
+.root[data-now] .nowCopy { opacity: 1; }
+.nowLogo { width: 96px; height: 96px; margin-bottom: var(--spacing-md); filter: brightness(0) invert(1) drop-shadow(0 2px 12px rgba(10, 15, 31, 0.6)); } /* 네이비 로고를 사진 위 흰색으로, 글자처럼 그림자만 */
+.nowLine { margin: 0; }
 .back:focus-visible { outline: 2px solid var(--color-on-dark); outline-offset: 4px; }
-.cue { position: absolute; z-index: 6; left: 50%; bottom: var(--spacing-base); transform: translateX(-50%); color: var(--color-on-dark-soft); animation: bob 1.8s ease-in-out infinite; transition: opacity 0.4s; }
-.root:not([data-cur="0"]) .cue { opacity: 0; }
+.cue { position: absolute; z-index: 7; left: 50%; bottom: var(--spacing-base); transform: translateX(-50%); color: var(--color-on-dark-soft); animation: bob 1.8s ease-in-out infinite; transition: opacity 0.4s; }
+.root:not([data-cur="0"]):not([data-cur="-1"]) .cue { opacity: 0; } /* 인트로·장 0에서 스크롤 안내 */
 @keyframes bob { 50% { transform: translate(-50%, 4px); } }
 
 @media (max-width: 760px) {
@@ -117,6 +129,8 @@
   .pileBox { position: relative; inset: auto; height: 100%; max-width: 100%; aspect-ratio: 5 / 4; margin-left: auto; }
   .pile2 .pc figcaption { font-size: 12px; padding: 16px 8px 6px; }
   .back { right: var(--spacing-md); bottom: var(--spacing-md); }
+  .nowCopy { left: var(--spacing-md); right: var(--spacing-md); bottom: calc(var(--spacing-md) * 3); }
+  .nowLogo { width: 72px; height: 72px; }
 }
 
 /* 짧은 휴대폰(툴바 펼친 iOS 등): 첫 화면 예배 정보는 아래 예배 섹션과 겹치므로 숨겨 카드와 겹치지 않게 */
