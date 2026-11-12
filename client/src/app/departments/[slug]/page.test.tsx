@@ -51,7 +51,7 @@ describe("DepartmentDetailPage (상세)", () => {
     expect(screen.queryByRole("heading", { name: "활동 사진" })).toBeNull();
   });
 
-  it("확인된 자료가 있는 팀만 한 해 구간을 보이고, 다섯 팀 내비는 현재 팀을 표시한다", async () => {
+  it("확인된 자료가 있는 팀만 한 해 구간을 보이고, 여섯 팀 내비는 현재 팀을 표시한다", async () => {
     stubBrowserApis();
     const first = render(await DepartmentDetailPage({ params: Promise.resolve({ slug: "orange" }) }));
     expect(screen.getByRole("heading", { name: DEPT_SECTIONS.year })).toBeDefined();
@@ -78,6 +78,6 @@ describe("DepartmentDetailPage (상세)", () => {
 
   it("generateStaticParams가 모든 부서 slug를 반환한다", () => {
     const params = generateStaticParams();
-    expect(params).toEqual(["orange", "skyblue", "red", "blue", "green"].map((slug) => ({ slug })));
+    expect(params).toEqual(["orange", "skyblue", "red", "blue", "green", "purple"].map((slug) => ({ slug })));
   });
 });

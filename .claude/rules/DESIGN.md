@@ -346,7 +346,7 @@ components:
 - **Muted** (`{colors.muted}`): 날짜, 부제, 푸터 보조.
 
 ### 미션팀 색 (팀 식별 전용)
-- **Team Orange·Skyblue·Red·Blue·Green** (CSS `--color-team-*` / 유틸 `bg-team-*`): 새누리교회는 부서를 색깔 이름의
+- **Team Orange·Skyblue·Red·Blue·Green·Purple** (CSS `--color-team-*` / 유틸 `bg-team-*`): 새누리교회는 부서를 색깔 이름의
   미션팀으로 부른다. 팀을 가리키는 **작은 점(`team-dot`)에만** 쓴다. 글자색·큰 색면·버튼·배지 채움으로 쓰지 않는다
   (오렌지·스카이블루는 흰 바탕에서 글자 대비가 모자란다). 현재 팀 표시는 색만으로 하지 않고 굵기·테두리를 함께 쓴다.
 
@@ -603,7 +603,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   (사진이 없으면 미노출·글만). **캡션은 사진에 실제로 찍힌 것만 적는다** — 시기·행사·소속 팀을 추정해 붙이지 않는다. reduced-motion은 정적.
 - **`dept-year`**: 상세의 "함께하는 한 해" 구간. `{colors.surface-soft}` 밴드, 항목 = 상단 2px `{colors.ink}` 룰 + 시기 `{typography.datetime}` +
   제목 `{typography.title-md}` + 설명 + (선택) `snap-card`. **교회·블로그로 확인된 활동이 있는 팀에만 노출**(없으면 구간째 미노출 — 지어내지 않는다).
-- **`team-nav`**: 상세 하단 다섯 팀 내비. `team-dot` + 팀 이름 + 세대 라벨의 링크 5개(모바일 2열 → 3열 → 5열). 현재 팀은 `aria-current="page"` +
+- **`team-nav`**: 상세 하단 여섯 팀 내비. `team-dot` + 팀 이름 + 세대 라벨의 링크 6개(모바일 2열 → 3열 → 6열). 현재 팀은 `aria-current="page"` +
   1px `{colors.ink}` 테두리 + 굵은 이름(색 단독 구분 금지).
 - **`team-dot`**: 팀 색 원형 점(`{rounded.full}`). 미션팀 색의 유일한 사용처. 팀 색이 없는 부서는 `{colors.primary}`로 폴백.
 - **`dept-tree`**: 사역(부서) 목록 = 최상위 부서 카드 그리드(조직도 다이어그램 아님 — 탐색 목적·고령 터치·단일 액센트).

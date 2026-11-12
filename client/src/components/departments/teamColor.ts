@@ -7,6 +7,7 @@ export const TEAM_DOT: Record<TeamColor, string> = {
   red: "bg-team-red",
   blue: "bg-team-blue",
   green: "bg-team-green",
+  purple: "bg-team-purple",
 };
 
 // 팀 색이 없는 부서(템플릿 기본)는 네이비 단일 액센트로 폴백.
