@@ -70,7 +70,18 @@ export function SiteHeader({ variant = "light", solid = false, concealed = false
       <Container className="flex h-nav items-center justify-between">
         {/* 로고 + 교회명. 로고는 이름 옆 장식이라 alt=""(스크린리더가 이름을 두 번 읽지 않게). */}
         <Link href="/" className={cn(typo.titleMd, "md:text-title-lg", accentColor, "flex items-center gap-sm md:gap-base")}>
-          <Image src={CHURCH_LOGO.src} alt="" width={512} height={512} priority className="size-7 shrink-0 md:size-10" />
+          {/* 사진 위(onDark)에서는 네이비 로고가 묻히므로 필터로 흰색. 전환 효과 없음 — 교회명·메뉴 글자색이 즉시 바뀌므로 같은 순간에 바뀐다. */}
+          <Image
+            src={CHURCH_LOGO.src}
+            alt=""
+            width={512}
+            height={512}
+            priority
+            className={cn(
+              "size-7 shrink-0 md:size-10",
+              onDark ? "brightness-0 invert" : null,
+            )}
+          />
           {CHURCH_NAME}
         </Link>
 
