@@ -148,4 +148,4 @@ node <archify>/bin/archify.mjs finalize workflow docs/diagrams/release-flow.arch
 ---
 
 <!-- AUTO-VERSION-SECTION: DO NOT EDIT MANUALLY -->
-## 최신 버전 : v0.5.0 (2026-11-11)
+## 최신 버전 : v0.6.0 (2026-11-12)
