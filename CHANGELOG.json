@@ -1,14 +1,40 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-14T16:10:13Z",
-    "currentVersion": "0.11.0",
+    "lastUpdated": "2026-11-14T17:08:34Z",
+    "currentVersion": "0.12.0",
     "projectType": "react",
     "projectTypes": [
       "react"
     ],
-    "totalReleases": 12
+    "totalReleases": 13
   },
   "releases": [
+    {
+      "version": "0.12.0",
+      "project_type": "react",
+      "project_types": [
+        "react"
+      ],
+      "date": "2026-11-14",
+      "pr_number": 26,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **새 기능**\n  * 정본 도메인을 www.snrbtc.com으로 바꾸고 구글·네이버 소유 확인 파일 추가\n  * 교회 내부 사진 5장·스카이블루 사진 2장을 넣고 사진 더미를 갤러리에서도 크게 보게 한다\n\n* **기타**\n  * chore : 새누리교회 교회로고 및 QR",
+      "parsed_changes": {
+        "새_기능": {
+          "title": "새 기능",
+          "items": [
+            "정본 도메인을 www.snrbtc.com으로 바꾸고 구글·네이버 소유 확인 파일 추가",
+            "교회 내부 사진 5장·스카이블루 사진 2장을 넣고 사진 더미를 갤러리에서도 크게 보게 한다"
+          ]
+        },
+        "기타": {
+          "title": "기타",
+          "items": [
+            "chore : 새누리교회 교회로고 및 QR"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.11.0",
       "project_type": "react",
