@@ -1,15 +1,39 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-14T14:23:30Z",
-    "currentVersion": "0.10.0",
-    "projectType": "spring",
+    "lastUpdated": "2026-11-14T16:10:13Z",
+    "currentVersion": "0.11.0",
+    "projectType": "react",
     "projectTypes": [
-      "spring",
       "react"
     ],
-    "totalReleases": 11
+    "totalReleases": 12
   },
   "releases": [
+    {
+      "version": "0.11.0",
+      "project_type": "react",
+      "project_types": [
+        "react"
+      ],
+      "date": "2026-11-14",
+      "pr_number": 23,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **새 기능**\n  * 블루·스카이블루·레드·그린 미션팀 사진 22장을 넣고 활동 사진을 보여 준다\n\n* **기타**\n  * 공용 백엔드 전환에 따라 server 폴더와 서버 워크플로 제거",
+      "parsed_changes": {
+        "새_기능": {
+          "title": "새 기능",
+          "items": [
+            "블루·스카이블루·레드·그린 미션팀 사진 22장을 넣고 활동 사진을 보여 준다"
+          ]
+        },
+        "기타": {
+          "title": "기타",
+          "items": [
+            "공용 백엔드 전환에 따라 server 폴더와 서버 워크플로 제거"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.10.0",
       "project_type": "spring",
