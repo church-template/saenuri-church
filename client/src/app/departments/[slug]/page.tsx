@@ -67,6 +67,13 @@ export default async function DepartmentDetailPage({
     </span>
   ));
 
+  // 사진 더미는 작게 기울어 있어 잘 안 보인다 → 아래 갤러리에도 앞에 넣어 크게 볼 수 있게(중복 src 제외).
+  const pileSrcs = new Set(dept.snaps?.map((s) => s.src));
+  const galleryPhotos = [
+    ...(dept.snaps ?? []).map(({ src, alt }) => ({ src, alt })),
+    ...(dept.gallery ?? []).filter((p) => !pileSrcs.has(p.src)),
+  ];
+
   return (
     <>
       <SiteHeader variant="transparent" solid />
@@ -97,10 +104,10 @@ export default async function DepartmentDetailPage({
             items={dept.features}
           />
         ) : null}
-        {dept.gallery?.length ? (
+        {galleryPhotos.length ? (
           <DeptGallery
             heading={DEPT_SECTIONS.gallery}
-            photos={dept.gallery}
+            photos={galleryPhotos}
             moreLabel={DEPT_SECTIONS.galleryMore}
           />
         ) : null}
