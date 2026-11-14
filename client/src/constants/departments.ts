@@ -149,6 +149,13 @@ export const DEPARTMENTS: Department[] = [
       { src: "/dept/skyblue/1.webp", alt: "둘러앉아 식사하는 스카이블루 미션팀", caption: "함께하는 식사" },
       { src: "/dept/skyblue/2.webp", alt: "카페에 모인 스카이블루 미션팀", caption: "카페에서" },
     ],
+    // 갤러리 3~6은 교회가 준 스카이블루 미션팀 사진(2026-11). 캡션·alt는 사진에 보이는 것만 적는다.
+    gallery: [
+      { src: "/dept/skyblue/4.webp", alt: "체육관 집회에서 손뼉 치며 찬양하는 청년들" },
+      { src: "/dept/skyblue/3.webp", alt: "명찰을 걸고 정원 앞 바위에 모인 청년들" },
+      { src: "/dept/skyblue/5.webp", alt: "집회장에서 손을 들고 찬양하는 청년" },
+      { src: "/dept/skyblue/6.webp", alt: "카페 소파에 앉아 반짝이 쿠션을 든 두 사람" },
+    ],
     info: [{ label: "대상", value: "20대 청년·대학생·미혼 30대" }],
     invite: {
       heading: "스카이블루 미션팀에서 함께해요",
@@ -171,6 +178,16 @@ export const DEPARTMENTS: Department[] = [
         alt: "레드 미션팀과 블루 미션팀이 목사님, 사모님과 함께한 모임",
         caption: "목사님, 사모님, 블루 미션팀과 함께",
       },
+      // red/1~5는 교회가 준 레드 미션팀 사진(2026-11).
+      { src: "/dept/red/3.webp", alt: "깃발 장식 아래 식탁에 둘러앉은 레드 미션팀", caption: "함께하는 식사" },
+      { src: "/dept/red/1.webp", alt: "카페 테이블에 둘러앉아 브이를 하는 사람들", caption: "카페에서" },
+    ],
+    gallery: [
+      { src: "/dept/red/2.webp", alt: "예배당 강단 보면대 앞에 선 성도와 목사님" },
+      { src: "/dept/red/5.webp", alt: "교회 안에 채소와 과일을 펼쳐 놓고 정리하는 사람들" },
+      { src: "/dept/red/4.webp", alt: "교회 교실에서 과자 봉지를 들고 웃는 성도" },
+      { src: "/dept/red/3.webp", alt: "깃발 장식 아래 식탁에 둘러앉은 레드 미션팀" },
+      { src: "/dept/red/1.webp", alt: "카페 테이블에 둘러앉아 브이를 하는 사람들" },
     ],
     info: [{ label: "대상", value: "기혼 청년·30대 후반~40대" }],
     invite: {
@@ -192,6 +209,20 @@ export const DEPARTMENTS: Department[] = [
     snaps: [
       { src: "/dept/blue.webp", alt: "예배당 강단 앞에 선 블루 미션팀 세 가정과 자녀들", caption: "세 가정과 자녀들" },
       { src: "/dept/blue/1.webp", alt: "예배당 강단 앞에 선 블루 미션팀", caption: "블루 미션팀" },
+      // blue/2~10은 교회가 준 블루 미션팀 사진(2026-11).
+      { src: "/dept/blue/4.webp", alt: "긴 식탁에 모여 식사하는 블루 미션팀 가정들", caption: "함께하는 식사" },
+    ],
+    // 앞 8장은 장면이 겹치지 않게 골랐다(갤러리는 8장씩 연다).
+    gallery: [
+      { src: "/dept/blue/3.webp", alt: "보드를 들고 웃는 어른들과 아이들" },
+      { src: "/dept/blue/10.webp", alt: "예배당 강단에서 기타를 치며 찬양하는 두 사람" },
+      { src: "/dept/blue/5.webp", alt: "야외 그릴에 둘러앉아 고기를 굽는 사람들" },
+      { src: "/dept/blue/7.webp", alt: "성탄 트리가 놓인 예배당에서 드리는 예배" },
+      { src: "/dept/blue/2.webp", alt: "카페 창가 테이블에 둘러앉은 가족들" },
+      { src: "/dept/blue/8.webp", alt: "카페에서 선물을 받아 든 사람과 웃는 사람들" },
+      { src: "/dept/blue/9.webp", alt: "강단 앞에 선 두 사람과 회중석에 앉은 사람들" },
+      { src: "/dept/blue/6.webp", alt: "예배당 강단 보면대 앞에 선 성도" },
+      { src: "/dept/blue/4.webp", alt: "긴 식탁에 모여 식사하는 블루 미션팀 가정들" },
     ],
     info: [{ label: "대상", value: "40대 가정과 자녀" }],
     invite: {
@@ -211,6 +242,15 @@ export const DEPARTMENTS: Department[] = [
     // 근거: 블로그 2024년 5월 결산 글 "어버이주일에는 그린미션팀 성도님들께서 … 특송".
     snaps: [
       { src: "/dept/green.webp", alt: "어버이주일 예배에서 특송하는 그린 미션팀", caption: "어버이주일 특송" },
+      // green/1~4는 교회가 준 그린 미션팀 사진(2026-11).
+      { src: "/dept/green/3.webp", alt: "소파 앞에 모여 앉은 그린 미션팀 여성도들", caption: "함께 모여" },
+      { src: "/dept/green/1.webp", alt: "카페 긴 테이블에 모인 그린 미션팀 여성도들", caption: "카페에서" },
+    ],
+    gallery: [
+      { src: "/dept/green/3.webp", alt: "소파 앞에 모여 앉은 그린 미션팀 여성도들" },
+      { src: "/dept/green/1.webp", alt: "카페 긴 테이블에 모인 그린 미션팀 여성도들" },
+      { src: "/dept/green/2.webp", alt: "야외 테이블에 앉아 웃는 두 여성도" },
+      { src: "/dept/green/4.webp", alt: "성탄 케이크를 앞에 두고 강단 옆에 선 두 사람" },
     ],
     info: [{ label: "대상", value: "여성도" }],
     invite: {
