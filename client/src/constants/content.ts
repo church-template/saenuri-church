@@ -321,6 +321,12 @@ export const CHURCH_PHOTOS: {
       photos: [
         { src: "/assets/church/worship-2023.webp", alt: "주일예배" },
         { src: "/assets/church/altar-2023.webp", alt: "예배당 강단" },
+        // 교회 제공 예배당 사진(2026-11-15 카카오톡 수령).
+        { src: "/assets/church/interior-1.webp", alt: "통로 끝 나무 십자가가 보이는 예배당" },
+        { src: "/assets/church/interior-2.webp", alt: "나무 십자가와 강대상, 드럼이 놓인 강단" },
+        { src: "/assets/church/interior-3.webp", alt: "뒤에서 바라본 예배당과 강단" },
+        { src: "/assets/church/interior-4.webp", alt: "긴 의자가 줄지어 놓인 예배당 통로" },
+        { src: "/assets/church/interior-5.webp", alt: "나무 십자가 아래 강대상과 꽃 화분" },
       ],
     },
     // 외부 사진 미수령 — 받으면 assets/church/exterior-*.webp로 추가.

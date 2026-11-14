@@ -149,12 +149,14 @@ export const DEPARTMENTS: Department[] = [
       { src: "/dept/skyblue/1.webp", alt: "둘러앉아 식사하는 스카이블루 미션팀", caption: "함께하는 식사" },
       { src: "/dept/skyblue/2.webp", alt: "카페에 모인 스카이블루 미션팀", caption: "카페에서" },
     ],
-    // 갤러리 3~6은 교회가 준 스카이블루 미션팀 사진(2026-11). 캡션·alt는 사진에 보이는 것만 적는다.
+    // 갤러리 3~8은 교회가 준 스카이블루 미션팀 사진(2026-11). 캡션·alt는 사진에 보이는 것만 적는다.
     gallery: [
       { src: "/dept/skyblue/4.webp", alt: "체육관 집회에서 손뼉 치며 찬양하는 청년들" },
       { src: "/dept/skyblue/3.webp", alt: "명찰을 걸고 정원 앞 바위에 모인 청년들" },
       { src: "/dept/skyblue/5.webp", alt: "집회장에서 손을 들고 찬양하는 청년" },
       { src: "/dept/skyblue/6.webp", alt: "카페 소파에 앉아 반짝이 쿠션을 든 두 사람" },
+      { src: "/dept/skyblue/7.webp", alt: "거울 앞에서 휴대폰으로 사진을 찍는 청년" },
+      { src: "/dept/skyblue/8.webp", alt: "탁구 경기에서 서브를 준비하는 선수" },
     ],
     info: [{ label: "대상", value: "20대 청년·대학생·미혼 30대" }],
     invite: {
