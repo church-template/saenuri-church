@@ -1,0 +1,76 @@
+/* dept-groups — 한 팀 안의 부서를 어린 순서로 잇는 선. 점이 뒤로 갈수록 커져 "자라 간다"를 보여 준다.
+   좁은 폭은 세로선(generation-ladder 결), ≥48rem은 가로선(sunday-flow 결). 선 그리기 0.9s는 연출 수치. */
+.flow {
+  position: relative;
+  padding-left: var(--spacing-xxl);
+  --dot-row: var(--spacing-md); /* 가장 큰 점의 지름 = 점 줄 높이 */
+}
+.list {
+  display: grid;
+  gap: var(--spacing-xl);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.track {
+  position: absolute;
+  left: calc(var(--dot-row) / 2 - 1px);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+}
+.line {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--color-hairline);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.9s ease;
+}
+[data-revealed] > .line { transform: none; }
+
+.item { position: relative; }
+.dotRow {
+  position: absolute;
+  left: calc(-1 * var(--spacing-xxl));
+  top: var(--spacing-xxs);
+  width: var(--dot-row);
+  height: var(--dot-row);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dot {
+  display: block;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 0 var(--spacing-xxs) var(--color-canvas); /* 선을 점 둘레에서 끊는다 */
+}
+/* 자라는 점 — 8 → 12 → 16 → 20px(간격 토큰). 넷을 넘으면 가장 큰 크기에 머문다. */
+.size0 { width: var(--spacing-xs); height: var(--spacing-xs); }
+.size1 { width: var(--spacing-sm); height: var(--spacing-sm); }
+.size2 { width: var(--spacing-base); height: var(--spacing-base); }
+.size3 { width: var(--spacing-md); height: var(--spacing-md); }
+
+@media (min-width: 48rem) {
+  .flow { padding-left: 0; }
+  .list {
+    grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+    gap: var(--spacing-lg);
+  }
+  .track {
+    left: 0;
+    right: 0;
+    top: calc(var(--dot-row) / 2 - 1px);
+    bottom: auto;
+    width: auto;
+    height: 2px;
+  }
+  .line { transform: scaleX(0); transform-origin: left; }
+  .dotRow { position: static; justify-content: flex-start; margin-bottom: var(--spacing-lg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Reveal이 IO를 등록하지 않아 신호가 오지 않는다 — 선을 처음부터 그려 둔다. */
+  .line { transform: none; transition: none; }
+}
