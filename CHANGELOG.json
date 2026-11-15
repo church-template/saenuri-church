@@ -1,14 +1,39 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-15T00:32:58Z",
-    "currentVersion": "0.12.1",
+    "lastUpdated": "2026-11-15T07:45:54Z",
+    "currentVersion": "0.13.0",
     "projectType": "react",
     "projectTypes": [
       "react"
     ],
-    "totalReleases": 14
+    "totalReleases": 15
   },
   "releases": [
+    {
+      "version": "0.13.0",
+      "project_type": "react",
+      "project_types": [
+        "react"
+      ],
+      "date": "2026-11-15",
+      "pr_number": 28,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **새 기능**\n  * 오렌지 미션팀 유·초·중·고 부서 구성 섹션 추가 및 소개 문구 수정\n\n* **버그 수정**\n  * 어두운 탭에서도 보이도록 파비콘에 흰 테두리 추가 및 로고 파일 추가",
+      "parsed_changes": {
+        "새_기능": {
+          "title": "새 기능",
+          "items": [
+            "오렌지 미션팀 유·초·중·고 부서 구성 섹션 추가 및 소개 문구 수정"
+          ]
+        },
+        "버그_수정": {
+          "title": "버그 수정",
+          "items": [
+            "어두운 탭에서도 보이도록 파비콘에 흰 테두리 추가 및 로고 파일 추가"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.12.1",
       "project_type": "react",
