@@ -138,25 +138,23 @@ export const DEPARTMENTS: Department[] = [
     name: "스카이블루 미션팀",
     description:
       "**청년부**의 한 팀입니다.\n\n20대 청년과 대학생, 미혼 30대 청년이 함께 모여 예배하고 교제합니다.",
-    media: { type: "image", src: "/dept/skyblue.webp", alt: "공원 바위 앞에 모인 스카이블루 미션팀" },
+    media: { type: "image", src: "/dept/skyblue.webp", alt: "카페 원탁에 둘러앉아 손을 펼쳐 보이는 청년들" },
     caption: ["함께 예배하고", "함께 꿈꾸는 청년"],
     team: "skyblue",
     generation: "20대 · 대학생 · 미혼 30대",
     summary: "또래 청년들이 함께 예배하고 교제하는 청년부입니다.",
-    // 근거: 블로그 2022년 6월 스카이블루 팀장 글 "새벽이슬 같은" — "새누리교회 스카이블루미션팀(2019~2022)" 묶음 사진.
+    // skyblue.webp·skyblue/1~4는 교회가 준 스카이블루 미션팀 사진(2026-11-15, 기존 블로그 사진 교체). 캡션·alt는 사진에 보이는 것만 적는다.
     snaps: [
-      { src: "/dept/skyblue.webp", alt: "공원 바위 앞에 모인 스카이블루 미션팀", caption: "스카이블루 미션팀" },
-      { src: "/dept/skyblue/1.webp", alt: "둘러앉아 식사하는 스카이블루 미션팀", caption: "함께하는 식사" },
-      { src: "/dept/skyblue/2.webp", alt: "카페에 모인 스카이블루 미션팀", caption: "카페에서" },
+      { src: "/dept/skyblue.webp", alt: "카페 원탁에 둘러앉아 손을 펼쳐 보이는 청년들", caption: "카페에서" },
+      { src: "/dept/skyblue/1.webp", alt: "강단 앞에 나란히 선 청년들", caption: "강단 앞에서" },
+      { src: "/dept/skyblue/3.webp", alt: "교회 테이블에서 함께 식사하는 두 청년", caption: "함께하는 식사" },
     ],
-    // 갤러리 3~8은 교회가 준 스카이블루 미션팀 사진(2026-11). 캡션·alt는 사진에 보이는 것만 적는다.
     gallery: [
-      { src: "/dept/skyblue/4.webp", alt: "체육관 집회에서 손뼉 치며 찬양하는 청년들" },
-      { src: "/dept/skyblue/3.webp", alt: "명찰을 걸고 정원 앞 바위에 모인 청년들" },
-      { src: "/dept/skyblue/5.webp", alt: "집회장에서 손을 들고 찬양하는 청년" },
-      { src: "/dept/skyblue/6.webp", alt: "카페 소파에 앉아 반짝이 쿠션을 든 두 사람" },
-      { src: "/dept/skyblue/7.webp", alt: "거울 앞에서 휴대폰으로 사진을 찍는 청년" },
-      { src: "/dept/skyblue/8.webp", alt: "탁구 경기에서 서브를 준비하는 선수" },
+      { src: "/dept/skyblue.webp", alt: "카페 원탁에 둘러앉아 손을 펼쳐 보이는 청년들" },
+      { src: "/dept/skyblue/1.webp", alt: "강단 앞에 나란히 선 청년들" },
+      { src: "/dept/skyblue/2.webp", alt: "초코케이크 상자를 들고 엄지를 든 청년" },
+      { src: "/dept/skyblue/3.webp", alt: "교회 테이블에서 함께 식사하는 두 청년" },
+      { src: "/dept/skyblue/4.webp", alt: "카페 소파에 앉아 두 엄지를 든 청년" },
     ],
     info: [{ label: "대상", value: "20대 청년·대학생·미혼 30대" }],
     invite: {
@@ -253,6 +251,13 @@ export const DEPARTMENTS: Department[] = [
       { src: "/dept/green/1.webp", alt: "카페 긴 테이블에 모인 그린 미션팀 여성도들" },
       { src: "/dept/green/2.webp", alt: "야외 테이블에 앉아 웃는 두 여성도" },
       { src: "/dept/green/4.webp", alt: "성탄 케이크를 앞에 두고 강단 옆에 선 두 사람" },
+      // green/5~10은 교회가 추가로 준 사진(2026-11-15).
+      { src: "/dept/green/5.webp", alt: "강단 앞에서 마이크를 들고 특송하는 여성도들" },
+      { src: "/dept/green/6.webp", alt: "'일어나라' 글자 카드를 들고 순서를 맡은 여성도들" },
+      { src: "/dept/green/7.webp", alt: "강단 앞에서 원고를 읽는 두 사람" },
+      { src: "/dept/green/8.webp", alt: "새누리 골든벨 최후의 1인 상장을 든 여성도" },
+      { src: "/dept/green/9.webp", alt: "예배 중 접시를 건네받는 여성도" },
+      { src: "/dept/green/10.webp", alt: "카메라를 보며 이야기하는 여성도" },
     ],
     info: [{ label: "대상", value: "여성도" }],
     invite: {

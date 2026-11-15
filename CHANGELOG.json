@@ -1,14 +1,34 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-14T17:08:34Z",
-    "currentVersion": "0.12.0",
+    "lastUpdated": "2026-11-15T00:32:58Z",
+    "currentVersion": "0.12.1",
     "projectType": "react",
     "projectTypes": [
       "react"
     ],
-    "totalReleases": 13
+    "totalReleases": 14
   },
   "releases": [
+    {
+      "version": "0.12.1",
+      "project_type": "react",
+      "project_types": [
+        "react"
+      ],
+      "date": "2026-11-15",
+      "pr_number": 27,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **기타**\n  * chore : 교회 사진 교체\n  * chore : 홈페이지 사용 설명서 및 파일 변경",
+      "parsed_changes": {
+        "기타": {
+          "title": "기타",
+          "items": [
+            "chore : 교회 사진 교체",
+            "chore : 홈페이지 사용 설명서 및 파일 변경"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.12.0",
       "project_type": "react",
