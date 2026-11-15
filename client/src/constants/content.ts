@@ -1,5 +1,6 @@
 // 정적 페이지 콘텐츠·예배 시간·CTA 카피. 배포 시 이 파일만 교체(스펙 D4). 샘플 문구.
 import type { HeroMedia } from "@/hero/types";
+import type { SpecialRule } from "@/lib/specialService";
 import type { TeamColor } from "@/constants/departments";
 
 // 소망 본문 세그먼트 — 의미 구절 자체를 상징색 글자로(괄호 표기 없이). color 없는 조각은 평문.
@@ -366,6 +367,7 @@ export const WORSHIP = {
   sermonCta: "설교 말씀 보기", // 정기예배 섹션 하단 → 설교 목록 진입 CTA(#109)
   specialHeading: "특별 예배",
   specialLead: "절기마다 함께 드리는 특별 예배입니다.",
+  specialNextLabel: "다음 특별 예배",
   placeHeading: "예배 장소 안내",
   placeLead: "예배는 누리에뜰 321호에서 드립니다.",
   placeLandmark: "누리에뜰 3층",
@@ -450,14 +452,18 @@ export const WORSHIP_SERVICES: WorshipService[] = [
 
 export interface SpecialService {
   name: string;
-  date: string; // 배지 — "1월 1일", "부활절 주일" 등 서술형 혼용
+  date: string; // 시기 — "1월 1일", "부활절 주일" 등 서술형 혼용
   time: string;
   desc: string;
+  /** 다음 특별 예배 계산 규칙 — 하나라도 없으면 "다음 특별 예배" 띠를 숨긴다(lib/specialService) */
+  rule?: SpecialRule;
 }
 export const SPECIAL_SERVICES: SpecialService[] = [
-  { name: "부활절 예배", date: "부활절 주일", time: "주일예배 시간", desc: "예수님의 부활을 기념하는 예배" },
-  { name: "창립기념 감사예배", date: "7월", time: "주일예배 시간", desc: "1990년 7월 8일 창립을 기념하며 감사드리는 예배" },
-  { name: "추수감사절 예배", date: "추수감사 주일", time: "주일예배 시간", desc: "한 해의 은혜에 감사드리는 예배" },
+  { name: "부활절 예배", date: "부활절 주일", time: "주일예배 시간", desc: "예수님의 부활을 기념하는 예배", rule: { type: "easter" } },
+  // 창립일(7월 8일)에 맞춰 7월 둘째 주일로 가정 — 실제 기념 주일이 다르면 n만 고친다.
+  { name: "창립기념 감사예배", date: "7월", time: "주일예배 시간", desc: "1990년 7월 8일 창립을 기념하며 감사드리는 예배", rule: { type: "nthSunday", month: 7, n: 2 } },
+  // 추수감사 주일 = 한국 교회 관례인 11월 셋째 주일로 맞춤.
+  { name: "추수감사절 예배", date: "추수감사 주일", time: "주일예배 시간", desc: "한 해의 은혜에 감사드리는 예배", rule: { type: "nthSunday", month: 11, n: 3 } },
 ];
 
 export const CTA_BAND = {
