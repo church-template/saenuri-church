@@ -69,7 +69,7 @@ describe("사역 부서 상수", () => {
     const orange = findDepartment("orange")!;
     expect(orange.intro?.heading).toBe("오렌지 미션팀 소개");
     expect(orange.info).toEqual([
-      { label: "대상", value: "어린이" },
+      { label: "대상", value: "유치부·초등부·중등부·고등부" },
       { label: "모임", value: "주일 오전 9:30 교회학교예배" },
     ]);
     expect(orange.invite?.heading).toBe("오렌지 미션팀에서 함께해요");
@@ -77,6 +77,12 @@ describe("사역 부서 상수", () => {
     expect(orange.programs).toBeUndefined();
     expect(orange.gallery).toHaveLength(13);
     expect(orange.gallery?.every((p) => p.src.startsWith("/dept/orange/") && p.src.endsWith(".webp"))).toBe(true);
+  });
+
+  it("오렌지 미션팀의 부서 구성은 유치부→고등부 순서이고, 확인되지 않은 부서 설명은 없다", () => {
+    const groups = findDepartment("orange")!.groups!;
+    expect(groups.items.map((g) => g.name)).toEqual(["유치부", "초등부", "중등부", "고등부"]);
+    expect(groups.items.every((g) => g.desc === undefined)).toBe(true);
   });
 
   it("최상위 미션팀은 모두 팀 색·세대 라벨·한 줄 소개를 갖고, 세대 순서(어린이→여성도)로 놓인다", () => {

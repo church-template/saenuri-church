@@ -38,14 +38,16 @@ describe("DepartmentDetailPage (상세)", () => {
       await DepartmentDetailPage({ params: Promise.resolve({ slug: "orange" }) }),
     );
     expect(screen.getByRole("heading", { name: orange.name })).toBeDefined(); // 히어로 h1
-    expect(container.querySelector(".prose-church")?.textContent).toContain("어린이");
+    expect(container.querySelector(".prose-church")?.textContent).toContain("유치부");
     // 담당자·하위부서 미확보 → 인도 줄·하위부서 섹션 미노출
     expect(screen.queryByText(/인도 ·/)).toBeNull();
     expect(screen.queryByRole("heading", { name: DEPT_PAGE.subHeading })).toBeNull();
 
     // 확인된 정보만: 알림 사항(대상·모임)·초대 문구·교회가 준 활동 사진은 노출, 근거 없는 활동·프로그램은 미노출
     expect(screen.getByRole("heading", { name: "알림 사항" })).toBeDefined();
-    expect(screen.getByText("주일 오전 9:30 교회학교예배")).toBeDefined();
+    // 모임 시간은 알림 사항 카드와 부서 구성의 "함께 모이는 때" 두 곳에 나온다.
+    expect(screen.getAllByText("주일 오전 9:30 교회학교예배")).toHaveLength(2);
+    expect(screen.getByRole("heading", { level: 2, name: orange.groups!.heading })).toBeDefined();
     expect(screen.getByRole("heading", { name: "오렌지 미션팀에서 함께해요" })).toBeDefined();
     expect(screen.queryByRole("heading", { name: "특별 프로그램" })).toBeNull();
     expect(screen.getByRole("heading", { name: "활동 사진" })).toBeDefined();

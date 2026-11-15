@@ -603,6 +603,10 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   (사진이 없으면 미노출·글만). **캡션은 사진에 실제로 찍힌 것만 적는다** — 시기·행사·소속 팀을 추정해 붙이지 않는다. reduced-motion은 정적.
 - **`dept-year`**: 상세의 "함께하는 한 해" 구간. `{colors.surface-soft}` 밴드, 항목 = 상단 2px `{colors.ink}` 룰 + 시기 `{typography.datetime}` +
   제목 `{typography.title-md}` + 설명 + (선택) `snap-card`. **교회·블로그로 확인된 활동이 있는 팀에만 노출**(없으면 구간째 미노출 — 지어내지 않는다).
+- **`dept-groups`**: 상세의 "부서 구성" 구간 — 한 팀 안의 부서(오렌지: 유·초·중·고)를 어린 순서로 잇는다. 흰 섹션(소개와 한 덩어리, 다음 `dept-year` 회색 밴드와 교차).
+  2px `{colors.hairline}` 선 위 `team-dot`이 뒤로 갈수록 커지고(8→12→16→20px, 간격 토큰) 항목 = 학년 `{typography.datetime}` `{colors.muted}` + 부서 이름 `{typography.title-lg}` + (선택) 설명 `{typography.body-sm}`.
+  ≥48rem 가로선(sunday-flow 결), 그 미만 세로선(generation-ladder 결). 등장: 선이 0.9s에 그려지고(Reveal `data-revealed` 신호) 항목은 Reveal 스태거. reduced-motion은 선을 처음부터 그린다.
+  아래 (선택) "함께 모이는 때" 줄 = 1px 헤어라인 위 라벨 `{typography.body-sm}` muted + 값 `{typography.title-md}`. **부서 설명은 교회가 준 것만**(없으면 생략). 데이터 `DEPARTMENTS[].groups`.
 - **`team-nav`**: 상세 하단 여섯 팀 내비. `team-dot` + 팀 이름 + 세대 라벨의 링크 6개(모바일 2열 → 3열 → 6열). 현재 팀은 `aria-current="page"` +
   1px `{colors.ink}` 테두리 + 굵은 이름(색 단독 구분 금지).
 - **`team-dot`**: 팀 색 원형 점(`{rounded.full}`). 미션팀 색의 유일한 사용처. 팀 색이 없는 부서는 `{colors.primary}`로 폴백.

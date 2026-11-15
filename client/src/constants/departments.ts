@@ -34,6 +34,13 @@ export interface DeptSnap {
   caption: string;
 }
 
+// 한 팀 안의 부서(오렌지: 유·초·중·고) — 어린 순서로 넣는다. 설명은 교회가 준 것만(없으면 생략).
+export interface DeptGroup {
+  name: string;
+  range: string; // "초등학교 1~6학년"처럼 대상 학년
+  desc?: string;
+}
+
 // 팀의 한 해 — 교회·블로그로 확인된 활동만 넣는다. 비어 있으면 구간째 미노출.
 export interface DeptYearItem {
   when: string; // "5월"처럼 풀어 쓴 시기
@@ -64,6 +71,7 @@ export interface Department {
   summary?: string; // 목록 한 줄 소개
   snaps?: DeptSnap[]; // 사진 더미(상세 최대 3장) — 첫 장이 목록 사진
   year?: DeptYearItem[]; // 한 해 구간
+  groups?: { heading: string; lead?: string; items: DeptGroup[]; together?: DeptInfoItem }; // 부서 구성
 }
 
 const FALLBACK_THUMB = "/dept/default.webp";
@@ -78,12 +86,12 @@ export const DEPARTMENTS: Department[] = [
     slug: "orange",
     name: "오렌지 미션팀",
     description:
-      "**어린이 주일학교**입니다.\n\n주일 오전 9시 30분 교회학교예배로 모여, 어린이들이 말씀 안에서 자라 갑니다. 여름에는 어린이 여름성경학교를 엽니다.",
+      "**유치부·초등부·중등부·고등부**가 함께하는 교회학교입니다.\n\n주일 오전 9시 30분 교회학교예배로 모여, 아이들과 학생들이 말씀 안에서 자라 갑니다. 여름에는 여름성경학교를 엽니다.",
     media: { type: "image", src: "/dept/orange.webp", alt: "강단 앞에 함께 선 오렌지 미션팀 아이들과 선생님" },
-    caption: ["말씀 안에서 자라는", "어린이 주일학교"],
+    caption: ["말씀 안에서 자라는", "다음 세대"],
     team: "orange",
-    generation: "어린이",
-    summary: "어린이 주일학교입니다. 여름에는 여름성경학교를 엽니다.",
+    generation: "유·초·중·고",
+    summary: "유치부부터 고등부까지 함께하는 주일학교입니다. 여름에는 여름성경학교를 엽니다.",
     // 사진 2~15는 교회가 준 오렌지 미션팀 사진(2026-11). 캡션·alt는 사진에 보이는 것만 적는다.
     snaps: [
       { src: "/dept/orange/2.webp", alt: "어버이주일 예배 강단 앞에 선 어린이들", caption: "어버이주일 예배에서" },
@@ -120,17 +128,28 @@ export const DEPARTMENTS: Department[] = [
       { src: "/dept/orange/9.webp", alt: "산타 모자를 쓰고 무대에 선 아이들" },
       { src: "/dept/orange/10.webp", alt: "강단 앞에 함께 선 아이들과 선생님" },
     ],
+    groups: {
+      heading: "유치부부터 고등부까지",
+      lead: "오렌지 미션팀은 네 부서가 한 팀입니다.",
+      items: [
+        { name: "유치부", range: "미취학" },
+        { name: "초등부", range: "초등학교 1~6학년" },
+        { name: "중등부", range: "중학교 1~3학년" },
+        { name: "고등부", range: "고등학교 1~3학년" },
+      ],
+      together: { label: "함께 모이는 때", value: "주일 오전 9:30 교회학교예배" },
+    },
     intro: {
       heading: "오렌지 미션팀 소개",
-      lead: "새누리교회의 다음 세대, 어린이 주일학교입니다.",
+      lead: "새누리교회의 다음 세대, 유치부·초등부·중등부·고등부가 함께하는 교회학교입니다.",
     },
     info: [
-      { label: "대상", value: "어린이" },
+      { label: "대상", value: "유치부·초등부·중등부·고등부" },
       { label: "모임", value: "주일 오전 9:30 교회학교예배" },
     ],
     invite: {
       heading: "오렌지 미션팀에서 함께해요",
-      body: "어린이 누구나 환영합니다. 주일 아침, 친구들과 함께 예배해요.",
+      body: "유치부부터 고등부까지 누구나 환영합니다. 주일 아침, 친구들과 함께 예배해요.",
     },
   },
   {
