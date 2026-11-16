@@ -18,6 +18,10 @@ export async function revalidateBulletins() {
   updateTag("bulletins");
 }
 
+export async function revalidateDepartments() {
+  updateTag("departments");
+}
+
 export async function revalidateTags() {
   updateTag("tags");
 }

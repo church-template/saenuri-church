@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { apiUrl } from "@/lib/auth/apiBase";
+import { gallerySrc } from "@/lib/mediaUrl";
 import { EmptyState } from "@/components/common/EmptyState";
 import { PhotoLightbox } from "./PhotoLightbox";
 import { AddPhotosButton, RemovePhotoButton } from "./GalleryPhotoManager";
@@ -42,13 +42,20 @@ export function PhotoGrid({
               >
                 {/* fill 모드는 부모 relative 필수(next/image 규약) */}
                 <span className="relative block aspect-square overflow-hidden rounded-md">
-                  <Image
-                    src={apiUrl(`/api/media/${p.mediaId}`)}
-                    alt={p.caption ?? ""}
-                    fill
-                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                    className="object-cover transition-transform duration-300 ease-out hover:scale-[1.03]"
-                  />
+                  {/* 서명 주소(쿼리스트링)는 remotePatterns(search 없음)에 안 맞고, 최적화 캐시(31일)가 만료 뒤에도 내줄 수 있어 원본을 직접 받는다(#32). */}
+                  {/* url: null이면 열 주소가 없다 → 빈 칸(id로 다시 조립하면 차단 뒤 404). */}
+                  {gallerySrc(p.mediaId, p.url) ? (
+                    <Image
+                      src={gallerySrc(p.mediaId, p.url) as string}
+                      unoptimized={!!p.url}
+                      alt={p.caption ?? ""}
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                      className="object-cover transition-transform duration-300 ease-out hover:scale-[1.03]"
+                    />
+                  ) : (
+                    <span className="block h-full w-full bg-surface-strong" />
+                  )}
                 </span>
               </button>
               {albumId != null ? <RemovePhotoButton albumId={albumId} photoId={p.id} /> : null}

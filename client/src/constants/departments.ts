@@ -1,5 +1,5 @@
 // 공개 "사역(부서) 소개" 단일 출처 — 메인 페이지처럼 프론트 상수로 주입한다(하드코딩 금지, 가이드 12장).
-// 백엔드 `department`(교인 정보관리·어드민)와 별개. 공개 인트로 페이지는 이 상수만으로 자립 동작한다.
+// 미션팀 사진·소개 본문만 backendId로 백엔드 부서 API에서 덮어쓰고, API가 비거나 실패하면 이 상수만으로 자립 동작한다(#32).
 // 히어로 미디어는 /public/dept/{slug}.webp 관례를 따른다 — 메인의 /hero.mp4와 동일.
 import type { HeroMedia } from "@/hero/types";
 
@@ -51,6 +51,7 @@ export interface DeptYearItem {
 
 export interface Department {
   slug: string; // URL 키(/departments/{slug}) — 백엔드 id와 무관, 프론트가 큐레이션
+  backendId?: number; // 백엔드 부서 id — 있으면 사진·소개를 API에서 읽는다(없거나 실패하면 이 상수로 폴백, #32)
   name: string;
   leader?: string;
   description: string; // raw 마크다운 → MarkdownContent
@@ -78,12 +79,14 @@ const FALLBACK_THUMB = "/dept/default.webp";
 
 // 사진을 받으면 public/dept/{slug}.webp(히어로 2000px)·dept/{slug}/{n}.webp(갤러리 1600px)로 넣고 media를 바꾼다.
 
+// backendId = 운영 백엔드 부서 id(새누리: 1 오렌지 ~ 6 퍼플, church-backend#92).
 // 미션팀 — 새누리교회는 부서를 색깔 이름의 "미션팀"으로 부른다(블로그 2022년 글 기준 5개 + 예배·찬양 세션팀 퍼플).
 // 메가메뉴 "미션팀" 카테고리와 동일 구성. 담당자·모임 장소는 교회 확인 전이라 비워 둔다
 // (옵션 필드 생략 → 해당 섹션 미노출). 사진은 블로그에서 팀이 확인된 것만 쓴다(근거는 팀별 주석).
 export const DEPARTMENTS: Department[] = [
   {
     slug: "orange",
+    backendId: 1,
     name: "오렌지 미션팀",
     description:
       "**유치부·초등부·중등부·고등부**가 함께하는 교회학교입니다.\n\n주일 오전 9시 30분 교회학교예배로 모여, 아이들과 학생들이 말씀 안에서 자라 갑니다. 여름에는 여름성경학교를 엽니다.",
@@ -165,6 +168,7 @@ export const DEPARTMENTS: Department[] = [
   },
   {
     slug: "skyblue",
+    backendId: 2,
     name: "스카이블루 미션팀",
     description:
       "**청년부**의 한 팀입니다.\n\n20대 청년과 대학생, 미혼 30대 청년이 함께 모여 예배하고 교제합니다.",
@@ -194,6 +198,7 @@ export const DEPARTMENTS: Department[] = [
   },
   {
     slug: "red",
+    backendId: 3,
     name: "레드 미션팀",
     description: "**청년부**의 한 팀입니다.\n\n결혼한 청년과 30대 후반~40대 청년이 함께합니다.",
     media: { type: "image", src: "/dept/red.webp", alt: "레드 미션팀과 블루 미션팀이 목사님, 사모님과 함께한 모임" },
@@ -227,6 +232,7 @@ export const DEPARTMENTS: Department[] = [
   },
   {
     slug: "blue",
+    backendId: 4,
     name: "블루 미션팀",
     description:
       "40대 가정이 자녀와 함께하는 미션팀입니다.\n\n보이지 않는 곳에서 교회를 섬기며, 부모와 자녀가 함께 신앙을 이어 갑니다.",
@@ -262,6 +268,7 @@ export const DEPARTMENTS: Department[] = [
   },
   {
     slug: "green",
+    backendId: 5,
     name: "그린 미션팀",
     description: "**여선교회**입니다.\n\n기도와 섬김으로 교회와 가정을 세웁니다.",
     media: { type: "image", src: "/dept/green.webp", alt: "어버이주일 예배에서 특송하는 그린 미션팀" },
@@ -298,6 +305,7 @@ export const DEPARTMENTS: Department[] = [
   // 세대 팀이 아니라 예배·찬양 세션팀이라 세대 줄 끝에 둔다. 사진 미확보 → 기본 이미지·스냅 없음.
   {
     slug: "purple",
+    backendId: 6,
     name: "퍼플 미션팀",
     description: "**예배와 찬양**을 이끄는 세션팀입니다.",
     media: { type: "image", src: "/dept/default.webp", alt: "퍼플 미션팀" },

@@ -2,7 +2,9 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const { createMock, updateMock, getDetailMock, notifySuccess, notifyError } = vi.hoisted(() => ({
+const { createMock, updateMock, getDetailMock, notifySuccess, notifyError, revalidateMock, fetchAlbumsMock } = vi.hoisted(() => ({
+  revalidateMock: vi.fn(),
+  fetchAlbumsMock: vi.fn(),
   createMock: vi.fn(),
   updateMock: vi.fn(),
   getDetailMock: vi.fn(),
@@ -15,6 +17,8 @@ vi.mock("@/lib/api/departments.admin", () => ({
   getDepartmentDetail: getDetailMock,
 }));
 vi.mock("@/lib/notify", () => ({ notify: { success: notifySuccess, error: notifyError } }));
+vi.mock("@/lib/admin/revalidate", () => ({ revalidateDepartments: revalidateMock }));
+vi.mock("@/lib/api/gallery", () => ({ fetchAlbums: fetchAlbumsMock }));
 
 import { DepartmentFormDialog } from "./DepartmentFormDialog";
 import type { DepartmentCardResponse } from "@/lib/api/types";
@@ -26,7 +30,11 @@ const departments: DepartmentCardResponse[] = [
 ];
 
 let qc: QueryClient;
-beforeEach(() => { qc = new QueryClient({ defaultOptions: { queries: { retry: false } } }); });
+beforeEach(() => {
+  qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+  revalidateMock.mockResolvedValue(undefined);
+  fetchAlbumsMock.mockResolvedValue({ content: [{ id: 7, title: "2026 여름성경학교" }] });
+});
 afterEach(() => vi.clearAllMocks());
 function renderDialog(ui: React.ReactNode) {
   return render(<QueryClientProvider client={qc}>{ui}</QueryClientProvider>);
@@ -121,5 +129,44 @@ describe("DepartmentFormDialog", () => {
     renderDialog(<DepartmentFormDialog open onOpenChange={() => {}} mode="edit" editId={2} departments={departments} />);
     await waitFor(() => expect(notifyError).toHaveBeenCalled());
     expect((screen.getByRole("button", { name: "저장" }) as HTMLButtonElement).disabled).toBe(true);
+  });
+
+  it("수정 PUT은 대표 사진·앨범을 값이 없어도(null) 항상 함께 보내고 공개 캐시를 비운다", async () => {
+    getDetailMock.mockResolvedValue({
+      id: 2, name: "중등부", description: "", leader: "", parentId: 1, sortOrder: 10,
+      createdAt: "", updatedAt: "", version: 4, // 백엔드 배포 전 — heroMediaId·albumId 필드 없음
+    });
+    updateMock.mockResolvedValue({ id: 2 });
+    renderDialog(<DepartmentFormDialog open onOpenChange={() => {}} mode="edit" editId={2} departments={departments} />);
+    await waitFor(() => expect((screen.getByLabelText("부서명") as HTMLInputElement).value).toBe("중등부"));
+    fireEvent.click(screen.getByRole("button", { name: "저장" }));
+    await waitFor(() => expect(updateMock).toHaveBeenCalled());
+    const body = updateMock.mock.calls[0][1];
+    expect(body).toHaveProperty("heroMediaId", null);
+    expect(body).toHaveProperty("albumId", null);
+    await waitFor(() => expect(revalidateMock).toHaveBeenCalled());
+  });
+
+  it("시드된 대표 사진·앨범을 보이고, 앨범을 바꾸거나 사진을 빼면 그 값으로 PUT한다", async () => {
+    getDetailMock.mockResolvedValue({
+      id: 2, name: "중등부", description: "", leader: "", parentId: 1, sortOrder: 10,
+      createdAt: "", updatedAt: "", version: 4, heroMediaId: 42, albumId: null, photos: [],
+    });
+    updateMock.mockResolvedValue({ id: 2 });
+    renderDialog(<DepartmentFormDialog open onOpenChange={() => {}} mode="edit" editId={2} departments={departments} />);
+    await waitFor(() => expect(screen.getByAltText("선택한 대표 사진")).toBeDefined());
+    await waitFor(() => expect(screen.getByRole("option", { name: "2026 여름성경학교" })).toBeDefined());
+    fireEvent.change(screen.getByLabelText("활동 사진 앨범"), { target: { value: "7" } });
+    fireEvent.click(screen.getByRole("button", { name: "대표 사진 빼기" }));
+    fireEvent.click(screen.getByRole("button", { name: "저장" }));
+    await waitFor(() =>
+      expect(updateMock).toHaveBeenCalledWith(2, expect.objectContaining({ heroMediaId: null, albumId: 7 })),
+    );
+  });
+
+  it("앨범 고르기 옆에 공개 안내를 보이고 select와 연결한다(#92 3.3)", async () => {
+    renderDialog(<DepartmentFormDialog open onOpenChange={() => {}} mode="create" departments={departments} />);
+    const note = screen.getByText(/앨범의 사진 전체가 누구에게나 공개됩니다/);
+    expect(screen.getByLabelText("활동 사진 앨범").getAttribute("aria-describedby")).toBe(note.id);
   });
 });

@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
 import { formatDate } from "@/lib/date";
-import { apiUrl } from "@/lib/auth/apiBase";
+import { gallerySrc } from "@/lib/mediaUrl";
 import type { GalleryAlbumCardResponse } from "@/lib/api/types";
 
 const focusRing =
@@ -14,14 +14,17 @@ const focusRing =
 
 // 앨범 카드 — 16:9 썸네일(첫 사진, 없으면 플레이스홀더) + 제목 + 메타. department-card 호버 재사용.
 export function AlbumCard({ album }: { album: GalleryAlbumCardResponse }) {
+  // thumbnailUrl: null=썸네일 없음(플레이스홀더), 없음(구 백엔드)=thumbnailMediaId로 조립(#32).
+  const thumb = gallerySrc(album.thumbnailMediaId, album.thumbnailUrl);
   return (
     <Link href={`/gallery/albums/${album.id}`} className={cn("block", focusRing)}>
       <Card bordered interactive className="group h-full">
-        {/* fill 모드는 부모 relative 필수(next/image 규약) */}
+        {/* fill 모드는 부모 relative 필수(next/image 규약). unoptimized: 서명 주소(쿼리스트링)는 remotePatterns(search 없음)에 안 맞고, 최적화 캐시(31일)가 만료 뒤에도 내줄 수 있어 원본을 직접 받는다(#32). */}
         <div className="relative aspect-video overflow-hidden">
-          {album.thumbnailMediaId != null ? (
+          {thumb ? (
             <Image
-              src={apiUrl(`/api/media/${album.thumbnailMediaId}`)}
+              src={thumb}
+              unoptimized={!!album.thumbnailUrl}
               alt=""
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
