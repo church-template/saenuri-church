@@ -23,6 +23,7 @@ Next.js (App Router) + TypeScript / 공개=서버컴포넌트+ISR · 회원=TanS
 - **hex·px 인라인 금지** — 색·크기·간격은 DESIGN.md 토큰(globals.css `@theme` → Tailwind 유틸 `bg-primary`·`p-section`) 참조. arbitrary value(`bg-[#...]`) 금지. 예외: CrossHero/DeptHero 검증 로직 내부 수치(SVG 좌표·rgba)
 - **UI 이모지 금지 · 아이콘은 `lucide-react`** — 사용자 노출 UI에 이모지(🎉·✅ 등)를 쓰지 않는다. 아이콘이 필요하면 `lucide-react`만 사용한다(다른 아이콘 세트·이미지 아이콘 임의 도입 금지, 가이드 15.1). 색은 `currentColor`(토큰 상속), 크기는 `size` prop
 - **JSX 조건부 렌더링은 삼항으로** — `{cond && <X/>}` 금지, `{cond ? <X/> : null}` 사용 (falsy `0`·`""` 렌더링 방어). `cn()` 내부 className 조합의 `&&`는 허용
+- **정적 이미지는 WebP로 변환해 넣는다** — `public/`에 넣는 사진·그림은 원본(jpg·png·heic)을 그대로 두지 않고 WebP(품질 82, 긴 변 최대 1600px, EXIF 제거)로 변환해 넣고 출처를 `public/assets/SOURCES.md`에 적는다
 - **허용 라이브러리 외 추가 금지** — 가이드 15.1 확정 스택 밖 라이브러리 임의 도입 금지
 
 ---

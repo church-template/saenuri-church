@@ -75,7 +75,7 @@ describe("사역 부서 상수", () => {
     expect(orange.invite?.heading).toBe("오렌지 미션팀에서 함께해요");
     expect(orange.activities).toBeUndefined();
     expect(orange.programs).toBeUndefined();
-    expect(orange.gallery).toHaveLength(13);
+    expect(orange.gallery).toHaveLength(24);
     expect(orange.gallery?.every((p) => p.src.startsWith("/dept/orange/") && p.src.endsWith(".webp"))).toBe(true);
   });
 

@@ -61,4 +61,16 @@ describe("PhotoLightbox", () => {
     render(<PhotoLightbox photos={photos} albumTitle="앨범" index={null} onIndexChange={onIndexChange} />);
     expect(screen.queryByRole("dialog")).toBeNull();
   });
+
+  it("서명 주소(url)가 있으면 그 주소로 크게 보여 준다(#32)", () => {
+    render(
+      <PhotoLightbox
+        photos={[{ ...photos[0], url: "/api/media/10?exp=1&sig=s" }]}
+        albumTitle="앨범"
+        index={0}
+        onIndexChange={vi.fn()}
+      />,
+    );
+    expect(screen.getByRole("img").getAttribute("src")).toBe("/api/media/10?exp=1&sig=s");
+  });
 });

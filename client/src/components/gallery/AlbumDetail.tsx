@@ -58,7 +58,12 @@ export function AlbumDetail({ id }: { id: number }) {
           {album.description ? (
             <>
               <div className="mt-lg border-t border-hairline" />
-              <MarkdownContent source={album.description} className="mt-lg" />
+              <MarkdownContent
+                source={album.description}
+                // 앨범 설명 이미지는 비공개 — mediaUrls에 키가 없으면 열 수 없어 그리지 않는다. 필드가 없으면(구 백엔드) 기존 공개 주소.
+                media={album.mediaUrls ? { urls: album.mediaUrls, missing: "drop" } : undefined}
+                className="mt-lg"
+              />
             </>
           ) : null}
           <PhotoGrid photos={album.photos} albumTitle={album.title} albumId={album.id} />

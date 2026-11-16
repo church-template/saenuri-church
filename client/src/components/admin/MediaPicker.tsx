@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
-import { apiUrl } from "@/lib/auth/apiBase";
+import { mediaSrc } from "@/lib/mediaUrl";
 import { Button } from "@/components/ui/Button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -20,11 +20,23 @@ export interface MediaPickerProps {
   onOpenChange: (v: boolean) => void;
   accept: "image" | "pdf";
   multiple?: boolean;
-  onConfirm: (mediaIds: number[]) => void;
+  // urls: 고른 미디어의 id→서명 주소(있는 것만, #32) — 저장 전 미리보기용(안 쓰인 파일은 공개 주소가 404).
+  onConfirm: (mediaIds: number[], urls: Record<string, string>) => void;
+}
+
+// 고른 id 중 서명 주소가 있는 것만 id→url로 모은다(없으면 호출부가 공개 주소로 폴백).
+export function signedUrlsOf(ids: number[], media: MediaResponse[]): Record<string, string> {
+  const urls: Record<string, string> = {};
+  for (const m of media) {
+    if (m.url && ids.includes(m.id)) urls[String(m.id)] = m.url;
+  }
+  return urls;
 }
 
 export function MediaPicker({ open, onOpenChange, accept, multiple = false, onConfirm }: MediaPickerProps) {
   const [selected, setSelected] = useState<number[]>([]);
+  // 이번에 올린 파일은 목록 재조회 전에 고를 수 있어 따로 기억한다(서명 주소 전달용).
+  const [uploadedMedia, setUploadedMedia] = useState<MediaResponse[]>([]);
   const params = { type: accept };
   const media = useQuery({
     queryKey: adminKeys.list("media", params),
@@ -40,11 +52,12 @@ export function MediaPicker({ open, onOpenChange, accept, multiple = false, onCo
   }
   function handleUploaded(uploaded: MediaResponse[]) {
     const ids = uploaded.map((m) => m.id);
+    setUploadedMedia((prev) => [...prev, ...uploaded]);
     setSelected((prev) => (multiple ? [...prev, ...ids] : ids.slice(-1)));
     media.refetch();
   }
   function confirm() {
-    onConfirm(selected);
+    onConfirm(selected, signedUrlsOf(selected, [...uploadedMedia, ...(media.data?.content ?? [])]));
     setSelected([]);
     onOpenChange(false);
   }
@@ -85,7 +98,7 @@ export function MediaPicker({ open, onOpenChange, accept, multiple = false, onCo
                     {accept === "image" ? (
                       // fill 모드는 부모 relative 필수(next/image 규약). 다이얼로그 셀 폭 근사 sizes=200px.
                       <span className="relative block aspect-square w-full overflow-hidden rounded-md">
-                        <Image src={apiUrl(`/api/media/${m.id}`)} alt={m.filename} fill sizes="200px" className="object-cover" />
+                        <Image src={mediaSrc(m.id, m.url)} unoptimized={!!m.url} alt={m.filename} fill sizes="200px" className="object-cover" />
                       </span>
                     ) : (
                       <span className={cn(typo.bodySm, "block truncate p-sm text-ink")}>{m.filename}</span>

@@ -27,6 +27,20 @@ describe("MediaPicker", () => {
     await waitFor(() => expect(screen.getByText("a.pdf")).toBeDefined());
     fireEvent.click(screen.getByText("a.pdf"));
     fireEvent.click(screen.getByRole("button", { name: /선택/ }));
-    expect(onConfirm).toHaveBeenCalledWith([3]);
+    expect(onConfirm).toHaveBeenCalledWith([3], {});
+  });
+
+  it("고른 미디어에 서명 주소가 있으면 id→url로 함께 넘긴다(#32)", async () => {
+    listMediaMock.mockResolvedValue({
+      content: [{ id: 4, filename: "b.png", mimeType: "image/png", size: 1, uploadedBy: 1, createdAt: "", url: "/api/media/4?exp=1&sig=s" }],
+      page: { size: 20, number: 0, totalElements: 1, totalPages: 1 },
+    });
+    const onConfirm = vi.fn();
+    renderQc(<MediaPicker open accept="image" onOpenChange={() => {}} onConfirm={onConfirm} />);
+    const img = await screen.findByAltText("b.png");
+    expect(img.getAttribute("src")).toBe("/api/media/4?exp=1&sig=s");
+    fireEvent.click(img);
+    fireEvent.click(screen.getByRole("button", { name: /선택/ }));
+    expect(onConfirm).toHaveBeenCalledWith([4], { "4": "/api/media/4?exp=1&sig=s" });
   });
 });

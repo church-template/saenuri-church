@@ -1,5 +1,5 @@
 // 공개 "사역(부서) 소개" 단일 출처 — 메인 페이지처럼 프론트 상수로 주입한다(하드코딩 금지, 가이드 12장).
-// 백엔드 `department`(교인 정보관리·어드민)와 별개. 공개 인트로 페이지는 이 상수만으로 자립 동작한다.
+// 미션팀 사진·소개 본문만 backendId로 백엔드 부서 API에서 덮어쓰고, API가 비거나 실패하면 이 상수만으로 자립 동작한다(#32).
 // 히어로 미디어는 /public/dept/{slug}.webp 관례를 따른다 — 메인의 /hero.mp4와 동일.
 import type { HeroMedia } from "@/hero/types";
 
@@ -51,6 +51,7 @@ export interface DeptYearItem {
 
 export interface Department {
   slug: string; // URL 키(/departments/{slug}) — 백엔드 id와 무관, 프론트가 큐레이션
+  backendId?: number; // 백엔드 부서 id — 있으면 사진·소개를 API에서 읽는다(없거나 실패하면 이 상수로 폴백, #32)
   name: string;
   leader?: string;
   description: string; // raw 마크다운 → MarkdownContent
@@ -78,12 +79,14 @@ const FALLBACK_THUMB = "/dept/default.webp";
 
 // 사진을 받으면 public/dept/{slug}.webp(히어로 2000px)·dept/{slug}/{n}.webp(갤러리 1600px)로 넣고 media를 바꾼다.
 
+// backendId = 운영 백엔드 부서 id(새누리: 1 오렌지 ~ 6 퍼플, church-backend#92).
 // 미션팀 — 새누리교회는 부서를 색깔 이름의 "미션팀"으로 부른다(블로그 2022년 글 기준 5개 + 예배·찬양 세션팀 퍼플).
 // 메가메뉴 "미션팀" 카테고리와 동일 구성. 담당자·모임 장소는 교회 확인 전이라 비워 둔다
 // (옵션 필드 생략 → 해당 섹션 미노출). 사진은 블로그에서 팀이 확인된 것만 쓴다(근거는 팀별 주석).
 export const DEPARTMENTS: Department[] = [
   {
     slug: "orange",
+    backendId: 1,
     name: "오렌지 미션팀",
     description:
       "**유치부·초등부·중등부·고등부**가 함께하는 교회학교입니다.\n\n주일 오전 9시 30분 교회학교예배로 모여, 아이들과 학생들이 말씀 안에서 자라 갑니다. 여름에는 여름성경학교를 엽니다.",
@@ -92,7 +95,7 @@ export const DEPARTMENTS: Department[] = [
     team: "orange",
     generation: "유·초·중·고",
     summary: "유치부부터 고등부까지 함께하는 주일학교입니다. 여름에는 여름성경학교를 엽니다.",
-    // 사진 2~15는 교회가 준 오렌지 미션팀 사진(2026-11). 캡션·alt는 사진에 보이는 것만 적는다.
+    // 사진 2~26은 교회가 준 오렌지 미션팀 사진(2026-11). 캡션·alt는 사진에 보이는 것만 적는다.
     snaps: [
       { src: "/dept/orange/2.webp", alt: "어버이주일 예배 강단 앞에 선 어린이들", caption: "어버이주일 예배에서" },
       { src: "/dept/orange/12.webp", alt: "카페에서 브이를 하는 아이들", caption: "카페에서 다 함께" },
@@ -127,6 +130,17 @@ export const DEPARTMENTS: Department[] = [
       { src: "/dept/orange/12.webp", alt: "카페에서 브이를 하는 아이들" },
       { src: "/dept/orange/9.webp", alt: "산타 모자를 쓰고 무대에 선 아이들" },
       { src: "/dept/orange/10.webp", alt: "강단 앞에 함께 선 아이들과 선생님" },
+      { src: "/dept/orange/16.webp", alt: "크리스마스 트리 옆 강단 앞에서 아이를 안아 주는 선생님" },
+      { src: "/dept/orange/19.webp", alt: "흰 장갑을 끼고 테이블에서 음식을 만드는 아이들과 청소년들" },
+      { src: "/dept/orange/20.webp", alt: "도전 성경골든벨 현수막 아래 예배당에 모인 아이들" },
+      { src: "/dept/orange/22.webp", alt: "물풍선 바구니를 둘러싸고 앉은 주황 조끼 입은 아이들" },
+      { src: "/dept/orange/25.webp", alt: "야외 운동장에서 원을 그려 앉은 아이들과 선생님" },
+      { src: "/dept/orange/18.webp", alt: "예배당 의자에 앉아 앞을 바라보는 아이들과 청소년들" },
+      { src: "/dept/orange/17.webp", alt: "흰 장갑을 끼고 브이를 하며 요리하는 청소년들" },
+      { src: "/dept/orange/21.webp", alt: "흰 장갑을 끼고 그릇에 재료를 섞는 아이들" },
+      { src: "/dept/orange/23.webp", alt: "흰 장갑을 낀 채 손짓을 하는 아이들과 청소년들" },
+      { src: "/dept/orange/24.webp", alt: "긴 테이블에 둘러서서 음식을 만드는 아이들과 선생님" },
+      { src: "/dept/orange/26.webp", alt: "음식을 차린 테이블 곁에 모인 아이들과 선생님" },
     ],
     groups: {
       heading: "유치부부터 고등부까지",
@@ -154,6 +168,7 @@ export const DEPARTMENTS: Department[] = [
   },
   {
     slug: "skyblue",
+    backendId: 2,
     name: "스카이블루 미션팀",
     description:
       "**청년부**의 한 팀입니다.\n\n20대 청년과 대학생, 미혼 30대 청년이 함께 모여 예배하고 교제합니다.",
@@ -183,13 +198,14 @@ export const DEPARTMENTS: Department[] = [
   },
   {
     slug: "red",
+    backendId: 3,
     name: "레드 미션팀",
-    description: "**청년부**의 한 팀입니다.\n\n결혼한 청년과 30대 후반~40대 청년이 함께합니다.",
+    description: "**여선교회**입니다.\n\n30대 이상 결혼한 여성도가 함께합니다.",
     media: { type: "image", src: "/dept/red.webp", alt: "레드 미션팀과 블루 미션팀이 목사님, 사모님과 함께한 모임" },
-    caption: ["가정을 세우며", "함께 걷는 청년"],
+    caption: ["가정을 세우며", "함께 걷는 여선교회"],
     team: "red",
-    generation: "기혼 청년 · 30대 후반~40대",
-    summary: "가정을 꾸린 청년들이 함께 걷는 청년부입니다.",
+    generation: "30대 이상 기혼 여성도",
+    summary: "30대 이상 결혼한 여성도가 함께하는 여선교회입니다.",
     // 근거: 블로그 2022년 6월 레드 미션팀 성도 글의 사진 설명 "목사님 사모님 그리고 레드미션, 블루미션팀과 함께".
     snaps: [
       {
@@ -208,22 +224,23 @@ export const DEPARTMENTS: Department[] = [
       { src: "/dept/red/3.webp", alt: "깃발 장식 아래 식탁에 둘러앉은 레드 미션팀" },
       { src: "/dept/red/1.webp", alt: "카페 테이블에 둘러앉아 브이를 하는 사람들" },
     ],
-    info: [{ label: "대상", value: "기혼 청년·30대 후반~40대" }],
+    info: [{ label: "대상", value: "30대 이상 기혼 여성도" }],
     invite: {
       heading: "레드 미션팀에서 함께해요",
-      body: "가정을 꾸린 청년이라면 누구나 환영합니다.",
+      body: "30대 이상 결혼한 여성도라면 누구나 환영합니다.",
     },
   },
   {
     slug: "blue",
+    backendId: 4,
     name: "블루 미션팀",
     description:
-      "40대 가정이 자녀와 함께하는 미션팀입니다.\n\n보이지 않는 곳에서 교회를 섬기며, 부모와 자녀가 함께 신앙을 이어 갑니다.",
+      "**남선교회**입니다.\n\n30대 이상 결혼한 남성도가 함께하며, 보이지 않는 곳에서 교회를 섬깁니다.",
     media: { type: "image", src: "/dept/blue.webp", alt: "예배당 강단 앞에 선 블루 미션팀 세 가정과 자녀들" },
-    caption: ["자녀와 함께", "교회를 섬기는 가정"],
+    caption: ["가정을 세우며", "교회를 섬기는 남선교회"],
     team: "blue",
-    generation: "40대 가정과 자녀",
-    summary: "부모와 자녀가 함께 교회를 섬기며 신앙을 이어 갑니다.",
+    generation: "30대 이상 기혼 남성도",
+    summary: "30대 이상 결혼한 남성도가 함께하는 남선교회입니다.",
     // 근거: 블로그 2022년 6월 "블루미션팀을 소개합니다" 글의 단체 사진 두 장.
     snaps: [
       { src: "/dept/blue.webp", alt: "예배당 강단 앞에 선 블루 미션팀 세 가정과 자녀들", caption: "세 가정과 자녀들" },
@@ -243,21 +260,22 @@ export const DEPARTMENTS: Department[] = [
       { src: "/dept/blue/6.webp", alt: "예배당 강단 보면대 앞에 선 성도" },
       { src: "/dept/blue/4.webp", alt: "긴 식탁에 모여 식사하는 블루 미션팀 가정들" },
     ],
-    info: [{ label: "대상", value: "40대 가정과 자녀" }],
+    info: [{ label: "대상", value: "30대 이상 기혼 남성도" }],
     invite: {
       heading: "블루 미션팀에서 함께해요",
-      body: "자녀를 둔 가정이라면 함께 모여 교제해요.",
+      body: "30대 이상 결혼한 남성도라면 누구나 환영합니다.",
     },
   },
   {
     slug: "green",
+    backendId: 5,
     name: "그린 미션팀",
-    description: "**여선교회**입니다.\n\n기도와 섬김으로 교회와 가정을 세웁니다.",
+    description: "**50대 이상 중장년층**이 함께합니다.\n\n기도와 섬김으로 교회와 가정을 세웁니다.",
     media: { type: "image", src: "/dept/green.webp", alt: "어버이주일 예배에서 특송하는 그린 미션팀" },
-    caption: ["기도와 섬김으로", "교회를 세우는 여선교회"],
+    caption: ["기도와 섬김으로", "교회를 세우는 중장년"],
     team: "green",
-    generation: "여성도",
-    summary: "기도와 섬김으로 교회와 가정을 세우는 여선교회입니다.",
+    generation: "50대 이상 중장년",
+    summary: "기도와 섬김으로 교회와 가정을 세우는 50대 이상 중장년층입니다.",
     // 근거: 블로그 2024년 5월 결산 글 "어버이주일에는 그린미션팀 성도님들께서 … 특송".
     snaps: [
       { src: "/dept/green.webp", alt: "어버이주일 예배에서 특송하는 그린 미션팀", caption: "어버이주일 특송" },
@@ -278,15 +296,16 @@ export const DEPARTMENTS: Department[] = [
       { src: "/dept/green/9.webp", alt: "예배 중 접시를 건네받는 여성도" },
       { src: "/dept/green/10.webp", alt: "카메라를 보며 이야기하는 여성도" },
     ],
-    info: [{ label: "대상", value: "여성도" }],
+    info: [{ label: "대상", value: "50대 이상 중장년" }],
     invite: {
       heading: "그린 미션팀에서 함께해요",
-      body: "여성도 누구나 환영합니다.",
+      body: "50대 이상 성도라면 누구나 환영합니다.",
     },
   },
   // 세대 팀이 아니라 예배·찬양 세션팀이라 세대 줄 끝에 둔다. 사진 미확보 → 기본 이미지·스냅 없음.
   {
     slug: "purple",
+    backendId: 6,
     name: "퍼플 미션팀",
     description: "**예배와 찬양**을 이끄는 세션팀입니다.",
     media: { type: "image", src: "/dept/default.webp", alt: "퍼플 미션팀" },

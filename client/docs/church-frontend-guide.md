@@ -330,6 +330,11 @@ function renderMarkdown(raw: string): string {
 | 삭제 | `DELETE /api/admin/media/{id}` | `MEDIA_MANAGE` | **204** 또는 409 |
 | **공개 서빙** | `GET /api/media/{id}` | **공개** | 파일 바이트 |
 
+> **공개 범위 변경(church-backend#92 결정 1번, 프론트 #32)**: 차단(`MEDIA_ACCESS_ENFORCED`)이 켜지면 서명 없는 `GET /api/media/{id}`는 **공개 미디어만** 연다(주보 FK, 공지·행사·부서 본문, 부서 대표 사진, 부서 연결 앨범 사진). 나머지(갤러리에만 있는 사진, 안 쓰인 파일)는 404이고, API가 내려 주는 **서명 주소**(`/api/media/{id}?exp=…&sig=…`, 1시간 유효, 교회 접두사 없음)로만 열린다. 프론트는 `lib/mediaUrl.ts`로 조립한다 — 관리 미디어는 `mediaSrc(id, url)`(서명 주소 있으면 그것, 없으면 `/api/media/{id}`), 갤러리는 `gallerySrc(id, url)`(필드 **없음**(구 백엔드)=id로 조립, **`null`**=사진 없음·플레이스홀더, 문자열=서명 주소). 모두 `API_BASE` 뒤에 붙인다.
+> - 서명 주소를 쓰는 곳: 갤러리 앨범 카드 `thumbnailUrl`, 사진 `url`, 앨범 설명 `mediaUrls`(`{ "42": "/api/media/42?exp=…&sig=…" }` → `MarkdownContent media={{ urls, missing: "drop" }}` — **키가 없는 이미지는 그리지 않는다**, 필드가 없으면 기존 공개 주소), 관리 `MediaResponse.url`(라이브러리 썸네일·"열기"·미디어 선택 창, 고른 사진의 주소는 `onConfirm(ids, urls)`로 넘겨 편집 미리보기·부서 대표 사진 미리보기에 쓴다).
+> - `next/image`: `remotePatterns`가 `new URL(...)`이라 `search: ""`(쿼리 없음)만 허용 → 서명 주소는 최적화가 거절되고, 허용하면 최적화 캐시(31일)가 만료 뒤에도 사진을 내준다. 그래서 서명 주소는 항상 `unoptimized`.
+> - 서명 주소가 든 응답은 서버·ISR 캐시에 넣지 않는다 — 갤러리·관리 미디어는 로그인 클라이언트 조회(TanStack Query)뿐이다.
+
 ### 6.2 업로드 규칙
 
 - 허용 형식 **5종만**: JPEG/PNG/GIF/WEBP/PDF. **매직바이트로 형식 확정** — 확장자·Content-Type 헤더는 신뢰하지 않는다. 미허용은 디스크에 쓰지 않고 거부(`400 INVALID_INPUT_VALUE`).
@@ -427,6 +432,8 @@ async function saveWithRetry(id: number, edit: (cur: Detail) => UpdateReq) {
 도메인 특이 동작 메모:
 - **일정 달력**: 범위 파라미터는 **반드시 쌍**(한쪽만 보내면 400). 둘 다 보내면 year/month 우선. 겹침은 `end_at` 배타 경계, `end_at=null` 점 이벤트는 `start_at` 기준 포함.
 - **부서**: 비페이징 평배열 → 프론트가 `parentId`로 트리 조립. 하위 부서 있으면 삭제 `409 DEPARTMENT_HAS_CHILDREN`. 루트화는 `PUT parentId=null`만(PATCH의 `parentId=null`은 미변경).
+- **미션팀 사진·소개(#32, church-backend#92)**: 상수 `DEPARTMENTS[].backendId`로 백엔드 부서와 잇는다. 공개 목록 사진·상세 히어로 ← `heroMediaId`, 소개 옆 사진(앞 3장)·활동 사진 ← 연결 앨범 `photos`(mediaId 배열, 앨범 순서 — 서명 없는 공개 주소, 앨범이 삭제되면 `albumId: null`·`photos: []`), 소개 본문 ← `description`. 칸이 비었거나 조회가 실패하면 그 칸만 상수로 폴백한다. 짧은 라벨(세대·요약·대상·초대·한 해·부서 구성·캡션)은 상수 그대로. 캐시는 ISR 60초 + `departments` 태그, 관리 화면 저장 시 `revalidateDepartments()`로 즉시 비운다. `heroMediaId`·`albumId`는 PUT·PATCH 공통으로 안 보냄=유지, `null`=비움, 숫자=설정(PATCH는 `version` 필수). 수정 창의 PUT은 시드한 현재 값을 두 칸 모두 항상 함께 보낸다. **앨범을 연결하면 그 앨범 사진 전체(연결 뒤 추가분 포함)와 대표 사진이 누구에게나 공개된다** — 수정 창 앨범 고르기 아래에 안내 문구가 있다. **`description`은 공개 페이지에 그대로 나가므로 내부 메모를 넣지 않는다.**
+- **운영: "미션팀 담당" 역할 만들기(코드 수정 없음)**: 마이페이지 → 관리 → 역할 관리에서 새 역할(예: "미션팀 담당")을 만들고, 권한에서 `DEPT_WRITE`(부서 수정 — 대표 사진·앨범·소개)·`GALLERY_WRITE`(앨범 만들기·사진 올리기·순서)·`MEDIA_MANAGE`(사진 올리기·고르기)를 켠 뒤, 회원 관리에서 담당자에게 이 역할을 준다. 앨범 목록을 보려면 `GALLERY_VIEW`도 필요하다(승인된 교인 `MEMBER` 역할에 이미 있다 — 미승인 계정이면 이 역할에 함께 켠다). 팀별로 권한을 나누는 기능은 없다(담당자는 모든 부서를 고칠 수 있다). 담당자는 미션팀 상세의 **"이 팀 수정"** 버튼으로 바로 고친다. 사진은 올릴 때 브라우저가 WebP(긴 변 1600px, 품질 82, EXIF 제거)로 줄인다(GIF·PDF 제외).
 - **공지 검색**: `q`는 **제목만** 매칭(Swagger 설명은 "제목/내용"이라 적혀 있으나 코드는 제목만 — 소스가 사실).
 - **조회수**: 설교·공지만 존재. 상세 조회 시 +1(부수효과).
 - **갤러리 사진 추가**: `POST .../{id}/photos`(multipart) — `files`(신규 업로드) **와/또는** `mediaIds`(기존 재사용) 혼합 가능. 반환은 갱신된 앨범 상세 전체.
@@ -737,7 +744,7 @@ export default function CrossHero({ caption, media }: CrossHeroProps) {
 
 부서 소개 페이지(청년부·장년부·교회학교 등)의 히어로다. 당근식 카드 확장 연출 — 미디어 카드가 스크롤에 따라 풀스크린으로 펼쳐진다. **메인이 아닌 부서 페이지 전용**이며, 메인 히어로는 14A(십자가 열쇠구멍)를 쓴다.
 
-> **부서별 히어로 미디어 출처**: 13.3의 메인 env와 별개로, 부서 페이지는 부서 식별자별 정적 에셋(`/public/dept/{slug}.jpg`)을 기본으로 한다. 부서 API 응답에 대표 이미지 필드가 없으므로(12장 원칙), 부서↔이미지 매핑은 프론트 상수 테이블로 둔다. `DeptHero`는 메인의 `CrossHero`와 `HeroMedia` 타입을 공유하므로 주입 방식만 다르고 컴포넌트 계약은 동일하다.
+> **부서별 히어로 미디어 출처**: 13.3의 메인 env와 별개로, 부서 페이지는 부서 식별자별 정적 에셋(`/public/dept/{slug}.jpg`)을 기본으로 한다. 부서 API 응답에 대표 이미지 필드가 없으므로(12장 원칙), 부서↔이미지 매핑은 프론트 상수 테이블로 둔다. (미션팀은 #32부터 API `heroMediaId`가 있으면 그것을 쓰고, 없으면 이 상수로 폴백 — 10장 "미션팀 사진·소개".) `DeptHero`는 메인의 `CrossHero`와 `HeroMedia` 타입을 공유하므로 주입 방식만 다르고 컴포넌트 계약은 동일하다.
 
 
 ### 14B.1 효과 개요

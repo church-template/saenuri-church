@@ -10,8 +10,8 @@ export const STORY_HERO: StoryHeroContent = {
   intro: { mark: "축복합니다", sub: "새누리교회", bg: `${C}/intro-sign.webp` },
   split: {
     eyebrow: "SINCE 1990 · 용인 보정동",
-    title: ["열두 명의 가정예배가", "33년의 공동체가", "되었습니다"],
-    highlight: "33년의 공동체",
+    title: ["열두 명의 가정예배가", "기적의 공동체가", "되었습니다"],
+    highlight: "기적의 공동체",
     lead: ["하나님이 기뻐하시는 사람을 세우는, 3대가 함께하는 새누리교회입니다.", "처음 오셔도 괜찮아요."],
     info: [
       { label: "주일예배", value: "오전 11:00 · 오후 1:40" },
@@ -31,7 +31,7 @@ export const STORY_HERO: StoryHeroContent = {
       year: "1990",
       yearSuffix: "7월 8일",
       title: ["한 가정에서, 열두 명이", "첫 예배를 드렸습니다"],
-      desc: "전옥춘 권사님 댁 거실. 그날의 사진은 남아 있지 않지만, 33년의 이야기는 거기서 시작됐습니다.",
+      desc: "새누리교회 루디아, 전옥춘 권사님 댁 거실에서 우리 교회의 이야기는 시작되었습니다",
       bg: {
         src: "/assets/stock/pray-bible-patrick-fore-unsplash.webp",
         tone: "none",
@@ -96,7 +96,7 @@ export const STORY_HERO: StoryHeroContent = {
       id: "2022-busking",
       year: "2022",
       title: ["교회 밖으로, 탄천 버스킹"],
-      desc: "창립 32주년, 노란 티셔츠를 맞춰 입고 이웃에게 노래로 인사했습니다.",
+      desc: "창립 32주년, 코로나로 힘든 시기에 동네 이웃을 섬기며 위로와 희망을 노래했습니다.",
       bg: { src: `${H}/2022-busking.webp`, tone: "fade1" },
       cards: [
         { src: `${H}/2022-busking-prep.webp`, caption: "버스킹 준비" },

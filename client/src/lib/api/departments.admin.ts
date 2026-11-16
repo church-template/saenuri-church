@@ -13,6 +13,10 @@ export interface DepartmentCreateRequest {
   leader?: string; // ≤100
   parentId?: number | null; // null = 루트
   sortOrder?: number; // 생략 시 백엔드 max+10
+  // 대표 사진·활동 앨범(church-backend#92). 안 보냄=유지, null=비움, 숫자=설정(PUT·PATCH 공통, PATCH는 version 필수).
+  // 수정 창은 PUT에 두 칸을 항상 함께 보낸다.
+  heroMediaId?: number | null;
+  albumId?: number | null;
 }
 export interface DepartmentUpdateRequest extends DepartmentCreateRequest {
   version: number; // 낙관락. parentId=null=루트화, sortOrder 생략=기존 유지(PUT 시맨틱)

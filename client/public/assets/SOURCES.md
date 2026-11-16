@@ -20,4 +20,6 @@
 - `history/early-kids`: 촬영 연도 미상.
 - `history/early-kids-christmas`·`2006-kids-door`·`early-worship-interior`·`2006-hanam-thanksgiving-sermon`·`2006-hanam-thanksgiving-choir`: 교회 제공 원본(2026-11-12 카카오톡 수령) → 긴 변 최대 1600px, EXIF 제거.
 - `../dept/blue/2~10`·`../dept/red/1~5`·`../dept/green/1~4`·`church/interior-1~5`: 교회 제공 사진(2026-11-15 카카오톡 수령) → 긴 변 최대 1600px, EXIF 제거.
+- `church/three-generations`: 교회 제공 원본(2026-11-16 카카오톡 수령, 메인 '3대가 함께' 카드) → WebP 1440×1080, EXIF 제거.
+- `../dept/orange/16~26`: 교회 제공 원본(2026-11-16 카카오톡 수령) → 긴 변 최대 1600px, EXIF 제거.
 - `history/1990-2006-geoyeo-4-3-now`: 현재 입주한 다른 교회 간판은 모자이크 처리.

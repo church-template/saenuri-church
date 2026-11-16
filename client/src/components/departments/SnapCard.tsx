@@ -9,7 +9,8 @@ export function SnapCard({ snap, className }: { snap: DeptSnap; className?: stri
     <figure className={cn(styles.snap, className)}>
       {/* eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸(정적 public 에셋) */}
       <img src={snap.src} alt={snap.alt} loading="lazy" />
-      <figcaption className={cn(typo.caption, "text-body")}>{snap.caption}</figcaption>
+      {/* API 사진은 캡션이 없다(#32) — 빈 캡션은 줄째 숨긴다. */}
+      {snap.caption ? <figcaption className={cn(typo.caption, "text-body")}>{snap.caption}</figcaption> : null}
     </figure>
   );
 }

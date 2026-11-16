@@ -8,6 +8,8 @@ export const departmentSchema = z.object({
   leader: z.string().max(100),
   parentId: z.number().nullable(),
   sortOrder: z.number().int().nonnegative().nullable(),
+  heroMediaId: z.number().nullable(), // 대표 사진(미션팀 목록·히어로, #32) — null=비움
+  albumId: z.number().nullable(), // 활동 사진 앨범(#32) — null=비움
 });
 
 export type DepartmentFormValues = z.infer<typeof departmentSchema>;

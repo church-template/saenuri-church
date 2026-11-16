@@ -604,11 +604,11 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`generation-ladder`**: 미션팀 목록(`/departments`). 카드 그리드 대신 **세대 순서(어린이→어른)로 한 줄에 세운다** —
   "3대가 함께"를 구조로 보여 준다. 왼쪽 2px `{colors.hairline}` 세로선 위에 `team-dot`, 행 = 세대 라벨 `{typography.datetime}` `{colors.muted}` +
   팀 이름 `{typography.title-lg}` + 한 줄 소개 `{typography.body-md}` + "자세히 보기" 텍스트 링크(48px 터치 타깃) + 우측 `snap-card`(사진이 확인된 팀만).
-  설명은 처음부터 다 보인다(호버로 숨기지 않음 — 고령·모바일). 모바일은 글 아래 사진으로 세로 스택. 데이터는 `DEPARTMENTS`의 `team`·`generation`·`summary`·`snaps`.
+  설명은 처음부터 다 보인다(호버로 숨기지 않음 — 고령·모바일). 모바일은 글 아래 사진으로 세로 스택. 데이터는 `DEPARTMENTS`의 `team`·`generation`·`summary`·`snaps`. 목록 사진은 API 대표 사진(`heroMediaId`)이 있으면 그것, 없으면 `snaps` 첫 장(#32).
 - **`snap-card`** / **`snap-pile`**: 홈 `story-hero`의 기울인 사진 카드를 세부 페이지로 가져온 것. 흰 테두리(`{colors.canvas}` 패딩) +
   1px hairline + `{rounded.lg}` + soft drop(그림자 단계 추가 없음) + 캡션 `{typography.caption}`. ±2~5도 기울고 hover 시 바로 서며 1.03배.
   원본이 약 800px인 스냅 사진을 크게 깔지 않고 작게 쓰기 위한 형태다. `snap-pile`은 상세 소개 옆에 1~3장을 겹쳐 놓고 hover 시 흩어진다
-  (사진이 없으면 미노출·글만). **캡션은 사진에 실제로 찍힌 것만 적는다** — 시기·행사·소속 팀을 추정해 붙이지 않는다. reduced-motion은 정적.
+  (사진이 없으면 미노출·글만). **캡션은 사진에 실제로 찍힌 것만 적는다** — 시기·행사·소속 팀을 추정해 붙이지 않는다. 캡션이 비면(API 앨범 사진, #32) 캡션 줄째 숨긴다(alt는 "{팀 이름} 활동 사진"). reduced-motion은 정적.
 - **`dept-year`**: 상세의 "함께하는 한 해" 구간. `{colors.surface-soft}` 밴드, 항목 = 상단 2px `{colors.ink}` 룰 + 시기 `{typography.datetime}` +
   제목 `{typography.title-md}` + 설명 + (선택) `snap-card`. **교회·블로그로 확인된 활동이 있는 팀에만 노출**(없으면 구간째 미노출 — 지어내지 않는다).
 - **`dept-groups`**: 상세의 "부서 구성" 구간 — 한 팀 안의 부서(오렌지: 유·초·중·고)를 어린 순서로 잇는다. 흰 섹션(소개와 한 덩어리, 다음 `dept-year` 회색 밴드와 교차).
@@ -619,7 +619,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   1px `{colors.ink}` 테두리 + 굵은 이름(색 단독 구분 금지).
 - **`team-dot`**: 팀 색 원형 점(`{rounded.full}`). 미션팀 색의 유일한 사용처. 팀 색이 없는 부서는 `{colors.primary}`로 폴백.
 - **`dept-tree`**: 사역(부서) 목록 = 최상위 부서 카드 그리드(조직도 다이어그램 아님 — 탐색 목적·고령 터치·단일 액센트).
-  공개 인트로는 **프론트 상수(`DEPARTMENTS`) 구동**(메인처럼 자립, 백엔드 불필요·정적 생성). 하위부서는
+  공개 인트로는 **프론트 상수(`DEPARTMENTS`) 구동**(메인처럼 자립). 미션팀 사진·소개 본문만 `backendId`로 부서 API를 읽고(ISR 60s + `departments` 태그) 비거나 실패하면 상수로 폴백(#32). 하위부서는
   인덱스에 펼치지 않고 각 상세의 `SubDepartments`에서만 노출. (백엔드 `department`는 교인 정보관리·어드민 별개.)
 - **`auth-split`**: 인증(로그인·가입·재동의) 전용 풀스크린 스플릿. 좌측 50% 사진 패널
   (`{colors.cover-dark}` 반투명 덮개 + on-dark 로고·슬로건, 콘텐츠는 church.ts 상수 주입) /
@@ -685,6 +685,7 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`markdown-toolbar`**: 서식 버튼줄(`role="toolbar"`, lucide 아이콘 + `aria-label`·`title`). 제목 3단계·굵게·기울임·취소선·목록·번호목록·인용·구분선은 선택 영역 토글(순수 로직 `lib/markdownEditing`), 링크·유튜브·표(열 1~8·행 1~20 크기 지정, `buildTable`)는 입력 Dialog(검증 실패 인라인 에러, `InsertDialogShell` 공용 뼈대), 이미지는 `media-picker`(image·multi) 재사용 → `media:{id}` 단독 문단 자동 삽입. `CircleHelp` 버튼 → 치트시트 Dialog("이렇게 쓰면 → 이렇게 보입니다", `MarkdownContent` 재사용 + 문단·유튜브·이미지 규칙 안내). 직접 버튼 삽입은 execCommand 우선(Ctrl+Z 보존)·상태 교체 폴백, **Dialog 삽입은 상태 교체 직행**(열린 Dialog의 포커스 트랩이 execCommand를 가로채 본문이 갱신되지 않는 실브라우저 버그 방지). 본문 표는 `prose-church` table 스타일(hairline 보더·surface-soft 헤더)로 렌더.
 - **`tag-multiselect`**: 기존 태그 다중선택. 인라인 칩 토글 — 태그 전체를 폼 안에 항상 펼쳐 렌더(`aria-pressed` 버튼), 선택=primary 채움+lucide `Check`, 비선택=surface-strong. 플로팅(Popover) 미사용 — 모달(Dialog) 안에서도 레이어 문제 없음. 옵션은 `getTags`. 신규 생성 없음(06 소관).
 - **`admin-inline-action`**: 공개 RSC 페이지 위 client island(목록 toolbar 등록 진입·상세 수정/삭제·공지 고정 토글). 등록·수정 진입은 전용 페이지 Link(`buttonVariants`), 삭제는 확인 Dialog. `RequirePermission` 게이트, 카드 내부 중첩 `<a>` 금지(목록 액션은 카드 밖).
+  변형 **`dept-edit-action`**(#32): 미션팀 상세 소개 위 우측 "이 팀 수정" `button-tertiary-text`(lucide `Pencil`). 부서는 전용 수정 페이지가 없어 Link 대신 `department-form-modal`을 그 자리에서 연다(`DEPT_WRITE`). 저장 후 공개 캐시 무효화 + 화면 새로 그림.
 <!-- admin:03 일정 — datetime-picker · event-form-page -->
 - **`datetime-picker`**: 일정 시작·종료 입력. 네이티브 `<input type="datetime-local">`(종일이면 `date`) 래퍼, 라이브러리 없이. `Input` 토큰·error 배선 상속. 직렬화는 `toServerDateTime`(offset 없는 LocalDateTime).
 - **`event-form-page`**: 일정 등록·수정 전용 페이지(`/events/new`·`/events/[id]/edit`, 공지·설교 폼 페이지와 동형). DateTimePicker·MarkdownEditor·TagMultiSelect·Checkbox(종일) 조합. 종료>시작 검증, 낙관락 version. edit는 RSC `getEvent` 시드.
@@ -692,7 +693,8 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 <!-- admin:05 미디어 — admin-data-table · media-uploader · media-picker · media-references-list · bulletin-form-page · album-form-page · gallery-photo-manager (크로스도메인 공유는 admin-data-table·media-uploader만, 나머지는 05 전용) -->
 - **`admin-data-table`**: 어드민 목록 공용 테이블(단일 생산, 06·07 소비). `Column<T>`(key·header·cell·className) + rows + rowKey + actions(후행 셀) + empty/loading. 정렬·선택·페이지네이션 미내장(페이지는 `common/Pagination` 조합). 헤어라인 행 구분, `typo.*`.
 - **`media-uploader`**: 미디어 업로드 위젯(단일 생산). 네이티브 파일 선택 + 클라 사전검증(accept별 MIME·10MB) + `POST /api/admin/media`. `accept`(image|pdf|all, all=라이브러리 전용), `multiple`. 가독성 우선 단순 변형.
-- **`media-picker`**: 미디어 선택 허브(Dialog+Tabs). "라이브러리"(기존 그리드·type 필터·선택) / "새 업로드"(media-uploader). `onConfirm(mediaIds)`. 갤러리(image·multi)·주보(pdf·single) 공용.
+  JPEG·PNG·WEBP는 올리기 전 브라우저 canvas로 WebP 변환(긴 변 최대 1600px, 품질 0.82, EXIF 제거 — `lib/imageToWebp`, #32). GIF(움직임)·PDF는 그대로. 변환 실패·WebP 인코딩 미지원이면 원본을 올린다(막지 않음). 변환 대상은 원본 10MB 검사를 건너뛴다(줄어서 올라가므로). 한 장씩 변환·업로드.
+- **`media-picker`**: 미디어 선택 허브(Dialog+Tabs). "라이브러리"(기존 그리드·type 필터·선택) / "새 업로드"(media-uploader). `onConfirm(mediaIds, urls)` — `urls`는 고른 미디어의 id→서명 주소(있는 것만, #32 비공개 미디어 미리보기용). 서명 주소 썸네일은 `unoptimized`. 갤러리(image·multi)·주보(pdf·single) 공용.
 - **`media-references-list`**: 차단형 삭제 안내 Dialog. 참조 type/title 목록 표시, 삭제 버튼 없음(편집 유도).
 - **`bulletin-form-page`**: 주보 등록·수정 전용 페이지(`/bulletins/new`·`/bulletins/[id]/edit`). Input(제목)·DateTimePicker(예배일)·MediaPicker(pdf·single). edit는 RSC `getBulletin`(no-store) 시드 + 낙관락 version.
 - **`album-form-page`**: 갤러리 앨범 등록·수정 전용 페이지(`/gallery/albums/new`·`/gallery/albums/[id]/edit`, 회원 영역 GalleryGate). Input(제목)·MarkdownEditor(설명)·TagMultiSelect. edit는 클라 `useAlbum` 시드(keyed 마운트) + 낙관락 version.
@@ -700,7 +702,8 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 <!-- admin:04 부서 -->
 - **`department-admin-manager`**: 어드민 부서 계층 관리 화면(트랙 04). 공개 `GET /api/departments`(no-store)를 `buildDepartmentTree`로 조립해 **접이식 단일 트리**(`department-tree`)로 표시. 페이지 Container 폭 그대로 사용(공지·미디어와 동일, 별도 폭 캡 없음) + 전체 펼치기/접기 + 안내 배너(lucide `Info`). 접힘 상태 `Set`(effect 미사용). 공개 격리라 ISR revalidate 미사용·어드민 쿼리 캐시만 무효화.
 - **`department-tree`**: 접이식 부서 트리(트랙 04). `flattenVisible`로 가시 행만 렌더 — 자식 있는 노드만 chevron(▸/▾, `aria-expanded`), 잎 노드는 동일 폭 스페이서(`w-6`)로 정렬, depth 들여쓰기 토큰. 행은 R1(이름·담당 `flex-1 truncate` 좌, 액션 `shrink-0 whitespace-nowrap` 우). 노드별 `＋하위·수정·삭제`(아이콘+`lg:` 텍스트).
-- **`department-form-modal`**: 부서 생성·수정 Dialog(트랙 04). 이름·담당(`Input`)·상위 부서(native `select`, edit 시 자기+하위 제외로 순환 방지)·정렬 순서(number)·설명(`markdown-editor`). 생성=POST, 수정=상세 시드 후 **항상 PUT**(루트화=상위 `(없음)`)·낙관락 version.
+- **`department-form-modal`**: 부서 생성·수정 Dialog(트랙 04). 이름·담당(`Input`)·상위 부서(native `select`, edit 시 자기+하위 제외로 순환 방지)·정렬 순서(number)·대표 사진·활동 사진 앨범·설명(`markdown-editor`). 생성=POST, 수정=상세 시드 후 **항상 PUT**(루트화=상위 `(없음)`)·낙관락 version.
+  대표 사진(#32) = 80px 미리보기(`{rounded.md}` + hairline) + "사진 선택/바꾸기"(`media-picker` image·single) + "대표 사진 빼기". 앨범 = native `select`(`(없음)` + 앨범 제목, 목록 밖 현재 값은 `앨범 #id`로 유지) + 도움말 `{typography.caption}` muted + 공개 안내 `{typography.caption}` body(lucide `Info` 16px, select의 `aria-describedby` — "연결하면 앨범 사진 전체·대표 사진이 누구에게나 공개", church-backend#92 3.3). PUT은 두 칸을 null이어도 항상 보낸다(백엔드: 안 보냄=유지, null=비움). 저장 성공 시 `revalidateDepartments()`로 공개 미션팀 ISR 무효화.
 <!-- admin:06 분류(태그·직분) — tag/position form-dialog (admin-data-table 소비) -->
 - **`tag-manager`**: 태그 목록·CRUD 화면(트랙 06). `DataTable`(이름) + 툴바 `새 태그` + 행 `수정`·`삭제`(`DeleteConfirmDialog`, 비차단 삭제 경고문). 목록은 공개 `getTags`(`["tags"]` 키 공유) 재사용, mutation onSuccess에서 `["tags"]` invalidate + `revalidateTags()`로 공개 ISR 무효화.
 - **`tag-form-modal`**: 태그 생성·수정 Dialog(트랙 06). `Input`(이름) 단일 필드. version 없음 — 행 값 시드(상세 GET 불요). 중복 시 name 인라인 에러(`onDuplicate`).
