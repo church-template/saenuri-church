@@ -65,7 +65,7 @@ describe("사역 부서 상수", () => {
     expect(DEPT_PAGE.subHeading.length).toBeGreaterThan(0);
   });
 
-  it("오렌지 미션팀은 확인된 보강 데이터(intro·info·invite)와 교회가 준 활동 사진만 갖고, 근거 없는 활동·프로그램은 없다", () => {
+  it("오렌지 미션팀은 확인된 보강 데이터(intro·info·invite)와 활동 사진은 상수에 없고, 근거 없는 활동·프로그램은 없다", () => {
     const orange = findDepartment("orange")!;
     expect(orange.intro?.heading).toBe("오렌지 미션팀 소개");
     expect(orange.info).toEqual([
@@ -75,8 +75,8 @@ describe("사역 부서 상수", () => {
     expect(orange.invite?.heading).toBe("오렌지 미션팀에서 함께해요");
     expect(orange.activities).toBeUndefined();
     expect(orange.programs).toBeUndefined();
-    expect(orange.gallery).toHaveLength(24);
-    expect(orange.gallery?.every((p) => p.src.startsWith("/dept/orange/") && p.src.endsWith(".webp"))).toBe(true);
+    // 활동 사진은 서버 앨범이 맡는다 — 상수에는 남기지 않는다.
+    expect(orange.gallery).toBeUndefined();
   });
 
   it("오렌지 미션팀의 부서 구성은 유치부→고등부 순서이고, 확인되지 않은 부서 설명은 없다", () => {

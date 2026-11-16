@@ -77,7 +77,7 @@ export interface Department {
 
 const FALLBACK_THUMB = "/dept/default.webp";
 
-// 사진을 받으면 public/dept/{slug}.webp(히어로 2000px)·dept/{slug}/{n}.webp(갤러리 1600px)로 넣고 media를 바꾼다.
+// 히어로 사진은 public/dept/{slug}.webp(2000px)로 넣고 media를 바꾼다. 활동 사진은 관리 화면에서 서버 앨범으로 올린다(#32).
 
 // backendId = 운영 백엔드 부서 id(새누리: 1 오렌지 ~ 6 퍼플, church-backend#92).
 // 미션팀 — 새누리교회는 부서를 색깔 이름의 "미션팀"으로 부른다(블로그 2022년 글 기준 5개 + 예배·찬양 세션팀 퍼플).
@@ -95,11 +95,9 @@ export const DEPARTMENTS: Department[] = [
     team: "orange",
     generation: "유·초·중·고",
     summary: "유치부부터 고등부까지 함께하는 주일학교입니다. 여름에는 여름성경학교를 엽니다.",
-    // 사진 2~26은 교회가 준 오렌지 미션팀 사진(2026-11). 캡션·alt는 사진에 보이는 것만 적는다.
+    // 활동 사진은 서버 앨범(albumId)으로 옮겼다 — 여기엔 목록 사진용 대표 사진만 둔다.
     snaps: [
-      { src: "/dept/orange/2.webp", alt: "어버이주일 예배 강단 앞에 선 어린이들", caption: "어버이주일 예배에서" },
-      { src: "/dept/orange/12.webp", alt: "카페에서 브이를 하는 아이들", caption: "카페에서 다 함께" },
-      { src: "/dept/orange/9.webp", alt: "산타 모자를 쓰고 무대에 선 아이들", caption: "산타 모자를 쓰고 무대에서" },
+      { src: "/dept/orange.webp", alt: "강단 앞에 함께 선 오렌지 미션팀 아이들과 선생님", caption: "" },
     ],
     // 근거: 블로그 2024년 5월 결산 글(어린이주일 선물), 2025년 여름성경학교 후기 글.
     year: [
@@ -114,33 +112,6 @@ export const DEPARTMENTS: Department[] = [
         desc: "찬양과 율동, 성경퀴즈, 요리 시간에 이어 선생님이 아이들의 발을 씻겨 주는 세족식으로 마칩니다.",
         photo: { src: "/dept/orange/1.webp", alt: "오렌지 미션팀 여름성경학교 포스터", caption: "여름성경학교 포스터" },
       },
-    ],
-    // 앞 8장은 장면이 겹치지 않게 골랐다(갤러리는 8장씩 연다).
-    gallery: [
-      { src: "/dept/orange/4.webp", alt: "매트에 앉아 보드를 들고 손을 든 아이들" },
-      { src: "/dept/orange/13.webp", alt: "매트에 앉아 앞에 선 선생님의 말씀을 듣는 아이들" },
-      { src: "/dept/orange/15.webp", alt: "VICTORY 현수막 아래 매트에 앉은 아이" },
-      { src: "/dept/orange/6.webp", alt: "수첩을 들고 매트에 앉은 아이" },
-      { src: "/dept/orange/11.webp", alt: "테이블에 둘러앉아 활동하는 아이들과 선생님" },
-      { src: "/dept/orange/14.webp", alt: "강단 앞에 줄지어 선 아이들" },
-      { src: "/dept/orange/7.webp", alt: "매트에 둘러앉은 아이들과 선생님" },
-      { src: "/dept/orange/3.webp", alt: "추수감사예배 강단 앞에 선 아이들과 청소년들" },
-      { src: "/dept/orange/5.webp", alt: "매트에 앉아 보드에 답을 적는 아이" },
-      { src: "/dept/orange/8.webp", alt: "매트에 앉아 보드를 든 아이들" },
-      { src: "/dept/orange/12.webp", alt: "카페에서 브이를 하는 아이들" },
-      { src: "/dept/orange/9.webp", alt: "산타 모자를 쓰고 무대에 선 아이들" },
-      { src: "/dept/orange/10.webp", alt: "강단 앞에 함께 선 아이들과 선생님" },
-      { src: "/dept/orange/16.webp", alt: "크리스마스 트리 옆 강단 앞에서 아이를 안아 주는 선생님" },
-      { src: "/dept/orange/19.webp", alt: "흰 장갑을 끼고 테이블에서 음식을 만드는 아이들과 청소년들" },
-      { src: "/dept/orange/20.webp", alt: "도전 성경골든벨 현수막 아래 예배당에 모인 아이들" },
-      { src: "/dept/orange/22.webp", alt: "물풍선 바구니를 둘러싸고 앉은 주황 조끼 입은 아이들" },
-      { src: "/dept/orange/25.webp", alt: "야외 운동장에서 원을 그려 앉은 아이들과 선생님" },
-      { src: "/dept/orange/18.webp", alt: "예배당 의자에 앉아 앞을 바라보는 아이들과 청소년들" },
-      { src: "/dept/orange/17.webp", alt: "흰 장갑을 끼고 브이를 하며 요리하는 청소년들" },
-      { src: "/dept/orange/21.webp", alt: "흰 장갑을 끼고 그릇에 재료를 섞는 아이들" },
-      { src: "/dept/orange/23.webp", alt: "흰 장갑을 낀 채 손짓을 하는 아이들과 청소년들" },
-      { src: "/dept/orange/24.webp", alt: "긴 테이블에 둘러서서 음식을 만드는 아이들과 선생님" },
-      { src: "/dept/orange/26.webp", alt: "음식을 차린 테이블 곁에 모인 아이들과 선생님" },
     ],
     groups: {
       heading: "유치부부터 고등부까지",
@@ -177,18 +148,9 @@ export const DEPARTMENTS: Department[] = [
     team: "skyblue",
     generation: "20대 · 대학생 · 미혼 30대",
     summary: "또래 청년들이 함께 예배하고 교제하는 청년부입니다.",
-    // skyblue.webp·skyblue/1~4는 교회가 준 스카이블루 미션팀 사진(2026-11-15, 기존 블로그 사진 교체). 캡션·alt는 사진에 보이는 것만 적는다.
+    // skyblue.webp는 교회가 준 스카이블루 미션팀 사진(2026-11-15, 기존 블로그 사진 교체). 캡션·alt는 사진에 보이는 것만 적는다.
     snaps: [
       { src: "/dept/skyblue.webp", alt: "카페 원탁에 둘러앉아 손을 펼쳐 보이는 청년들", caption: "카페에서" },
-      { src: "/dept/skyblue/1.webp", alt: "강단 앞에 나란히 선 청년들", caption: "강단 앞에서" },
-      { src: "/dept/skyblue/3.webp", alt: "교회 테이블에서 함께 식사하는 두 청년", caption: "함께하는 식사" },
-    ],
-    gallery: [
-      { src: "/dept/skyblue.webp", alt: "카페 원탁에 둘러앉아 손을 펼쳐 보이는 청년들" },
-      { src: "/dept/skyblue/1.webp", alt: "강단 앞에 나란히 선 청년들" },
-      { src: "/dept/skyblue/2.webp", alt: "초코케이크 상자를 들고 엄지를 든 청년" },
-      { src: "/dept/skyblue/3.webp", alt: "교회 테이블에서 함께 식사하는 두 청년" },
-      { src: "/dept/skyblue/4.webp", alt: "카페 소파에 앉아 두 엄지를 든 청년" },
     ],
     info: [{ label: "대상", value: "20대 청년·대학생·미혼 30대" }],
     invite: {
@@ -213,16 +175,6 @@ export const DEPARTMENTS: Department[] = [
         alt: "레드 미션팀과 블루 미션팀이 목사님, 사모님과 함께한 모임",
         caption: "목사님, 사모님, 블루 미션팀과 함께",
       },
-      // red/1~5는 교회가 준 레드 미션팀 사진(2026-11).
-      { src: "/dept/red/3.webp", alt: "깃발 장식 아래 식탁에 둘러앉은 레드 미션팀", caption: "함께하는 식사" },
-      { src: "/dept/red/1.webp", alt: "카페 테이블에 둘러앉아 브이를 하는 사람들", caption: "카페에서" },
-    ],
-    gallery: [
-      { src: "/dept/red/2.webp", alt: "예배당 강단 보면대 앞에 선 성도와 목사님" },
-      { src: "/dept/red/5.webp", alt: "교회 안에 채소와 과일을 펼쳐 놓고 정리하는 사람들" },
-      { src: "/dept/red/4.webp", alt: "교회 교실에서 과자 봉지를 들고 웃는 성도" },
-      { src: "/dept/red/3.webp", alt: "깃발 장식 아래 식탁에 둘러앉은 레드 미션팀" },
-      { src: "/dept/red/1.webp", alt: "카페 테이블에 둘러앉아 브이를 하는 사람들" },
     ],
     info: [{ label: "대상", value: "30대 이상 기혼 여성도" }],
     invite: {
@@ -244,21 +196,6 @@ export const DEPARTMENTS: Department[] = [
     // 근거: 블로그 2022년 6월 "블루미션팀을 소개합니다" 글의 단체 사진 두 장.
     snaps: [
       { src: "/dept/blue.webp", alt: "예배당 강단 앞에 선 블루 미션팀 세 가정과 자녀들", caption: "세 가정과 자녀들" },
-      { src: "/dept/blue/1.webp", alt: "예배당 강단 앞에 선 블루 미션팀", caption: "블루 미션팀" },
-      // blue/2~10은 교회가 준 블루 미션팀 사진(2026-11).
-      { src: "/dept/blue/4.webp", alt: "긴 식탁에 모여 식사하는 블루 미션팀 가정들", caption: "함께하는 식사" },
-    ],
-    // 앞 8장은 장면이 겹치지 않게 골랐다(갤러리는 8장씩 연다).
-    gallery: [
-      { src: "/dept/blue/3.webp", alt: "보드를 들고 웃는 어른들과 아이들" },
-      { src: "/dept/blue/10.webp", alt: "예배당 강단에서 기타를 치며 찬양하는 두 사람" },
-      { src: "/dept/blue/5.webp", alt: "야외 그릴에 둘러앉아 고기를 굽는 사람들" },
-      { src: "/dept/blue/7.webp", alt: "성탄 트리가 놓인 예배당에서 드리는 예배" },
-      { src: "/dept/blue/2.webp", alt: "카페 창가 테이블에 둘러앉은 가족들" },
-      { src: "/dept/blue/8.webp", alt: "카페에서 선물을 받아 든 사람과 웃는 사람들" },
-      { src: "/dept/blue/9.webp", alt: "강단 앞에 선 두 사람과 회중석에 앉은 사람들" },
-      { src: "/dept/blue/6.webp", alt: "예배당 강단 보면대 앞에 선 성도" },
-      { src: "/dept/blue/4.webp", alt: "긴 식탁에 모여 식사하는 블루 미션팀 가정들" },
     ],
     info: [{ label: "대상", value: "30대 이상 기혼 남성도" }],
     invite: {
@@ -279,22 +216,6 @@ export const DEPARTMENTS: Department[] = [
     // 근거: 블로그 2024년 5월 결산 글 "어버이주일에는 그린미션팀 성도님들께서 … 특송".
     snaps: [
       { src: "/dept/green.webp", alt: "어버이주일 예배에서 특송하는 그린 미션팀", caption: "어버이주일 특송" },
-      // green/1~4는 교회가 준 그린 미션팀 사진(2026-11).
-      { src: "/dept/green/3.webp", alt: "소파 앞에 모여 앉은 그린 미션팀 여성도들", caption: "함께 모여" },
-      { src: "/dept/green/1.webp", alt: "카페 긴 테이블에 모인 그린 미션팀 여성도들", caption: "카페에서" },
-    ],
-    gallery: [
-      { src: "/dept/green/3.webp", alt: "소파 앞에 모여 앉은 그린 미션팀 여성도들" },
-      { src: "/dept/green/1.webp", alt: "카페 긴 테이블에 모인 그린 미션팀 여성도들" },
-      { src: "/dept/green/2.webp", alt: "야외 테이블에 앉아 웃는 두 여성도" },
-      { src: "/dept/green/4.webp", alt: "성탄 케이크를 앞에 두고 강단 옆에 선 두 사람" },
-      // green/5~10은 교회가 추가로 준 사진(2026-11-15).
-      { src: "/dept/green/5.webp", alt: "강단 앞에서 마이크를 들고 특송하는 여성도들" },
-      { src: "/dept/green/6.webp", alt: "'일어나라' 글자 카드를 들고 순서를 맡은 여성도들" },
-      { src: "/dept/green/7.webp", alt: "강단 앞에서 원고를 읽는 두 사람" },
-      { src: "/dept/green/8.webp", alt: "새누리 골든벨 최후의 1인 상장을 든 여성도" },
-      { src: "/dept/green/9.webp", alt: "예배 중 접시를 건네받는 여성도" },
-      { src: "/dept/green/10.webp", alt: "카메라를 보며 이야기하는 여성도" },
     ],
     info: [{ label: "대상", value: "50대 이상 중장년" }],
     invite: {

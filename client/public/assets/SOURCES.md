@@ -8,10 +8,9 @@
 | `history/` | 새누리교회 네이버 블로그(snrbtc). 1990~2007: 글 222805674345, 2022: 글 222800248428 |
 | `church/` | 같은 블로그. 2023: 글 223157369246(창립 33주년), 2021: 글 222425146820 |
 | `../dept/orange*` | 같은 블로그. `dept/orange.webp`: 글 223474612981(2024년 5월 결산, 어버이주일 예배 — 어린이 뒷모습), `dept/orange/1.webp`: 글 223989319367(2025년 여름성경학교 포스터 그림) |
-| `../dept/blue*` | 같은 블로그 글 222771324286(2022년 6월 "블루미션팀을 소개합니다") 단체 사진 두 장 |
+| `../dept/blue*` | 같은 블로그 글 222771324286(2022년 6월 "블루미션팀을 소개합니다") 단체 사진 |
 | `../dept/red.webp` | 같은 블로그 글 222774208724(2022년 6월, 레드 미션팀 성도 글) — 사진 설명 "목사님 사모님 그리고 레드미션, 블루미션팀과 함께" |
 | `../dept/green.webp` | 같은 블로그 글 223474612981(2024년 5월 결산) — 어버이주일 그린 미션팀 특송 |
-| `../dept/green/5~10.webp` | 교회 제공 원본(2026-11-15 카카오톡 수령) → 긴 변 최대 1600px, EXIF 제거 |
 | `../dept/skyblue*` | 교회 제공 원본(2026-11-15 카카오톡 수령, 기존 블로그 사진 교체) → 긴 변 최대 1600px, EXIF 제거 |
 | `location/map.webp` | 직접 제작 약도 — 지도 그림은 Codex(OpenAI 이미지 생성, 네이버 지도 배치만 참고), 장소 이름은 Pretendard로 합성. 축척 아님 |
 | `stock/` | Unsplash 무료 사진 — Patrick Fore, "펼쳐진 책에 손을 얹고 있는 남자"(b_SHPU5M3nk). Unsplash License: 상업 이용 무료, 출처 표기 의무 없음 |
@@ -19,7 +18,6 @@
 - `history/1990-2006-*-now`: 옛 예배처소 자리의 **현재 모습**(당시 사진 아님).
 - `history/early-kids`: 촬영 연도 미상.
 - `history/early-kids-christmas`·`2006-kids-door`·`early-worship-interior`·`2006-hanam-thanksgiving-sermon`·`2006-hanam-thanksgiving-choir`: 교회 제공 원본(2026-11-12 카카오톡 수령) → 긴 변 최대 1600px, EXIF 제거.
-- `../dept/blue/2~10`·`../dept/red/1~5`·`../dept/green/1~4`·`church/interior-1~5`: 교회 제공 사진(2026-11-15 카카오톡 수령) → 긴 변 최대 1600px, EXIF 제거.
+- `church/interior-1~5`: 교회 제공 사진(2026-11-15 카카오톡 수령) → 긴 변 최대 1600px, EXIF 제거.
 - `church/three-generations`: 교회 제공 원본(2026-11-16 카카오톡 수령, 메인 '3대가 함께' 카드) → WebP 1440×1080, EXIF 제거.
-- `../dept/orange/16~26`: 교회 제공 원본(2026-11-16 카카오톡 수령) → 긴 변 최대 1600px, EXIF 제거.
 - `history/1990-2006-geoyeo-4-3-now`: 현재 입주한 다른 교회 간판은 모자이크 처리.
