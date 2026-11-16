@@ -92,7 +92,7 @@ export const DEPARTMENTS: Department[] = [
     team: "orange",
     generation: "유·초·중·고",
     summary: "유치부부터 고등부까지 함께하는 주일학교입니다. 여름에는 여름성경학교를 엽니다.",
-    // 사진 2~15는 교회가 준 오렌지 미션팀 사진(2026-11). 캡션·alt는 사진에 보이는 것만 적는다.
+    // 사진 2~26은 교회가 준 오렌지 미션팀 사진(2026-11). 캡션·alt는 사진에 보이는 것만 적는다.
     snaps: [
       { src: "/dept/orange/2.webp", alt: "어버이주일 예배 강단 앞에 선 어린이들", caption: "어버이주일 예배에서" },
       { src: "/dept/orange/12.webp", alt: "카페에서 브이를 하는 아이들", caption: "카페에서 다 함께" },
@@ -127,6 +127,17 @@ export const DEPARTMENTS: Department[] = [
       { src: "/dept/orange/12.webp", alt: "카페에서 브이를 하는 아이들" },
       { src: "/dept/orange/9.webp", alt: "산타 모자를 쓰고 무대에 선 아이들" },
       { src: "/dept/orange/10.webp", alt: "강단 앞에 함께 선 아이들과 선생님" },
+      { src: "/dept/orange/16.webp", alt: "크리스마스 트리 옆 강단 앞에서 아이를 안아 주는 선생님" },
+      { src: "/dept/orange/19.webp", alt: "흰 장갑을 끼고 테이블에서 음식을 만드는 아이들과 청소년들" },
+      { src: "/dept/orange/20.webp", alt: "도전 성경골든벨 현수막 아래 예배당에 모인 아이들" },
+      { src: "/dept/orange/22.webp", alt: "물풍선 바구니를 둘러싸고 앉은 주황 조끼 입은 아이들" },
+      { src: "/dept/orange/25.webp", alt: "야외 운동장에서 원을 그려 앉은 아이들과 선생님" },
+      { src: "/dept/orange/18.webp", alt: "예배당 의자에 앉아 앞을 바라보는 아이들과 청소년들" },
+      { src: "/dept/orange/17.webp", alt: "흰 장갑을 끼고 브이를 하며 요리하는 청소년들" },
+      { src: "/dept/orange/21.webp", alt: "흰 장갑을 끼고 그릇에 재료를 섞는 아이들" },
+      { src: "/dept/orange/23.webp", alt: "흰 장갑을 낀 채 손짓을 하는 아이들과 청소년들" },
+      { src: "/dept/orange/24.webp", alt: "긴 테이블에 둘러서서 음식을 만드는 아이들과 선생님" },
+      { src: "/dept/orange/26.webp", alt: "음식을 차린 테이블 곁에 모인 아이들과 선생님" },
     ],
     groups: {
       heading: "유치부부터 고등부까지",
