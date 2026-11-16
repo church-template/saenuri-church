@@ -57,4 +57,13 @@ describe("MediaLibrary", () => {
     await waitFor(() => expect(screen.getByText("삭제할 수 없습니다")).toBeDefined());
     expect(deleteMediaMock).not.toHaveBeenCalled();
   });
+
+  it("서명 주소(url)가 있으면 썸네일·열기에 그 주소를 쓴다(#32)", async () => {
+    const signed = "/api/media/5?exp=1&sig=s";
+    listMediaMock.mockResolvedValue({ ...oneItem, content: [{ ...oneItem.content[0], url: signed }] });
+    const { container } = renderQc(<MediaLibrary />);
+    const link = await screen.findByRole("link", { name: "a.png 열기" });
+    expect(link.getAttribute("href")).toBe(signed);
+    expect(container.querySelector("img")?.getAttribute("src")).toBe(signed);
+  });
 });

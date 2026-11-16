@@ -19,6 +19,8 @@ import { DeptSnapPile } from "@/components/departments/DeptSnapPile";
 import { DeptYear } from "@/components/departments/DeptYear";
 import { DeptGroups } from "@/components/departments/DeptGroups";
 import { TeamNav } from "@/components/departments/TeamNav";
+import { DeptEditAction } from "@/components/departments/DeptEditAction";
+import { getDepartment, withApiDetail } from "@/lib/api/departments";
 import {
   allDepartmentSlugs,
   findDepartment,
@@ -47,7 +49,7 @@ export async function generateMetadata({
   };
 }
 
-// 사역 부서 상세(공개) — 상수 구동. SiteShell 대신 투명+solid 고정 헤더 직접 합성.
+// 사역 부서 상세(공개) — 상수 구동 + 사진·소개는 API(#32). SiteShell 대신 투명+solid 고정 헤더 직접 합성.
 // DeptHero 시작이 라이트라 on-dark 투명은 가독성 위험 → 라이트 스킨 고정(메인 무수정).
 // 보강 섹션은 데이터가 있는 부서에만 조건부 노출(학생부만 채움, 타 부서는 기존과 동일).
 export default async function DepartmentDetailPage({
@@ -56,10 +58,13 @@ export default async function DepartmentDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const dept = findDepartment(slug);
-  if (!dept) {
+  const base = findDepartment(slug);
+  if (!base) {
     notFound();
   }
+  // 사진·소개 본문만 API(ISR 60s + "departments" 태그). 실패·미연결이면 상수 그대로(#32).
+  const api = base.backendId != null ? await getDepartment(base.backendId).catch(() => null) : null;
+  const dept = withApiDetail(base, api);
 
   // 줄 단위 카피 → block span(메인 caption과 동일 패턴, "\n" 이슈 차단).
   const caption = dept.caption.map((line, i) => (
@@ -89,6 +94,7 @@ export default async function DepartmentDetailPage({
           )}
         >
           <div>
+            {dept.backendId != null ? <DeptEditAction departmentId={dept.backendId} /> : null}
             {dept.leader ? <DeptLeader name={dept.leader} /> : null}
             {dept.description ? (
               <MarkdownContent source={dept.description} className="mt-base" />

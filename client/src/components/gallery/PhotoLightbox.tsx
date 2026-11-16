@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
-import { apiUrl } from "@/lib/auth/apiBase";
+import { gallerySrc } from "@/lib/mediaUrl";
 import type { GalleryPhotoResponse } from "@/lib/api/types";
 
 interface PhotoLightboxProps {
@@ -19,6 +19,8 @@ interface PhotoLightboxProps {
 export function PhotoLightbox({ photos, albumTitle, index, onIndexChange }: PhotoLightboxProps) {
   const open = index !== null;
   const current = open ? photos[index] : null;
+  // url: null이면 열 주소가 없다(id로 조립하면 차단 뒤 404). 필드가 없을 때(구 백엔드)만 mediaId로 폴백(#32).
+  const currentSrc = current ? gallerySrc(current.mediaId, current.url) : null;
   const hasPrev = open && index > 0;
   const hasNext = open && index < photos.length - 1;
 
@@ -51,13 +53,15 @@ export function PhotoLightbox({ photos, albumTitle, index, onIndexChange }: Phot
         {current ? (
           <div className="flex flex-col gap-sm">
             <div className="relative flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸 */}
-              <img
-                src={apiUrl(`/api/media/${current.mediaId}`)}
-                alt={current.caption ?? ""}
-                /* max-h-[70vh]: 뷰포트 높이 제약(색·간격 토큰이 아닌 레이아웃 값) — dept-hero 70vh 선례와 동일 */
-                className="max-h-[70vh] w-auto rounded-md object-contain"
-              />
+              {currentSrc ? (
+                // eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸
+                <img
+                  src={currentSrc}
+                  alt={current.caption ?? ""}
+                  /* max-h-[70vh]: 뷰포트 높이 제약(색·간격 토큰이 아닌 레이아웃 값) — dept-hero 70vh 선례와 동일 */
+                  className="max-h-[70vh] w-auto rounded-md object-contain"
+                />
+              ) : null}
               {/* iconOnly 흡수: 오버레이 위치·크기·색 className이 마지막이라 iconOnly 기본값을 덮는다 */}
               <Button
                 type="button"

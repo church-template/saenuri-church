@@ -14,6 +14,8 @@ export interface MediaResponse {
   size: number; // bytes
   uploadedBy: number;
   createdAt: string; // LocalDateTime
+  // 서명 주소(church-backend#92, 1시간 유효) — 아직 아무 데도 안 쓰인 파일은 이것으로만 열린다. 배포 전엔 없음 → /api/media/{id}
+  url?: string | null;
 }
 // 참조 항목은 기존 MediaReference({type,id,title}) 재사용 — 409 백스톱과 동일 타입.
 export interface MediaReferencesResponse {

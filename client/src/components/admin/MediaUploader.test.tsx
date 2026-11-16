@@ -51,4 +51,21 @@ describe("MediaUploader", () => {
     });
     await waitFor(() => expect(onUploaded).toHaveBeenCalledWith([{ id: 1, filename: "a.png" }]));
   });
+
+  it("10MB 넘는 사진은 WebP로 줄여 올리므로 막지 않고, GIF·PDF는 막는다", async () => {
+    uploadMediaMock.mockResolvedValue({ id: 3, filename: "big.webp" });
+    const big = (name: string, type: string) => {
+      const f = new File(["x"], name, { type });
+      Object.defineProperty(f, "size", { value: 11 * 1024 * 1024 });
+      return f;
+    };
+    const onUploaded = vi.fn();
+    const { container } = render(<MediaUploader accept="all" onUploaded={onUploaded} />);
+    fireEvent.change(fileInput(container), { target: { files: [big("big.jpg", "image/jpeg")] } });
+    // jsdom엔 createImageBitmap이 없어 변환 실패 → 원본 그대로 업로드(막지 않음).
+    await waitFor(() => expect(uploadMediaMock).toHaveBeenCalledTimes(1));
+    fireEvent.change(fileInput(container), { target: { files: [big("big.gif", "image/gif")] } });
+    await waitFor(() => expect(screen.getByText(/10MB를 초과/)).toBeDefined());
+    expect(uploadMediaMock).toHaveBeenCalledTimes(1);
+  });
 });

@@ -21,7 +21,15 @@ vi.mock("@/hero/DeptHero", () => ({
   ),
 }));
 
+// 수정 버튼은 권한 게이트 client island — DeptEditAction 단위 테스트가 커버. 여기선 어느 부서 id로 붙는지만.
+vi.mock("@/components/departments/DeptEditAction", () => ({
+  DeptEditAction: ({ departmentId }: { departmentId: number }) => <div data-testid="edit-action">{departmentId}</div>,
+}));
+
 import DepartmentDetailPage, { generateStaticParams } from "./page";
+
+const okJson = (body: unknown) => ({ ok: true, status: 200, json: async () => body }) as Response;
+const failFetch = () => vi.stubGlobal("fetch", vi.fn(async () => { throw new Error("network"); }));
 
 function stubBrowserApis() {
   vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true, addEventListener: () => {}, removeEventListener: () => {} })));
@@ -34,6 +42,7 @@ const orange = DEPARTMENTS.find((d) => d.slug === "orange")!;
 describe("DepartmentDetailPage (상세)", () => {
   it("제목·본문을 합성한다(상수 구동)", async () => {
     stubBrowserApis();
+    failFetch();
     const { container } = render(
       await DepartmentDetailPage({ params: Promise.resolve({ slug: "orange" }) }),
     );
@@ -56,6 +65,7 @@ describe("DepartmentDetailPage (상세)", () => {
 
   it("확인된 자료가 있는 팀만 한 해 구간을 보이고, 여섯 팀 내비는 현재 팀을 표시한다", async () => {
     stubBrowserApis();
+    failFetch();
     const first = render(await DepartmentDetailPage({ params: Promise.resolve({ slug: "orange" }) }));
     expect(screen.getByRole("heading", { name: DEPT_SECTIONS.year })).toBeDefined();
     const nav = screen.getByRole("navigation", { name: DEPT_SECTIONS.teamNav });
@@ -82,5 +92,23 @@ describe("DepartmentDetailPage (상세)", () => {
   it("generateStaticParams가 모든 부서 slug를 반환한다", () => {
     const params = generateStaticParams();
     expect(params).toEqual(["orange", "skyblue", "red", "blue", "green", "purple"].map((slug) => ({ slug })));
+  });
+
+  it("API 사진·소개가 있으면 히어로·소개 옆 사진(앞 3장)·활동 사진·본문을 API로 바꾼다", async () => {
+    stubBrowserApis();
+    const spy = vi.fn(async () => okJson({
+      id: 1, name: "오렌지", leader: "", parentId: null, sortOrder: 0, description: "API **소개**",
+      createdAt: "", updatedAt: "", version: 1, heroMediaId: 9, albumId: 5,
+      photos: [11, 12, 13, 14], // mediaId 배열(#92 확정 계약)
+    }));
+    vi.stubGlobal("fetch", spy);
+    const { container } = render(await DepartmentDetailPage({ params: Promise.resolve({ slug: "orange" }) }));
+    expect(spy).toHaveBeenCalledWith("/api/departments/1", expect.anything());
+    expect(container.querySelector(".prose-church")?.textContent).toContain("API 소개");
+    expect(screen.getByTestId("edit-action").textContent).toBe("1");
+    const srcs = Array.from(container.querySelectorAll("img")).map((i) => i.getAttribute("src"));
+    expect(srcs).toContain("/api/media/11");
+    expect(srcs).toContain("/api/media/14"); // 활동 사진은 앨범 전체
+    expect(srcs).not.toContain(orange.gallery![0].src); // 상수 갤러리는 쓰지 않음
   });
 });

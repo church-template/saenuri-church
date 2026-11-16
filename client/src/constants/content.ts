@@ -498,7 +498,7 @@ export const MINISTRIES: Ministry[] = [
     title: "3대가 함께",
     desc: "어린이부터 청년, 가정까지 미션팀으로 함께 자랍니다.",
     href: "/departments",
-    image: { src: "/assets/church/youth-2023.webp", alt: "청년들" },
+    image: { src: "/assets/church/three-generations.webp", alt: "할머니와 부모, 아이들이 함께한 식사 자리" },
   },
   {
     key: "serving",

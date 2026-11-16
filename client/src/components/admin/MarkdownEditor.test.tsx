@@ -31,4 +31,19 @@ describe("MarkdownEditor", () => {
     render(<MarkdownEditor value="" onChange={() => {}} />);
     expect(screen.getByRole("toolbar", { name: "서식 도구" })).toBeDefined();
   });
+
+  it("앨범 설명(mediaUrls 있음) 미리보기는 서명 주소로 그리고, 맵에 없는 이미지는 뺀다(#32)", () => {
+    const { container } = render(
+      <MarkdownEditor value={"![a](media:3)\n\n![b](media:4)"} onChange={() => {}} mediaUrls={{ "3": "/api/media/3?exp=1&sig=s" }} />,
+    );
+    fireEvent.mouseDown(screen.getByRole("tab", { name: "미리보기" }));
+    const srcs = Array.from(container.querySelectorAll("img")).map((i) => i.getAttribute("src"));
+    expect(srcs).toEqual(["/api/media/3?exp=1&sig=s"]);
+  });
+
+  it("mediaUrls가 없는 본문(공지 등) 미리보기는 저장된 이미지를 기존 공개 주소로 그린다", () => {
+    const { container } = render(<MarkdownEditor value={"![b](media:4)"} onChange={() => {}} />);
+    fireEvent.mouseDown(screen.getByRole("tab", { name: "미리보기" }));
+    expect(container.querySelector("img")?.getAttribute("src")).toBe("/api/media/4");
+  });
 });

@@ -14,7 +14,9 @@ vi.mock("./PhotoGrid", () => ({ PhotoGrid: () => "PHOTOGRID" }));
 // AlbumDetailActions(useRouter·RequirePermission 포함) 무력화 — 권한 게이트 동작은 GalleryAdminActions.test에서 검증.
 vi.mock("./GalleryAdminActions", () => ({ AlbumDetailActions: () => null, AlbumListAction: () => null }));
 vi.mock("@/components/common/MarkdownContent", () => ({
-  MarkdownContent: ({ source }: { source: string }) => <div>{source}</div>,
+  MarkdownContent: ({ source, media }: { source: string; media?: unknown }) => (
+    <div data-media={JSON.stringify(media ?? null)}>{source}</div>
+  ),
 }));
 
 import { AlbumDetail } from "./AlbumDetail";
@@ -58,5 +60,18 @@ describe("AlbumDetail", () => {
     render(<AlbumDetail id={5} />);
     expect(screen.queryByText("본문 마크다운")).toBeNull();
     expect(screen.getByText("PHOTOGRID")).toBeDefined();
+  });
+
+  it("앨범 설명에 응답의 mediaUrls를 '키 없으면 뺌' 규칙으로 넘기고, 필드가 없으면 기존 동작(#32)", () => {
+    const mediaUrls = { "10": "/api/media/10?exp=1&sig=s" };
+    useAlbumMock.mockReturnValue(detailState({ data: { ...album, mediaUrls } }));
+    const first = render(<AlbumDetail id={5} />);
+    expect(screen.getByText("본문 마크다운").getAttribute("data-media")).toBe(
+      JSON.stringify({ urls: mediaUrls, missing: "drop" }),
+    );
+    first.unmount();
+    useAlbumMock.mockReturnValue(detailState({ data: album }));
+    render(<AlbumDetail id={5} />);
+    expect(screen.getByText("본문 마크다운").getAttribute("data-media")).toBe("null");
   });
 });

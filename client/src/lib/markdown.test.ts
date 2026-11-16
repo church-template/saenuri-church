@@ -34,6 +34,26 @@ describe("renderMarkdown", () => {
     expect(html).toContain("/api/media/420");
     expect(html).not.toContain('/api/media/42"');
   });
+
+  it("id→서명 주소 맵이 있으면 그 주소로, 맵에 없는 id는 기존 공개 주소로 치환한다", () => {
+    const html = renderMarkdown("![a](media:42)\n\n![b](media:7)", {
+      urls: { "42": "/api/media/42?exp=9&sig=zz" },
+      missing: "public",
+    });
+    expect(html).toContain('src="/api/media/42?exp=9&amp;sig=zz"');
+    expect(html).toContain('src="/api/media/7"');
+  });
+
+  it("missing=drop(앨범 설명)이면 맵에 키가 없는 이미지는 그리지 않는다", () => {
+    const html = renderMarkdown('앞\n\n![a](media:42)\n\n![b](media:7 "제목")\n\n뒤', {
+      urls: { "42": "/api/media/42?exp=9&sig=zz" },
+      missing: "drop",
+    });
+    expect(html).toContain("/api/media/42?exp=9");
+    expect(html).not.toContain("/api/media/7");
+    expect(html.match(/<img/g)).toHaveLength(1);
+    expect(html).toContain("뒤");
+  });
 });
 
 describe("splitYouTubeSegments", () => {

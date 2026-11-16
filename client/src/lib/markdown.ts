@@ -1,6 +1,7 @@
 import { marked } from "marked";
 import DOMPurify from "isomorphic-dompurify";
 import { parseYouTubeId } from "./youtube";
+import { mediaSrc } from "./mediaUrl";
 
 // 경계 안전: media:42 뒤에 숫자가 이어지면 매칭 안 함(420/421 오탐 방지) — 서버 추적 규약과 동일.
 const MEDIA_REF = /media:(\d+)(?!\d)/g;
@@ -52,9 +53,29 @@ export function splitYouTubeSegments(raw: string | null | undefined): MarkdownSe
   return segments;
 }
 
-export function renderMarkdown(raw: string | null | undefined): string {
+// 이미지 문법 ![alt](media:{id} "title") — 서명 주소가 없는 비공개 이미지를 통째 빼는 데 쓴다.
+const MEDIA_IMAGE = /!\[[^\]]*\]\(\s*media:(\d+)(?!\d)[^)]*\)/g;
+
+export interface MediaUrlOptions {
+  /** id→서명 주소(교회 접두사 없는 경로, #32·church-backend#92). */
+  urls: Record<string, string>;
+  /**
+   * 맵에 없는 id 처리. "drop"=그 이미지를 그리지 않음(앨범 설명 `mediaUrls` — 키가 없으면 비공개라 열 수 없다),
+   * "public"=기존 공개 주소(편집 미리보기 — 맵은 방금 고른 사진만 담고, 나머지는 저장된 공개 본문 이미지).
+   */
+  missing: "drop" | "public";
+}
+
+// media 미지정이면 기존 동작(모든 media:{id} → 공개 주소).
+export function renderMarkdown(raw: string | null | undefined, media?: MediaUrlOptions): string {
   if (!raw) return ""; // 서버가 본문 없음을 null로 내려준다(설교 content 등) — replace 크래시 방어
-  const withUrls = raw.replace(MEDIA_REF, (_, id) => `/api/media/${id}`); // 1) media:{id} → 공개 URL
+  const mediaUrls = media?.urls;
+  const source =
+    media?.missing === "drop" ? raw.replace(MEDIA_IMAGE, (m, id: string) => (media.urls[id] ? m : "")) : raw;
+  // 1) media:{id} → 서명 주소(맵에 있으면, API_BASE 뒤에 붙임) 또는 공개 URL
+  const withUrls = source.replace(MEDIA_REF, (_, id: string) =>
+    mediaUrls?.[id] ? mediaSrc(Number(id), mediaUrls[id]) : `/api/media/${id}`,
+  );
   const html = marked.parse(withUrls, { async: false }) as string;        // 2) MD → HTML
   return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR });        // 3) 마크다운 태그만 허용(raw HTML 제거)
 }
