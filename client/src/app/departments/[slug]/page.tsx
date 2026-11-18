@@ -94,7 +94,7 @@ export default async function DepartmentDetailPage({
           )}
         >
           <div>
-            {dept.backendId != null ? <DeptEditAction departmentId={dept.backendId} /> : null}
+            {dept.backendId != null ? <DeptEditAction departmentId={dept.backendId} slug={dept.slug} /> : null}
             {dept.leader ? <DeptLeader name={dept.leader} /> : null}
             {dept.description ? (
               <MarkdownContent source={dept.description} className="mt-base" />
