@@ -74,7 +74,8 @@ export function renderMarkdown(raw: string | null | undefined, media?: MediaUrlO
     media?.missing === "drop" ? raw.replace(MEDIA_IMAGE, (m, id: string) => (media.urls[id] ? m : "")) : raw;
   // 1) media:{id} → 서명 주소(맵에 있으면, API_BASE 뒤에 붙임) 또는 공개 URL
   const withUrls = source.replace(MEDIA_REF, (_, id: string) =>
-    mediaUrls?.[id] ? mediaSrc(Number(id), mediaUrls[id]) : `/api/media/${id}`,
+    // 무서명도 API 베이스(교회 접두사 포함)를 거친다 — 상대경로로 두면 프론트 도메인을 향해 404가 된다.
+    mediaSrc(Number(id), mediaUrls?.[id]),
   );
   const html = marked.parse(withUrls, { async: false }) as string;        // 2) MD → HTML
   return DOMPurify.sanitize(html, { ALLOWED_TAGS, ALLOWED_ATTR });        // 3) 마크다운 태그만 허용(raw HTML 제거)
