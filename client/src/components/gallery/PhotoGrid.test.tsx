@@ -35,7 +35,13 @@ describe("PhotoGrid", () => {
     );
     const srcs = Array.from(container.querySelectorAll("img")).map((i) => i.getAttribute("src") ?? "");
     expect(srcs[0]).toBe("/api/media/10?exp=1&sig=a"); // unoptimized — 최적화 캐시에 서명 주소를 넣지 않는다
-    expect(srcs[1]).toContain(encodeURIComponent("/api/media/20")); // 폴백은 기존처럼 최적화 경유
+    expect(srcs[1]).toBe("/api/media/20"); // 공개 범위가 바뀔 수 있어 최적화하지 않는다(6.6-16)
+  });
+
+  it("사진은 서명 주소가 없어도 최적화하지 않는다", () => {
+    const { container } = render(<PhotoGrid photos={[photos[1]]} albumTitle="앨범" />);
+    const src = container.querySelector("img")?.getAttribute("src") ?? "";
+    expect(src.startsWith("/_next/image")).toBe(false);
   });
 
   it("사진 url이 null이면 mediaId로 조립하지 않는다(#32)", () => {

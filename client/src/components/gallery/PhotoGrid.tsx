@@ -42,12 +42,12 @@ export function PhotoGrid({
               >
                 {/* fill 모드는 부모 relative 필수(next/image 규약) */}
                 <span className="relative block aspect-square overflow-hidden rounded-md">
-                  {/* 서명 주소(쿼리스트링)는 remotePatterns(search 없음)에 안 맞고, 최적화 캐시(31일)가 만료 뒤에도 내줄 수 있어 원본을 직접 받는다(#32). */}
+                  {/* 항상 unoptimized — 서명 주소(쿼리스트링)는 remotePatterns(search 없음)에 안 맞고, 공개 범위가 바뀔 수 있는 사진이라 지울 수 없는 31일 최적화 캐시를 쓰지 않는다(#32, 스펙 6.6-16). */}
                   {/* url: null이면 열 주소가 없다 → 빈 칸(id로 다시 조립하면 차단 뒤 404). */}
                   {gallerySrc(p.mediaId, p.url) ? (
                     <Image
                       src={gallerySrc(p.mediaId, p.url) as string}
-                      unoptimized={!!p.url}
+                      unoptimized
                       alt={p.caption ?? ""}
                       fill
                       sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
