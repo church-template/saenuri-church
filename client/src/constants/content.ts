@@ -270,16 +270,16 @@ export type PastorPhilosophyKey =
   | "nextgen"
   | "mission";
 
-// 학력·인용문은 교회에서 받기 전이라 비운다(지어내지 않음). 비어 있는 항목은 화면에서 생략된다.
+// 인용문은 교회에서 받기 전이라 비운다(지어내지 않음). 비어 있는 항목은 화면에서 생략된다.
 export const PASTOR = {
   title: "목회자 인사말",
   name: "황영기",
   position: "담임목사",
-  degree: "",
+  degree: "한국침례신학대학교 신학과 학사 · 목회학 석사",
   image: { src: "/assets/pastor/navy.webp", alt: "황영기 담임목사", aspect: 1600 / 2400 },
   pullQuote: "",
   intro:
-    "황영기 목사님은 1990년 6월 26일 목사 안수를 받고, 같은 해 7월 새누리교회를 개척해 지금까지 섬기고 있습니다.",
+    "3대째 침례교 목회자의 믿음의 가문에서 자란 황영기 목사님은 1990년 6월 26일 목사안수를 받고 같은 해에 성별교회(현 새누리교회)를 개척하여, 지금까지 한 교회를 하나님 아버지의 마음과 사랑으로 섬기고 있습니다.",
   greeting: [
     "안녕하세요. 새누리교회 황영기 목사입니다. 새누리교회를 찾아주셔서 감사를 드립니다. 환영하고 축복합니다.",
     "하나님의 은혜를 나누고 위로와 격려가 되었으면 좋겠습니다. 새누리교회는 누구든지 환영합니다.",
@@ -296,9 +296,11 @@ export const PASTOR = {
   philosophy: {
     heading: "목회 철학",
     items: [
-      { key: "bible", text: "말씀과 성령의 능력으로 복음을 전하는 교회" },
-      { key: "fellowship", text: "가정을 세우는 교회" },
-      { key: "nextgen", text: "3대가 함께 예배하는 교회" },
+      { key: "bible", text: "오직 성경말씀에 기준을 둔다" },
+      { key: "worship", text: "영적 회복과 성령의 인도하심" },
+      { key: "fellowship", text: "건강한 교회와 가정 만들기" },
+      { key: "mission", text: "각 분야의 영적 리더 세우기" },
+      { key: "nextgen", text: "3대가 예배하는 믿음의 명문가문" },
     ] satisfies { key: PastorPhilosophyKey; text: string }[],
   },
 };
