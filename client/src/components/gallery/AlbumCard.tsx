@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
 import { formatDate } from "@/lib/date";
 import { gallerySrc } from "@/lib/mediaUrl";
+import { MembersOnlyBadge } from "@/components/visibility/MembersOnlyBadge";
 import type { GalleryAlbumCardResponse } from "@/lib/api/types";
 
 const focusRing =
@@ -19,12 +20,13 @@ export function AlbumCard({ album }: { album: GalleryAlbumCardResponse }) {
   return (
     <Link href={`/gallery/albums/${album.id}`} className={cn("block", focusRing)}>
       <Card bordered interactive className="group h-full">
-        {/* fill 모드는 부모 relative 필수(next/image 규약). unoptimized: 서명 주소(쿼리스트링)는 remotePatterns(search 없음)에 안 맞고, 최적화 캐시(31일)가 만료 뒤에도 내줄 수 있어 원본을 직접 받는다(#32). */}
+        {/* fill 모드는 부모 relative 필수(next/image 규약). 항상 unoptimized: 서명 주소(쿼리스트링)는 remotePatterns(search 없음)에 안 맞고,
+            무서명 주소도 공개 범위가 바뀔 수 있는데 31일 최적화 캐시는 지울 방법이 없어 교인만으로 바꾼 뒤에도 내준다(#32, 스펙 6.6-16). */}
         <div className="relative aspect-video overflow-hidden">
           {thumb ? (
             <Image
               src={thumb}
-              unoptimized={!!album.thumbnailUrl}
+              unoptimized
               alt=""
               fill
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
@@ -37,7 +39,10 @@ export function AlbumCard({ album }: { album: GalleryAlbumCardResponse }) {
           )}
         </div>
         <div className="p-xl">
-          <h3 className={cn(typo.titleMd, "text-ink")}>{album.title}</h3>
+          <div className="flex flex-wrap items-center gap-xs">
+            <h3 className={cn(typo.titleMd, "text-ink")}>{album.title}</h3>
+            {album.membersOnly ? <MembersOnlyBadge /> : null}
+          </div>
           <p className={cn(typo.datetime, "mt-xxs text-muted")}>
             {formatDate(album.createdAt)} · 사진 {album.photoCount}장
             {album.author ? ` · ${album.author}` : ""}
