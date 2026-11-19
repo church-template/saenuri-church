@@ -10,6 +10,8 @@ import { CtaBand } from "@/components/shell/CtaBand";
 import { Container } from "@/components/shell/Container";
 import { SiteFooter } from "@/components/shell/SiteFooter";
 import { getMain } from "@/lib/api/main";
+import { getVisibility, resolveVisibility } from "@/lib/api/visibility";
+import { cn } from "@/lib/utils";
 import { MinistryCards } from "@/components/main/MinistryCards";
 
 // 홈 정본 URL — 루트 layout에 canonical을 두면 전 페이지가 홈을 정본으로 가리키는 버그라
@@ -22,10 +24,19 @@ export default async function Home() {
   // force-dynamic과 달리 fetch 데이터 캐시(revalidate 60)는 그대로 동작 — 백엔드 부하는 60s 캐시가 흡수.
   await connection();
   // 소식 fetch만 격리: 실패해도 여기서 null로 흡수해 Hero·연혁·사역·예배시간·CTA·푸터는 그대로 산다.
-  const main = await getMain().catch((error: unknown) => {
-    console.error(error); // 서버 로깅 지점, 화면 비노출(app/error.tsx 관례와 동일)
-    return null;
-  });
+  // 설정 조회는 실패해도 null(폴백 = 지금 동작)이라 따로 격리하지 않는다.
+  const [main, visibility] = await Promise.all([
+    getMain().catch((error: unknown) => {
+      console.error(error); // 서버 로깅 지점, 화면 비노출(app/error.tsx 관례와 동일)
+      return null;
+    }),
+    getVisibility(),
+  ]);
+  // 교인만인 공지·일정은 홈 소식 밴드에서 그 칸째 뺀다(스펙 5.4). 둘 다 빠지면 빈 밴드를 남기지 않는다.
+  // 설교 섹션은 그대로(글 단위 교인만은 백엔드가 뺀다).
+  const levels = resolveVisibility(visibility);
+  const showNotices = levels.notices === "PUBLIC";
+  const showEvents = levels.events === "PUBLIC";
 
   return (
     <>
@@ -38,12 +49,14 @@ export default async function Home() {
           <>
             <SermonSection sermons={main.sermons} />
             {/* 공지·일정은 한 소식 밴드에 나란히(좁은 폭은 세로) — 짧은 목록 둘을 따로 세우면 밴드만 늘어난다 */}
-            <section className="bg-surface-soft py-section">
-              <Container className="grid gap-xxl lg:grid-cols-2">
-                <NoticeSection notices={main.notices} />
-                <EventSection events={main.upcomingEvents} />
-              </Container>
-            </section>
+            {showNotices || showEvents ? (
+              <section data-testid="main-news-band" className="bg-surface-soft py-section">
+                <Container className={cn("grid gap-xxl", showNotices && showEvents && "lg:grid-cols-2")}>
+                  {showNotices ? <NoticeSection notices={main.notices} /> : null}
+                  {showEvents ? <EventSection events={main.upcomingEvents} /> : null}
+                </Container>
+              </section>
+            ) : null}
           </>
         ) : (
           <MainFeedsError />

@@ -50,6 +50,12 @@ vi.mock("@/lib/api/main", () => ({
   })),
 }));
 
+const { getVisibilityMock } = vi.hoisted(() => ({ getVisibilityMock: vi.fn(async () => null as unknown) }));
+vi.mock("@/lib/api/visibility", async (orig) => ({
+  ...(await orig<typeof import("@/lib/api/visibility")>()),
+  getVisibility: getVisibilityMock,
+}));
+
 import Home from "./page";
 import { STORY_HERO } from "@/constants/storyHero";
 import { getMain } from "@/lib/api/main";
@@ -126,5 +132,50 @@ describe("Home (메인)", () => {
     expect(screen.getByRole("contentinfo")).toBeDefined();
     // 설교 데이터는 노출되지 않는다
     expect(screen.queryByText("부활의 증인")).toBeNull();
+  });
+
+  const allPublic = { notices: "PUBLIC", events: "PUBLIC", bulletins: "PUBLIC", sermons: "PUBLIC", gallery: "PUBLIC" } as const;
+
+  it("공지·일정이 모두 교인만이면 소식 밴드가 없다(대조: 설교 섹션은 그대로)", async () => {
+    stubBrowserApis();
+    getVisibilityMock.mockResolvedValueOnce({ ...allPublic, notices: "MEMBERS", events: "MEMBERS" });
+    const { container } = render(await Home());
+    expect(screen.queryByRole("heading", { name: MAIN_SECTIONS.notices.title })).toBeNull();
+    expect(screen.queryByRole("heading", { name: MAIN_SECTIONS.events.title })).toBeNull();
+    expect(screen.queryByText("전교인 수련회 안내")).toBeNull();
+    expect(screen.queryByText("성가대 연습")).toBeNull();
+    // 빈 회색 밴드도 남기지 않는다
+    expect(container.querySelector("[data-testid='main-news-band']")).toBeNull();
+    expect(screen.getByText("부활의 증인")).toBeDefined();
+  });
+
+  it("공지만 교인만이면 공지만 빠지고 일정은 남는다", async () => {
+    stubBrowserApis();
+    getVisibilityMock.mockResolvedValueOnce({ ...allPublic, notices: "MEMBERS" });
+    const { container } = render(await Home());
+    expect(screen.queryByRole("heading", { name: MAIN_SECTIONS.notices.title })).toBeNull();
+    expect(screen.queryByText("전교인 수련회 안내")).toBeNull();
+    expect(screen.getByRole("heading", { name: MAIN_SECTIONS.events.title })).toBeDefined();
+    expect(screen.getByText("성가대 연습")).toBeDefined();
+    expect(container.querySelector("[data-testid='main-news-band']")).not.toBeNull();
+  });
+
+  it("일정만 교인만이면 일정만 빠지고 공지는 남는다", async () => {
+    stubBrowserApis();
+    getVisibilityMock.mockResolvedValueOnce({ ...allPublic, events: "MEMBERS" });
+    render(await Home());
+    expect(screen.queryByRole("heading", { name: MAIN_SECTIONS.events.title })).toBeNull();
+    expect(screen.queryByText("성가대 연습")).toBeNull();
+    expect(screen.getByRole("heading", { name: MAIN_SECTIONS.notices.title })).toBeDefined();
+    expect(screen.getByText("전교인 수련회 안내")).toBeDefined();
+  });
+
+  it("대조: 모두 누구나면 공지·일정이 모두 보이고 밴드가 있다", async () => {
+    stubBrowserApis();
+    getVisibilityMock.mockResolvedValueOnce(allPublic);
+    const { container } = render(await Home());
+    expect(screen.getByText("전교인 수련회 안내")).toBeDefined();
+    expect(screen.getByText("성가대 연습")).toBeDefined();
+    expect(container.querySelector("[data-testid='main-news-band']")).not.toBeNull();
   });
 });
