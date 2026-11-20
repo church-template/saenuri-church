@@ -73,6 +73,12 @@ export const CHURCH_PHONE = "010-5415-5061";
 // TODO(교회 확인): 이메일 미수령 — 배포 전 교체
 export const CHURCH_EMAIL = "contact@example.com";
 
+// 교회 네이버 블로그 — 푸터 링크와 홈 "블로그 새 글" 구간이 쓴다(#51).
+// 둘 다 빈 문자열이면 링크·구간이 통째로 숨는다(블로그 없는 교회).
+export const CHURCH_BLOG_URL = "https://blog.naver.com/snrbtc";
+// 네이버가 공개하는 RSS 주소(https://rss.blog.naver.com/<블로그 아이디>.xml).
+export const CHURCH_BLOG_RSS_URL = "https://rss.blog.naver.com/snrbtc.xml";
+
 // 설교 등록 폼의 설교자 기본값 — 설교자가 바뀌는 일이 드물어 미리 채운다(#109).
 // 교회 교체 시 이 값만 바꾸면 되고, 빈 문자열이면 기본값 없음과 동일하게 동작한다.
 export const SERMON_DEFAULT_PREACHER = "황영기 목사님";

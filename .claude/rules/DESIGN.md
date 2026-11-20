@@ -545,6 +545,11 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`main-news-band`**: 메인 공지·일정 소식 밴드(`{colors.surface-soft}`). 공지(`notice-row`)와 일정을 ≥lg 2열로 나란히, 좁은 폭은 세로.
   일정 행(`event-row`) = 월(caption muted)·일(`{typography.datetime-lg}`) 블록 + 제목 title-sm(hover primary) + 시간·장소 datetime muted, 1px 헤어라인, 행 전체 링크.
   월·일은 서버 문자열에서 바로 읽는다(시간대 밀림 방지). 메인 최신 설교는 첫 설교를 `sermon-feature`로, 나머지를 텍스트형 `sermon-card`로(3:2).
+- **`blog-section`**: 메인 "블로그 새 글"(#51). 소식 밴드 아래·`cta-band-dark` 위의 흰 섹션. 머리는 `main-section-head`(eyebrow 없음)인데 우측 링크가
+  바깥 사이트라 새 탭 + lucide `ExternalLink` 20px + sr-only "(새 탭에서 열림)". 카드 = `sermon-card` 결(16:9 대표 사진 + 제목 `{typography.title-md}` + 날짜 `{typography.datetime}` `{colors.muted}`),
+  3개 — 모바일 1-up, 태블릿 2-up, 데스크톱 3-up. 카드 전체가 블로그 글 새 탭 링크. 분류·요약은 싣지 않는다. 사진 없는 글은 글만.
+  글은 교회 네이버 블로그 RSS에서 읽는다(1시간 캐시). 못 읽거나 글이 없으면 **구간째 숨긴다**(빈 상태 문구 없음). 대표 사진은 네이버 서버의 것을 `referrerPolicy="no-referrer"`로 부른다(리퍼러가 붙으면 403).
+  푸터 교회 정보 칸에도 같은 블로그로 가는 텍스트 링크(`{typography.body-md}` `{colors.body}` + `ExternalLink` 20px, 48px 터치 타깃). 블로그 주소 상수가 비면 구간·링크 모두 없다.
 
 ### 연출
 - **`media-collage`**: 메인 히어로(14A)와 한 몸인 스크럽 구간(`HeroReveal`). 풀스크린 영상이
