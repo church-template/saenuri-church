@@ -1,14 +1,34 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-20T02:56:44Z",
-    "currentVersion": "0.19.0",
+    "lastUpdated": "2026-11-20T12:25:51Z",
+    "currentVersion": "0.20.0",
     "projectType": "react",
     "projectTypes": [
       "react"
     ],
-    "totalReleases": 22
+    "totalReleases": 23
   },
   "releases": [
+    {
+      "version": "0.20.0",
+      "project_type": "react",
+      "project_types": [
+        "react"
+      ],
+      "date": "2026-11-20",
+      "pr_number": 53,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **새 기능**\n  * 홈 화면에 교회 네이버 블로그의 최근 글 3개를 보여 주는 \"블로그 새 글\" 구간 추가\n  * 모든 페이지 하단에 네이버 블로그 바로가기 링크 추가",
+      "parsed_changes": {
+        "새_기능": {
+          "title": "새 기능",
+          "items": [
+            "홈 화면에 교회 네이버 블로그의 최근 글 3개를 보여 주는 \"블로그 새 글\" 구간 추가",
+            "모든 페이지 하단에 네이버 블로그 바로가기 링크 추가"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.19.0",
       "project_type": "react",
