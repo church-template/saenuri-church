@@ -112,6 +112,18 @@ describe("SermonDetail 교인만·서명 주소", () => {
     render(<SermonDetail id={7} />);
     expect(screen.queryByText("교인만")).toBeNull();
   });
+  // #46 — 메뉴 전체가 교인만이면 글 단위 표시는 의미가 없어 누구에게도 보이지 않는다.
+  it("메뉴가 교인만이면 표시한 설교에도 배지 없음", () => {
+    useSermonMock.mockReturnValue(state({ data: { ...sermon, membersOnly: true } }));
+    render(<SermonDetail id={7} menuLevel="MEMBERS" />);
+    expect(screen.getByRole("heading", { level: 1 })).toBeDefined();
+    expect(screen.queryByText("교인만")).toBeNull();
+  });
+  it("회귀: 메뉴가 누구나면 표시한 설교에 배지", () => {
+    useSermonMock.mockReturnValue(state({ data: { ...sermon, membersOnly: true } }));
+    render(<SermonDetail id={7} menuLevel="PUBLIC" />);
+    expect(screen.getByText("교인만")).toBeDefined();
+  });
   // 교인만 설교의 본문 이미지는 무서명 주소가 404 — 응답 mediaUrls의 서명 주소로 그린다(스펙 6.2).
   // 이 저장소 markdown 계약: 맵을 주면 missing "drop"(키 없는 이미지는 그리지 않음), 맵이 없으면 전부 무서명.
   it("본문에 응답의 mediaUrls를 '키 없으면 뺌' 규칙으로 넘기고, 필드가 없으면 넘기지 않는다", () => {
