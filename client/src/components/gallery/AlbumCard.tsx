@@ -14,7 +14,8 @@ const focusRing =
   "focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas rounded-xl";
 
 // 앨범 카드 — 16:9 썸네일(첫 사진, 없으면 플레이스홀더) + 제목 + 메타. department-card 호버 재사용.
-export function AlbumCard({ album }: { album: GalleryAlbumCardResponse }) {
+// showBadge: 메뉴 전체가 교인만이면 글 단위 교인만 배지를 그리지 않는다(#46).
+export function AlbumCard({ album, showBadge = true }: { album: GalleryAlbumCardResponse; showBadge?: boolean }) {
   // thumbnailUrl: null=썸네일 없음(플레이스홀더), 없음(구 백엔드)=thumbnailMediaId로 조립(#32).
   const thumb = gallerySrc(album.thumbnailMediaId, album.thumbnailUrl);
   return (
@@ -41,7 +42,7 @@ export function AlbumCard({ album }: { album: GalleryAlbumCardResponse }) {
         <div className="p-xl">
           <div className="flex flex-wrap items-center gap-xs">
             <h3 className={cn(typo.titleMd, "text-ink")}>{album.title}</h3>
-            {album.membersOnly ? <MembersOnlyBadge /> : null}
+            {showBadge && album.membersOnly ? <MembersOnlyBadge /> : null}
           </div>
           <p className={cn(typo.datetime, "mt-xxs text-muted")}>
             {formatDate(album.createdAt)} · 사진 {album.photoCount}장
