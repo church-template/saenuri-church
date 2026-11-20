@@ -522,11 +522,16 @@ export const MAIN_WORSHIP = {
   weekdayLabel: "주중",
 } as const;
 
+// 푸터 교회 정보 칸의 블로그 링크 문구(#51).
+export const FOOTER_BLOG_LABEL = "네이버 블로그";
+
 // 메인 데이터 섹션 타이틀·빈 상태 문구(가이드 13.2 빈 배열 처리) — 콘텐츠 하드코딩 금지(12장).
 export const MAIN_SECTIONS = {
   sermons: { eyebrow: "SERMON", title: "최신 설교", empty: "등록된 설교가 없습니다", more: "전체 설교", moreHref: "/sermons" },
   notices: { title: "공지", empty: "등록된 공지가 없습니다", more: "전체", moreHref: "/notices" },
   events: { title: "다가오는 일정", empty: "등록된 일정이 없습니다", more: "전체", moreHref: "/events" },
+  // 네이버 블로그 최근 글(#51). 글 링크·"블로그 가기"는 외부(새 탭) — 주소는 church.ts의 CHURCH_BLOG_URL.
+  blog: { title: "블로그 새 글", more: "네이버 블로그 가기" },
   // 소식 섹션(설교·공지·일정)만 불러오기 실패했을 때 그 자리에 표시하는 문구. 페이지 나머지는 정상.
   error: "지금은 교회 소식을 불러올 수 없어요. 잠시 후 다시 시도해 주세요.",
 } as const;

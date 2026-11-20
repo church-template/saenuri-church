@@ -5,11 +5,13 @@ import { WorshipSection } from "@/components/main/WorshipSection";
 import { SermonSection } from "@/components/main/SermonSection";
 import { NoticeSection } from "@/components/main/NoticeSection";
 import { EventSection } from "@/components/main/EventSection";
+import { BlogSection } from "@/components/main/BlogSection";
 import { MainFeedsError } from "@/components/main/MainFeedsError";
 import { CtaBand } from "@/components/shell/CtaBand";
 import { Container } from "@/components/shell/Container";
 import { SiteFooter } from "@/components/shell/SiteFooter";
 import { getMain } from "@/lib/api/main";
+import { getBlogPosts } from "@/lib/blog/naverRss";
 import { getVisibility, resolveVisibility } from "@/lib/api/visibility";
 import { cn } from "@/lib/utils";
 import { MinistryCards } from "@/components/main/MinistryCards";
@@ -25,12 +27,13 @@ export default async function Home() {
   await connection();
   // 소식 fetch만 격리: 실패해도 여기서 null로 흡수해 Hero·연혁·사역·예배시간·CTA·푸터는 그대로 산다.
   // 설정 조회는 실패해도 null(폴백 = 지금 동작)이라 따로 격리하지 않는다.
-  const [main, visibility] = await Promise.all([
+  const [main, visibility, blogPosts] = await Promise.all([
     getMain().catch((error: unknown) => {
       console.error(error); // 서버 로깅 지점, 화면 비노출(app/error.tsx 관례와 동일)
       return null;
     }),
     getVisibility(),
+    getBlogPosts(), // 실패·글 없음이면 빈 배열 — 블로그 구간만 숨는다(#51)
   ]);
   // 교인만인 공지·일정은 홈 소식 밴드에서 그 칸째 뺀다(스펙 5.4). 둘 다 빠지면 빈 밴드를 남기지 않는다.
   // 설교 섹션은 그대로(글 단위 교인만은 백엔드가 뺀다).
@@ -61,6 +64,8 @@ export default async function Home() {
         ) : (
           <MainFeedsError />
         )}
+        {/* 네이버 블로그 최근 글 — 교회 서버 소식과 따로 산다(백엔드가 죽어도 나오고, 네이버가 죽어도 홈은 산다) */}
+        <BlogSection posts={blogPosts} />
       </HeroHeaderSync>
       <CtaBand />
       <SiteFooter />

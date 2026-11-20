@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 import { Container } from "./Container";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
@@ -10,7 +11,9 @@ import {
   CHURCH_ADDRESS,
   CHURCH_PHONE,
   CHURCH_EMAIL,
+  CHURCH_BLOG_URL,
 } from "@/constants/church";
+import { FOOTER_BLOG_LABEL } from "@/constants/content";
 import { FOOTER_COLUMNS } from "@/constants/navigation";
 
 // footer-light(교회 정보 + 링크열) + legal-band(저작권). canvas 배경, 헤어라인 구분.
@@ -39,6 +42,19 @@ export function SiteFooter() {
             <br />
             {CHURCH_EMAIL}
           </address>
+          {/* 교회 블로그(#51) — 바깥 사이트라 새 탭. 주소가 비면 줄째 숨긴다. 48px 터치 타깃(고령 사용자). */}
+          {CHURCH_BLOG_URL ? (
+            <a
+              href={CHURCH_BLOG_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(typo.bodyMd, "inline-flex min-h-12 items-center gap-xxs self-start text-body hover:text-ink")}
+            >
+              {FOOTER_BLOG_LABEL}
+              <ExternalLink size={20} aria-hidden />
+              <span className="sr-only">(새 탭에서 열림)</span>
+            </a>
+          ) : null}
         </div>
         {FOOTER_COLUMNS.map((col) => (
           <nav key={col.title} aria-label={col.title} className="flex flex-col gap-xs">

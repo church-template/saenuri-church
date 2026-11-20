@@ -50,6 +50,14 @@ vi.mock("@/lib/api/main", () => ({
   })),
 }));
 
+// 블로그 RSS는 바깥 네트워크 — 테스트에서 실제로 부르지 않게 막는다(#51).
+const { getBlogPostsMock } = vi.hoisted(() => ({
+  getBlogPostsMock: vi.fn(async () => [
+    { title: "추수감사절을 맞이하며", url: "https://blog.naver.com/snrbtc/1", date: "2026-11-09", image: null as string | null },
+  ]),
+}));
+vi.mock("@/lib/blog/naverRss", () => ({ getBlogPosts: getBlogPostsMock }));
+
 const { getVisibilityMock } = vi.hoisted(() => ({ getVisibilityMock: vi.fn(async () => null as unknown) }));
 vi.mock("@/lib/api/visibility", async (orig) => ({
   ...(await orig<typeof import("@/lib/api/visibility")>()),
@@ -177,5 +185,19 @@ describe("Home (메인)", () => {
     expect(screen.getByText("전교인 수련회 안내")).toBeDefined();
     expect(screen.getByText("성가대 연습")).toBeDefined();
     expect(container.querySelector("[data-testid='main-news-band']")).not.toBeNull();
+  });
+
+  it("블로그 새 글 구간 — 소식 로드가 실패해도 나오고, 글이 없으면 구간째 없다(#51)", async () => {
+    stubBrowserApis();
+    vi.mocked(getMain).mockRejectedValueOnce(new Error("백엔드 다운"));
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    const first = render(await Home());
+    expect(screen.getByRole("heading", { name: MAIN_SECTIONS.blog.title })).toBeDefined();
+    expect(screen.getByText("추수감사절을 맞이하며").closest("a")?.getAttribute("href")).toBe("https://blog.naver.com/snrbtc/1");
+    first.unmount();
+
+    getBlogPostsMock.mockResolvedValueOnce([]);
+    render(await Home());
+    expect(screen.queryByRole("heading", { name: MAIN_SECTIONS.blog.title })).toBeNull();
   });
 });

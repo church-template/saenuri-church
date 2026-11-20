@@ -1,7 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { CHURCH_NAME, CHURCH_ADDRESS, CHURCH_PHONE } from "@/constants/church";
+import { CHURCH_NAME, CHURCH_ADDRESS, CHURCH_PHONE, CHURCH_BLOG_URL } from "@/constants/church";
+import { FOOTER_BLOG_LABEL } from "@/constants/content";
 import { FOOTER_COLUMNS } from "@/constants/navigation";
 
 vi.mock("next/link", () => ({
@@ -37,5 +38,13 @@ describe("SiteFooter", () => {
     render(<SiteFooter />);
     const tel = screen.getByRole("link", { name: CHURCH_PHONE }) as HTMLAnchorElement;
     expect(tel.getAttribute("href")).toBe(`tel:${CHURCH_PHONE}`);
+  });
+
+  it("교회 정보 칸에 네이버 블로그 링크가 새 탭으로 열린다", () => {
+    render(<SiteFooter />);
+    const link = screen.getByText(FOOTER_BLOG_LABEL).closest("a");
+    expect(link?.getAttribute("href")).toBe(CHURCH_BLOG_URL);
+    expect(link?.getAttribute("target")).toBe("_blank");
+    expect(link?.getAttribute("rel")).toContain("noopener");
   });
 });
