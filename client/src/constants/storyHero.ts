@@ -7,7 +7,7 @@ const H = "/assets/history";
 const C = "/assets/church";
 
 export const STORY_HERO: StoryHeroContent = {
-  intro: { mark: "축복합니다", sub: "새누리교회", bg: `${C}/intro-sign.webp` },
+  intro: { mark: ["환영합니다", "축복합니다"], sub: "새누리교회", bg: `${C}/sanctuary.webp` },
   split: {
     eyebrow: "SINCE 1990 · 용인 보정동",
     title: ["열두 명의 가정예배가", "기적의 공동체가", "되었습니다"],

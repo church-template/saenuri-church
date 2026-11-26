@@ -462,11 +462,13 @@ export interface SpecialService {
   rule?: SpecialRule;
 }
 export const SPECIAL_SERVICES: SpecialService[] = [
-  { name: "부활절 예배", date: "부활절 주일", time: "주일예배 시간", desc: "예수님의 부활을 기념하는 예배", rule: { type: "easter" } },
-  // 창립일(7월 8일)에 맞춰 7월 둘째 주일로 가정 — 실제 기념 주일이 다르면 n만 고친다.
-  { name: "창립기념 감사예배", date: "7월", time: "주일예배 시간", desc: "1990년 7월 8일 창립을 기념하며 감사드리는 예배", rule: { type: "nthSunday", month: 7, n: 2 } },
-  // 추수감사 주일 = 한국 교회 관례인 11월 셋째 주일로 맞춤.
-  { name: "추수감사절 예배", date: "추수감사 주일", time: "주일예배 시간", desc: "한 해의 은혜에 감사드리는 예배", rule: { type: "nthSunday", month: 11, n: 3 } },
+  // 날짜·시간은 교회가 알려 준 대로. 시간을 받지 못한 예배는 "추후 안내"로 둔다(지어내지 않는다).
+  { name: "송구영신예배", date: "12월 31일", time: "밤 11:30", desc: "한 해를 보내고 새해를 맞는 예배", rule: { type: "fixed", month: 12, day: 31 } },
+  { name: "신년예배", date: "1월 첫째 주일", time: "오전 11:00", desc: "새해 첫 주일에 드리는 예배", rule: { type: "nthSunday", month: 1, n: 1 } },
+  { name: "부활절예배", date: "부활절 주일", time: "주일예배 시간", desc: "예수님의 부활을 기념하는 예배", rule: { type: "easter" } },
+  { name: "창립예배", date: "7월 8일", time: "추후 안내", desc: "1990년 7월 8일 창립을 기념하며 감사드리는 예배", rule: { type: "fixed", month: 7, day: 8 } },
+  { name: "추수감사절예배", date: "11월 셋째 주일", time: "주일예배 시간", desc: "한 해의 은혜에 감사드리는 예배", rule: { type: "nthSunday", month: 11, n: 3 } },
+  { name: "성탄절예배", date: "12월 25일", time: "추후 안내", desc: "예수님의 탄생을 기뻐하는 예배", rule: { type: "fixed", month: 12, day: 25 } },
 ];
 
 export const CTA_BAND = {

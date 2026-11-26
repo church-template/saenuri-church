@@ -97,11 +97,10 @@ describe("StoryHero", () => {
     expect(after.defaultPrevented).toBe(false);
   });
 
-  it("인트로 문구는 서버 HTML에 이미 있다(문구 등장은 CSS 애니메이션)", () => {
+  it("인트로 문구는 서버 HTML에 이미 있다(한 줄씩, 움직임 없이)", () => {
     stubMotion(false);
-    // 글자마다 span으로 쪼개지므로 태그를 걷어낸 텍스트로 확인한다
     const text = renderToString(<StoryHero content={STORY_HERO} />).replace(/<[^>]+>/g, "");
-    expect(text).toContain(STORY_HERO.intro.mark);
+    for (const line of STORY_HERO.intro.mark) expect(text).toContain(line);
   });
 
   it("스크롤 위치가 복원된 채로 열리면 인트로를 건너뛰고 현재 위치(헤더 솔리드)를 반영한다", () => {
