@@ -13,7 +13,7 @@ import styles from "./StoryHero.module.css";
 // 과거→현재 장 → 마지막 "지금" 장(앞 카드가 풀스크린). 모든 장은 고정 무대에서 크로스페이드로 넘어간다.
 // 장 번호는 window 스크롤에서 chapterAt으로 계산한다.
 // 스플래시 — 사진판이 준비된 순간부터 잰다(휴대폰은 사진이 늦게 와 마운트 기준이면 문구를 거의 못 본다).
-const INTRO_HOLD_MS = 2800; // 준비 후 유지 시간: 글자 등장(~1.35s) + 완성 문구 ~1.5s. 이 동안 스크롤 입력을 막는다
+const INTRO_HOLD_MS = 2800; // 준비 후 문구를 보여 주는 시간. 이 동안 스크롤 입력을 막는다
 const INTRO_WAIT_MAX_MS = 2500; // 사진이 끝내 안 오면 이만큼만 기다리고 시작한다
 const SCROLL_KEYS = new Set(["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "]);
 
@@ -231,14 +231,9 @@ export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHe
       {/* eslint-disable-next-line @next/next/no-img-element -- 연출 미디어 */}
       <img ref={introImgRef} src={intro.bg} alt="" fetchPriority="high" />
       <div className={styles.mark} aria-hidden>
-        {/* 한 글자씩 떠오르게 글자마다 순번(--i)을 준다 */}
-        <b>
-          {Array.from(intro.mark).map((ch, i) => (
-            <span key={i} className={styles.ch} style={{ "--i": i } as CSSProperties}>
-              {ch}
-            </span>
-          ))}
-        </b>
+        {intro.mark.map((line) => (
+          <b key={line}>{line}</b>
+        ))}
         <span className={styles.sub}>{intro.sub}</span>
       </div>
     </div>

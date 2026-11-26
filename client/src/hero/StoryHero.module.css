@@ -68,16 +68,10 @@
 
 .mark { position: absolute; inset: 0; z-index: 1; display: grid; place-content: center; text-align: center; pointer-events: none; text-shadow: 0 1px 4px rgba(10, 15, 31, 0.55), 0 2px 28px rgba(10, 15, 31, 0.6); }
 .mark b { font-size: clamp(56px, 11vw, 136px); font-weight: 700; letter-spacing: -0.04em; line-height: 1.1; white-space: nowrap; } /* DESIGN 예외: 인트로 문구만 700 */
-.mark .sub { margin-top: var(--spacing-base); font-size: 26px; font-weight: 600; letter-spacing: 0.08em; animation: mark-in 0.8s 0.55s ease both; }
-/* 글자 등장 — 아래에서 튀어 오르며 0.08s 간격 */
-.ch { display: inline-block; animation: ch-in 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; animation-delay: calc(var(--i) * 80ms); }
-@keyframes ch-in { from { opacity: 0; transform: translateY(0.4em) scale(0.85); } }
-@keyframes mark-in { from { opacity: 0; transform: translateY(12px); } }
-@media (prefers-reduced-motion: reduce) { .mark .sub, .ch { animation: none; } }
-/* 스플래시 — 사진판이 준비되기 전엔 사진은 숨기고(어두운 무대) 글자 등장은 멈춰 둔다. 준비되면 함께 시작 */
+.mark .sub { margin-top: var(--spacing-base); font-size: 26px; font-weight: 600; letter-spacing: 0.08em; }
+/* 스플래시 — 사진판이 준비되기 전엔 사진·문구를 숨긴다(어두운 무대). 준비되면 문구는 움직임 없이 그대로 나타난다 */
 .intro img { transition: opacity 0.4s ease; }
-.root:not([data-ready]) .intro img { opacity: 0; }
-.root:not([data-ready]) .ch, .root:not([data-ready]) .mark .sub { animation-play-state: paused; }
+.root:not([data-ready]) .intro img, .root:not([data-ready]) .mark { opacity: 0; }
 
 /* 장 묶음 — 데스크톱은 무대 전체를 덮는 투명 판(자식이 각자 절대 배치) */
 /* 카드 묶음 폭은 창 전체가 아니라 컨테이너 안쪽 폭의 42% — 창 폭 기준이면 넓은 화면(2560 100%)에서 글 영역이 수십 px로 쪼그라든다 */

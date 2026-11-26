@@ -17,14 +17,14 @@ describe("WorshipSpecial", () => {
     expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(SPECIAL_SERVICES.length);
     expect(screen.getAllByRole("listitem")).toHaveLength(SPECIAL_SERVICES.length);
 
-    const first = SPECIAL_SERVICES[0]; // 부활절 예배 — name/date/desc는 유일값, time은 공통("주일예배 시간")
+    const first = SPECIAL_SERVICES[0]; // 송구영신예배 — name/date/time/desc 모두 유일값
     expect(screen.getByText(first.name)).toBeDefined();
     expect(screen.getByText(first.date)).toBeDefined();
-    expect(screen.getAllByText(first.time)).toHaveLength(SPECIAL_SERVICES.length);
+    expect(screen.getByText(first.time)).toBeDefined();
     expect(screen.getByText(first.desc)).toBeDefined();
   });
 
-  it("다음 특별 예배 띠 — 추수감사주일 다음 날이면 내년 부활절", () => {
+  it("다음 특별 예배 띠 — 추수감사주일 다음 날이면 성탄절", () => {
     vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
     vi.useFakeTimers({ toFake: ["Date"] });
     vi.setSystemTime(new Date("2026-11-16T09:00:00+09:00"));
@@ -32,8 +32,20 @@ describe("WorshipSpecial", () => {
     vi.useRealTimers();
 
     expect(screen.getByText(WORSHIP.specialNextLabel)).toBeDefined();
-    expect(screen.getAllByText("부활절 예배")).toHaveLength(2); // 띠 + 목록
-    expect(screen.getByText("3월 28일 일요일 · 주일예배 시간")).toBeDefined();
-    expect(screen.getByText("132일 남았어요")).toBeDefined();
+    expect(screen.getAllByText("성탄절예배")).toHaveLength(2); // 띠 + 목록
+    expect(screen.getByText("12월 25일 금요일 · 추후 안내")).toBeDefined();
+    expect(screen.getByText("39일 남았어요")).toBeDefined();
+  });
+
+  it("다음 특별 예배 띠 — 새해 첫날이면 그 주 주일의 신년예배", () => {
+    vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(new Date("2027-01-01T09:00:00+09:00"));
+    render(<WorshipSpecial />);
+    vi.useRealTimers();
+
+    expect(screen.getAllByText("신년예배")).toHaveLength(2);
+    expect(screen.getByText("1월 3일 일요일 · 오전 11:00")).toBeDefined();
+    expect(screen.getByText("2일 남았어요")).toBeDefined();
   });
 });

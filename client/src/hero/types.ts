@@ -40,7 +40,7 @@ export interface StoryChapter {
 }
 
 export interface StoryHeroContent {
-  intro: { mark: string; sub: string; bg: string }; // 첫 화면 커튼 — bg 사진 위 문구
+  intro: { mark: string[]; sub: string; bg: string }; // 첫 화면 커튼 — bg 사진 위 문구(mark는 한 줄씩)
   split: {
     eyebrow: string;
     /** 제목 줄 — highlight와 같은 문자열 조각은 강조색 */
