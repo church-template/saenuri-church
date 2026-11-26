@@ -1,14 +1,40 @@
 {
   "metadata": {
-    "lastUpdated": "2026-11-20T12:25:51Z",
-    "currentVersion": "0.20.0",
+    "lastUpdated": "2026-11-26T16:18:17Z",
+    "currentVersion": "0.21.0",
     "projectType": "react",
     "projectTypes": [
       "react"
     ],
-    "totalReleases": 23
+    "totalReleases": 24
   },
   "releases": [
+    {
+      "version": "0.21.0",
+      "project_type": "react",
+      "project_types": [
+        "react"
+      ],
+      "date": "2026-11-26",
+      "pr_number": 56,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **새 기능**\n  * 홈 첫 화면을 예배당 사진과 \"환영합니다 축복합니다\" 문구로 바꿈\n  * 특별 예배를 절기예배 6개로 새로 안내\n\n* **개선**\n  * 홈 첫 화면 문구가 움직임 없이 차분하게 나타남",
+      "parsed_changes": {
+        "새_기능": {
+          "title": "새 기능",
+          "items": [
+            "홈 첫 화면을 예배당 사진과 \"환영합니다 축복합니다\" 문구로 바꿈",
+            "특별 예배를 절기예배 6개로 새로 안내"
+          ]
+        },
+        "개선": {
+          "title": "개선",
+          "items": [
+            "홈 첫 화면 문구가 움직임 없이 차분하게 나타남"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "0.20.0",
       "project_type": "react",
