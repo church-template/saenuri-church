@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/Button";
+import { PhotoViewer } from "@/components/common/PhotoViewer";
 import { EmptyState } from "@/components/common/EmptyState";
 import { cn } from "@/lib/utils";
-import { typo } from "@/constants/typography";
 import type { PhotoGroup } from "@/constants/content";
 
 const focusRing =
@@ -21,16 +18,6 @@ export function ChurchPhotos({ empty, groups }: { empty: string; groups: PhotoGr
 
   const activeGroup = groups.find((g) => g.key === activeKey) ?? groups[0];
   const photos = activeGroup?.photos ?? [];
-  const open = lightboxIndex !== null;
-  const current = open ? photos[lightboxIndex] : null;
-  const hasPrev = open && lightboxIndex > 0;
-  const hasNext = open && lightboxIndex < photos.length - 1;
-
-  const go = (delta: number) => {
-    if (lightboxIndex === null) return;
-    const next = lightboxIndex + delta;
-    if (next >= 0 && next < photos.length) setLightboxIndex(next);
-  };
 
   // groups가 비어 주입되면(외부 데이터) 화면이 빈 채로 남지 않도록 최소 fallback.
   if (groups.length === 0) {
@@ -85,64 +72,7 @@ export function ChurchPhotos({ empty, groups }: { empty: string; groups: PhotoGr
         ))}
       </Tabs>
 
-      <Dialog
-        open={open}
-        onOpenChange={(o) => {
-          if (!o) setLightboxIndex(null);
-        }}
-      >
-        <DialogContent
-          className="max-w-[var(--container-lightbox)]"
-          aria-describedby={undefined}
-          onKeyDown={(e) => {
-            if (e.key === "ArrowLeft") go(-1);
-            if (e.key === "ArrowRight") go(1);
-          }}
-        >
-          {/* a11y: 제목은 시각적으로 숨기되 aria 연결 유지 */}
-          <DialogTitle className="sr-only">
-            {activeGroup?.title} 사진 {open ? lightboxIndex + 1 : 0} / {photos.length}
-          </DialogTitle>
-
-          {current ? (
-            <div className="flex flex-col gap-sm">
-              <div className="relative flex items-center justify-center">
-                {/* eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸 */}
-                <img
-                  src={current.src}
-                  alt={current.alt}
-                  className="max-h-[70vh] w-auto rounded-md object-contain"
-                />
-                <Button
-                  type="button"
-                  variant="tertiary"
-                  iconOnly
-                  onClick={() => go(-1)}
-                  disabled={!hasPrev}
-                  aria-label="이전 사진"
-                  className="absolute left-xs top-1/2 -translate-y-1/2 rounded-full bg-surface-card/80 p-xs text-ink disabled:opacity-30"
-                >
-                  <ChevronLeft size={24} aria-hidden />
-                </Button>
-                <Button
-                  type="button"
-                  variant="tertiary"
-                  iconOnly
-                  onClick={() => go(1)}
-                  disabled={!hasNext}
-                  aria-label="다음 사진"
-                  className="absolute right-xs top-1/2 -translate-y-1/2 rounded-full bg-surface-card/80 p-xs text-ink disabled:opacity-30"
-                >
-                  <ChevronRight size={24} aria-hidden />
-                </Button>
-              </div>
-              <div className={cn(typo.datetime, "text-center text-muted")}>
-                {lightboxIndex! + 1} / {photos.length}
-              </div>
-            </div>
-          ) : null}
-        </DialogContent>
-      </Dialog>
+      <PhotoViewer photos={photos} title={activeGroup?.title ?? ""} index={lightboxIndex} onIndexChange={setLightboxIndex} />
     </>
   );
 }

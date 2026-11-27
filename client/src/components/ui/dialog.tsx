@@ -34,8 +34,11 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = forwardRef<
   ElementRef<typeof DialogPrimitive.Content>,
-  ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+    /** 닫기(X) 버튼 위치·모양 덮어쓰기 — 사진이 꽉 찬 창에서 X가 사진 위에 올라갈 때 */
+    closeClassName?: string;
+  }
+>(({ className, closeClassName, children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
@@ -55,6 +58,7 @@ const DialogContent = forwardRef<
         className={cn(
           "absolute right-base top-base rounded-sm p-xxs text-muted transition-colors hover:text-ink",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas",
+          closeClassName,
         )}
         aria-label="닫기"
       >

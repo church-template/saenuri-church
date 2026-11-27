@@ -1,9 +1,5 @@
 "use client";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/Button";
-import { cn } from "@/lib/utils";
-import { typo } from "@/constants/typography";
+import { PhotoViewer } from "@/components/common/PhotoViewer";
 import { gallerySrc } from "@/lib/mediaUrl";
 import type { GalleryPhotoResponse } from "@/lib/api/types";
 
@@ -14,87 +10,15 @@ interface PhotoLightboxProps {
   onIndexChange: (index: number | null) => void;
 }
 
-// 사진 라이트박스 — Radix Dialog 재사용(ESC·포커스트랩·스크롤락·내장 X 닫기 제공).
-// 카드 표면(bg-surface-card)을 유지해 내장 X 닫기 버튼이 가시적. 폭만 --container-lightbox로 확장.
+// 회원 갤러리 사진 라이트박스 — 공용 PhotoViewer에 갤러리 사진(미디어 id·서명 주소)을 맞춰 넘긴다.
 export function PhotoLightbox({ photos, albumTitle, index, onIndexChange }: PhotoLightboxProps) {
-  const open = index !== null;
-  const current = open ? photos[index] : null;
-  // url: null이면 열 주소가 없다(id로 조립하면 차단 뒤 404). 필드가 없을 때(구 백엔드)만 mediaId로 폴백(#32).
-  const currentSrc = current ? gallerySrc(current.mediaId, current.url) : null;
-  const hasPrev = open && index > 0;
-  const hasNext = open && index < photos.length - 1;
-
-  const go = (delta: number) => {
-    if (index === null) return;
-    const next = index + delta;
-    if (next >= 0 && next < photos.length) onIndexChange(next);
-  };
-
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(o) => {
-        if (!o) onIndexChange(null);
-      }}
-    >
-      <DialogContent
-        className="max-w-[var(--container-lightbox)]"
-        aria-describedby={undefined}
-        onKeyDown={(e) => {
-          if (e.key === "ArrowLeft") go(-1);
-          if (e.key === "ArrowRight") go(1);
-        }}
-      >
-        {/* a11y: 제목은 시각적으로 숨기되 aria 연결 유지(가이드 15.2) */}
-        <DialogTitle className="sr-only">
-          {albumTitle} 사진 {open ? index + 1 : 0} / {photos.length}
-        </DialogTitle>
-
-        {current ? (
-          <div className="flex flex-col gap-sm">
-            <div className="relative flex items-center justify-center">
-              {currentSrc ? (
-                // eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸
-                <img
-                  src={currentSrc}
-                  alt={current.caption ?? ""}
-                  /* max-h-[70vh]: 뷰포트 높이 제약(색·간격 토큰이 아닌 레이아웃 값) — dept-hero 70vh 선례와 동일 */
-                  className="max-h-[70vh] w-auto rounded-md object-contain"
-                />
-              ) : null}
-              {/* iconOnly 흡수: 오버레이 위치·크기·색 className이 마지막이라 iconOnly 기본값을 덮는다 */}
-              <Button
-                type="button"
-                variant="tertiary"
-                iconOnly
-                onClick={() => go(-1)}
-                disabled={!hasPrev}
-                aria-label="이전 사진"
-                className="absolute left-xs top-1/2 -translate-y-1/2 rounded-full bg-surface-card/80 p-xs text-ink disabled:opacity-30"
-              >
-                <ChevronLeft size={24} aria-hidden />
-              </Button>
-              <Button
-                type="button"
-                variant="tertiary"
-                iconOnly
-                onClick={() => go(1)}
-                disabled={!hasNext}
-                aria-label="다음 사진"
-                className="absolute right-xs top-1/2 -translate-y-1/2 rounded-full bg-surface-card/80 p-xs text-ink disabled:opacity-30"
-              >
-                <ChevronRight size={24} aria-hidden />
-              </Button>
-            </div>
-            <div className={cn(typo.datetime, "text-center text-muted")}>
-              {index! + 1} / {photos.length}
-            </div>
-            {current.caption ? (
-              <p className={cn(typo.caption, "text-center text-muted")}>{current.caption}</p>
-            ) : null}
-          </div>
-        ) : null}
-      </DialogContent>
-    </Dialog>
+    <PhotoViewer
+      // url: null이면 열 주소가 없다(id로 조립하면 차단 뒤 404). 필드가 없을 때(구 백엔드)만 mediaId로 폴백(#32).
+      photos={photos.map((p) => ({ src: gallerySrc(p.mediaId, p.url), alt: p.caption ?? "", caption: p.caption }))}
+      title={albumTitle}
+      index={index}
+      onIndexChange={onIndexChange}
+    />
   );
 }

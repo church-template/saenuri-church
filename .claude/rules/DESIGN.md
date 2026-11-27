@@ -581,9 +581,9 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   **스플래시처럼 동작한다** — 사진판이 준비되기 전엔 어두운 무대에서 문구를 숨겨 두고(사진이 끝내 안 오면 최대 2.5s 대기), 준비되면 사진과 문구가 함께 나타나
   2.8s 유지한 뒤 다른 장과 같은 0.9s 크로스페이드로 장 0에 넘어간다(스크롤 칸을 차지하지 않음). 시간을 마운트가 아니라 사진 준비 시점부터 재야 휴대폰(사진 늦게 도착)에서도 문구가 충분히 보인다. 인트로 동안은 휠·터치·키보드 스크롤 입력을 막아 끝까지 보여 준다. 인트로 동안 헤더 숨김(`SiteHeader concealed`).
   앞 카드(c3)는 장 0을 떠날 때 커지지 않는다 — 제자리에서 페이드아웃한 뒤 보이지 않을 때 풀스크린 자리로 옮긴다("지금" 장에서 풀스크린으로 페이드인).
-  **장 0(스플릿)**: 단체 사진 배경(blur 4px + 옅은 네이비 그라데이션) 위 좌측 글(eyebrow·`display-mega`·소개·예배 정보, 버튼 없음) + 우측 기울어 겹친 카드 3장(hover 시 흩어짐).
+  **장 0(스플릿)**: 단체 사진 배경(blur 4px + 옅은 네이비 그라데이션) 위 좌측 글(eyebrow·`display-mega`·소개·예배 정보, 버튼 없음) + 우측 기울어 겹친 카드 3장(hover 시 뒤 카드는 흩어지고 앞 카드는 바로 서며 1.03배).
   **과거 장**: 과거→현재 시간순, 데스크톱은 연도·제목 좌상단(연도 숫자 위치 모든 장 동일, top 18%)·설명·말씀 좌하단, 글 영역 오른쪽 끝은 카드 묶음 왼쪽 끝 + 32px(겹침 0), 좌우 끝은 헤더와 같은 컨테이너 가장자리. 휴대폰은 헤더 바로 아래부터 글 → 카드 세로 쌓기, 사진 2~3장은 우하단에 기울여 겹침(구텐베르크: 시작 좌상·종착 우하), 캡션은 카드 안쪽 하단. 과거일수록 바램(sepia .25 → .5, 화재 장 grayscale).
-  카드는 확대 없음(사진 크게 보기는 추후 교회 둘러보기 페이지). **마지막 "지금" 장**: 앞 카드가 풀스크린, 좌하단에 흰 교회 로고(96px, 모바일 72px) + 표어 한 줄(`now.line`, `{typography.display-lg}`), 덮개 없이 글자 그림자로만 가독성 확보. 우하단 "처음으로" 링크.
+  **카드는 모든 장이 같은 것 하나**(테두리 없는 `{rounded.lg}` 사진 카드 + 같은 hover — 과거 장 묶음도 장 0처럼 흩어진다, 단 과거 장은 캡션을 카드 안쪽 하단에 둔다). 카드를 누르면 `photo-viewer`로 사진 한 장 + 캡션을 크게 보여 준다(`ZoomPhoto`). 보이지 않는 장의 카드는 누를 수도, 탭으로 갈 수도 없다. **마지막 "지금" 장**: 앞 카드가 풀스크린, 좌하단에 흰 교회 로고(96px, 모바일 72px) + 표어 한 줄(`now.line`, `{typography.display-lg}`), 덮개 없이 글자 그림자로만 가독성 확보. 우하단 "처음으로" 링크.
   날짜는 "7월 8일"·"~ 2006년"처럼 풀어 쓴다(점 표기 금지). reduced-motion은 인트로·고정 없이 정적 세로 나열. 수치는 이슈 #1 설계 댓글이 단일 진실.
 - **`reading-spotlight`**: 목회자 인사말(`/about/pastor`) 본문의 리딩 강조. 본문을 **문장 span으로 쪼개** 스크롤에
   따라 **한 문장씩** 켠다 — 켜진 문장만 `{colors.ink}` + `{typography.body-xl}`(32px/600)로 부풀고, 나머지는
@@ -623,13 +623,17 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
 - **`department-card`**: 사역 부서 카드(목록·하위부서 공용). 16:9 부서 히어로 이미지 썸네일 + 이름
   `{typography.title-md}` + 인도자 `{typography.datetime}` `{colors.muted}`. `sermon-card` 호버(soft drop +
   썸네일 1.03 줌) 재사용. `/departments/{slug}`로 링크, 목록 카드 이미지 = 상세 히어로 이미지(목록↔상세 시각 연속성).
-- **`church-photos`**: 교회사진(`/about/photos`) 공개 페이지. 카테고리 토글(`Tabs` 재사용, 교회 내부/외부)로 사진 그리드를 통째 교체, 썸네일 클릭 시 `Dialog` 확대 모달(좌우 이동·키보드, 이동은 활성 그룹 내부). 콘텐츠는 `CHURCH_PHOTOS` 상수(`public/photos/**` 정적 에셋) 주입, 갤러리 미재사용(자체 컴포넌트)·`<img>` 프레젠테이션 셸. 정적 생성(API 호출 0).
+- **`church-photos`**: 교회사진(`/about/photos`) 공개 페이지. 카테고리 토글(`Tabs` 재사용, 교회 내부/외부)로 사진 그리드를 통째 교체, 썸네일 클릭 시 `photo-viewer`(좌우 이동·키보드, 이동은 활성 그룹 내부). 콘텐츠는 `CHURCH_PHOTOS` 상수(`public/photos/**` 정적 에셋) 주입, 갤러리 미재사용(자체 컴포넌트)·`<img>` 프레젠테이션 셸. 정적 생성(API 호출 0).
 - **`generation-ladder`**: 미션팀 목록(`/departments`). 카드 그리드 대신 **세대 순서(어린이→어른)로 한 줄에 세운다** —
   "3대가 함께"를 구조로 보여 준다. 왼쪽 2px `{colors.hairline}` 세로선 위에 `team-dot`, 행 = 세대 라벨 `{typography.datetime}` `{colors.muted}` +
   팀 이름 `{typography.title-lg}` + 한 줄 소개 `{typography.body-md}` + "자세히 보기" 텍스트 링크(48px 터치 타깃) + 우측 `snap-card`(사진이 확인된 팀만).
   설명은 처음부터 다 보인다(호버로 숨기지 않음 — 고령·모바일). 모바일은 글 아래 사진으로 세로 스택. 데이터는 `DEPARTMENTS`의 `team`·`generation`·`summary`·`snaps`. 목록 사진은 API 대표 사진(`heroMediaId`)이 있으면 그것, 없으면 `snaps` 첫 장(#32).
+- **`photo-viewer`**: 사진 크게 보기 — **사이트의 모든 사진 확대가 이 하나**(`common/PhotoViewer`: 홈 story-hero 카드·`snap-card`·교회사진·미션팀 활동 사진·회원 갤러리). 공용 `Dialog` + 폭 `--container-lightbox`,
+  사진 둘레 여백은 네 변 모두 `{spacing.base}`, 사진 `{rounded.md}`·최대 높이 70vh. 닫기 X는 사진 오른쪽 위 모서리 위에 반투명 흰 원판(`surface-card` 80%, `{rounded.full}`, 44px) + ink 아이콘 — 어떤 사진 위에서도 보인다.
+  여러 장이면 좌우 이동 버튼(같은 원판 결)·방향키·순번 `{typography.datetime}` muted, 한 장이면 모두 생략. 캡션이 있으면 아래 `{typography.caption}` muted.
+  **누르면 크게 보이는 사진 한 장**은 `common/ZoomPhoto`(버튼 + 사진 + 뷰어)를 쓴다 — 카드 겉모양은 각 카드가, 누름·확대는 ZoomPhoto가 맡는다. 버튼 이름은 "{캡션 또는 alt} 크게 보기".
 - **`snap-card`** / **`snap-pile`**: 홈 `story-hero`의 기울인 사진 카드를 세부 페이지로 가져온 것. 흰 테두리(`{colors.canvas}` 패딩) +
-  1px hairline + `{rounded.lg}` + soft drop(그림자 단계 추가 없음) + 캡션 `{typography.caption}`. ±2~5도 기울고 hover 시 바로 서며 1.03배.
+  1px hairline + `{rounded.lg}` + soft drop(그림자 단계 추가 없음) + 캡션 `{typography.caption}`. ±2~5도 기울고 hover 시 바로 서며 1.03배. 누르면 `photo-viewer`로 크게 본다.
   원본이 약 800px인 스냅 사진을 크게 깔지 않고 작게 쓰기 위한 형태다. `snap-pile`은 상세 소개 옆에 1~3장을 겹쳐 놓고 hover 시 흩어진다
   (사진이 없으면 미노출·글만). **캡션은 사진에 실제로 찍힌 것만 적는다** — 시기·행사·소속 팀을 추정해 붙이지 않는다. 캡션이 비면(API 앨범 사진, #32) 캡션 줄째 숨긴다(alt는 "{팀 이름} 활동 사진"). reduced-motion은 정적.
 - **`dept-year`**: 상세의 "함께하는 한 해" 구간. `{colors.surface-soft}` 밴드, 항목 = 상단 2px `{colors.ink}` 룰 + 시기 `{typography.datetime}` +

@@ -7,6 +7,11 @@ import { extendTailwindMerge } from "tailwind-merge";
 // 새 --text-* 토큰을 추가하면 이 목록에도 함께 등록해야 한다(utils.test.ts가 회귀 감시).
 const twMerge = extendTailwindMerge({
   extend: {
+    // 간격 토큰(globals.css @theme --spacing-*)도 등록한다 — 모르는 이름(base·xxs 등)은 충돌로 보지 않아
+    // 소비자가 넘긴 p-base가 기본 p-xl과 함께 남고 CSS 순서가 승자를 정했다. 새 --spacing-* 토큰도 여기에.
+    theme: {
+      spacing: ["xxs", "xs", "sm", "base", "md", "lg", "xl", "xxl", "section", "nav"],
+    },
     classGroups: {
       "font-size": [
         {

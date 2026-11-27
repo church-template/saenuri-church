@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { typo } from "@/constants/typography";
+import { ZoomPhoto } from "@/components/common/ZoomPhoto";
 import { REDUCED_MQ, useMediaFlag } from "@/lib/hooks/useMediaFlag";
 import { chapterAt } from "./storyChapter";
 import type { StoryCard, StoryChapter, StoryHeroContent } from "./types";
@@ -51,11 +52,19 @@ function Title({ lines, highlight }: { lines: string[]; highlight?: string }) {
   });
 }
 
-function Card({ card, className, priority }: { card: StoryCard; className?: string; priority?: boolean }) {
+interface CardProps {
+  card: StoryCard;
+  className?: string;
+  priority?: boolean;
+  /** 지금 장면에 보이지 않는 카드 — 탭 순서에서 뺀다 */
+  hidden?: boolean;
+}
+
+// 사진 카드 — 첫 화면·과거 장·움직임 줄이기 모두 이 하나를 쓴다. 누르면 크게 보기(ZoomPhoto).
+function Card({ card, className, priority, hidden }: CardProps) {
   return (
     <figure className={cn(styles.pc, className)}>
-      {/* eslint-disable-next-line @next/next/no-img-element -- 연출 미디어(CrossHero 선례) */}
-      <img src={card.src} alt={card.caption} fetchPriority={priority ? "high" : undefined} />
+      <ZoomPhoto src={card.src} alt={card.caption} caption={card.caption} className={styles.zoom} priority={priority} hidden={hidden} />
       <figcaption>{card.caption}</figcaption>
     </figure>
   );
@@ -280,9 +289,9 @@ export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHe
           <SplitCopy split={split} />
         </div>
         <div className={styles.pile}>
-          <Card card={split.cards[0]} className={styles.c1} />
-          <Card card={split.cards[1]} className={styles.c2} />
-          <Card card={split.cards[2]} className={styles.c3} priority />
+          <Card card={split.cards[0]} className={styles.c1} hidden={cur !== 0} />
+          <Card card={split.cards[1]} className={styles.c2} hidden={cur !== 0} />
+          <Card card={split.cards[2]} className={styles.c3} hidden={cur !== 0} priority />
         </div>
 
         {/* 장마다 글 + 사진 묶음을 한 덩어리로 — 데스크톱은 각자 절대 배치(글 좌상·카드 우하),
@@ -296,7 +305,7 @@ export default function StoryHero({ content, onSolid, onConcealHeader }: StoryHe
               <div className={cn(styles.pile2, ch.cards.length >= 3 ? styles.n3 : styles.n2, cur === i + 1 && styles.on)}>
                 <div className={styles.pileBox}>
                   {ch.cards.slice(0, 3).map((c) => (
-                    <Card key={c.src} card={c} />
+                    <Card key={c.src} card={c} hidden={cur !== i + 1} />
                   ))}
                 </div>
               </div>

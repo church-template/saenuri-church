@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Container } from "@/components/shell/Container";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { PhotoViewer } from "@/components/common/PhotoViewer";
 import { Button } from "@/components/ui/Button";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
@@ -29,16 +28,6 @@ export function DeptGallery({
 }) {
   const [index, setIndex] = useState<number | null>(null);
   const [shown, setShown] = useState(PAGE);
-  const open = index !== null;
-  const current = open ? photos[index] : null;
-  const hasPrev = open && index > 0;
-  const hasNext = open && index < photos.length - 1;
-
-  const go = (delta: number) => {
-    if (index === null) return;
-    const next = index + delta;
-    if (next >= 0 && next < photos.length) setIndex(next);
-  };
 
   return (
     <section className="bg-surface-soft py-section">
@@ -73,62 +62,7 @@ export function DeptGallery({
           </div>
         ) : null}
 
-        <Dialog
-          open={open}
-          onOpenChange={(o) => {
-            if (!o) setIndex(null);
-          }}
-        >
-          <DialogContent
-            className="max-w-[var(--container-lightbox)]"
-            aria-describedby={undefined}
-            onKeyDown={(e) => {
-              if (e.key === "ArrowLeft") go(-1);
-              if (e.key === "ArrowRight") go(1);
-            }}
-          >
-            <DialogTitle className="sr-only">
-              {heading} 사진 {open ? index + 1 : 0} / {photos.length}
-            </DialogTitle>
-            {current ? (
-              <div className="flex flex-col gap-sm">
-                <div className="relative flex items-center justify-center">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- 프레젠테이션 셸 */}
-                  <img
-                    src={current.src}
-                    alt={current.alt}
-                    className="max-h-[70vh] w-auto rounded-md object-contain"
-                  />
-                  <Button
-                    type="button"
-                    variant="tertiary"
-                    iconOnly
-                    onClick={() => go(-1)}
-                    disabled={!hasPrev}
-                    aria-label="이전 사진"
-                    className="absolute left-xs top-1/2 -translate-y-1/2 rounded-full bg-surface-card/80 p-xs text-ink disabled:opacity-30"
-                  >
-                    <ChevronLeft size={24} aria-hidden />
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="tertiary"
-                    iconOnly
-                    onClick={() => go(1)}
-                    disabled={!hasNext}
-                    aria-label="다음 사진"
-                    className="absolute right-xs top-1/2 -translate-y-1/2 rounded-full bg-surface-card/80 p-xs text-ink disabled:opacity-30"
-                  >
-                    <ChevronRight size={24} aria-hidden />
-                  </Button>
-                </div>
-                <div className={cn(typo.datetime, "text-center text-muted")}>
-                  {index! + 1} / {photos.length}
-                </div>
-              </div>
-            ) : null}
-          </DialogContent>
-        </Dialog>
+        <PhotoViewer photos={photos} title={heading} index={index} onIndexChange={setIndex} />
       </Container>
     </section>
   );
