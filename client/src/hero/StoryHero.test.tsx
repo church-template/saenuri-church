@@ -132,11 +132,22 @@ describe("StoryHero", () => {
     }
   });
 
-  it("사진 카드를 눌러도 확대 창이 열리지 않는다(카드 전용)", () => {
+  it("카드를 누르면 그 사진을 캡션과 함께 크게 보여 준다", () => {
     stubMotion(false);
     render(<StoryHero content={STORY_HERO} />);
-    const img = screen.getAllByAltText(STORY_HERO.chapters[1].cards[0].caption)[0];
-    fireEvent.click(img);
+    const card = STORY_HERO.chapters[1].cards[0];
     expect(screen.queryByRole("dialog")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: `${card.caption} 크게 보기` }));
+    const dialog = screen.getByRole("dialog");
+    expect(dialog.querySelector(`img[src="${card.src}"]`)).not.toBeNull();
+    expect(dialog.textContent).toContain(card.caption);
+  });
+
+  it("움직임 줄이기에서도 카드를 눌러 크게 볼 수 있다", () => {
+    stubMotion(true);
+    render(<StoryHero content={STORY_HERO} />);
+    const card = STORY_HERO.split.cards[1];
+    fireEvent.click(screen.getByRole("button", { name: `${card.caption} 크게 보기` }));
+    expect(screen.getByRole("dialog").querySelector(`img[src="${card.src}"]`)).not.toBeNull();
   });
 });

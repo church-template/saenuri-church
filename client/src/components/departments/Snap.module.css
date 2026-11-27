@@ -18,6 +18,8 @@
   object-fit: cover;
   border-radius: var(--radius-sm);
 }
+.zoom { border-radius: var(--radius-sm); }
+.zoom:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 .snap figcaption {
   padding: var(--spacing-xs) var(--spacing-xxs) var(--spacing-sm);
 }

@@ -23,3 +23,19 @@ describe("cn — 커스텀 타이포 토큰 병합", () => {
     expect(cn("text-ink", "text-on-dark")).toBe("text-on-dark");
   });
 });
+
+// 간격 토큰(globals.css @theme --spacing-*) 중 base·xxs·xxl·section·nav는 tailwind-merge가 모르는 이름이라
+// `cn("p-xl", "p-base")`가 둘 다 남고 CSS 순서가 승자를 정했다 — Dialog에 넘긴 p-base가 무시된 원인.
+describe("cn — 커스텀 간격 토큰 병합", () => {
+  it("뒤에 준 간격 토큰이 앞의 것을 덮는다", () => {
+    expect(cn("p-xl", "p-base")).toBe("p-base");
+    expect(cn("p-xxs", "p-sm")).toBe("p-sm");
+    expect(cn("right-base top-base", "right-lg top-lg")).toBe("right-lg top-lg");
+    expect(cn("gap-base", "gap-xxl")).toBe("gap-xxl");
+    expect(cn("py-section", "py-base")).toBe("py-base");
+  });
+
+  it("다른 축의 간격은 함께 남는다", () => {
+    expect(cn("px-base", "py-xl")).toBe("px-base py-xl");
+  });
+});

@@ -39,7 +39,10 @@
 /* 장 0 카드 묶음 — 앞 카드(c3)는 마지막 장에서 풀스크린 */
 .pc { position: absolute; margin: 0; overflow: hidden; border-radius: var(--radius-lg); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
 .pc img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.pc figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 10px; font-size: 14px; line-height: 1.35; color: var(--color-on-dark); background: linear-gradient(transparent, rgba(10, 15, 31, 0.75)); }
+/* 카드 전체가 "크게 보기" 버튼 — 캡션은 그 위에 얹힌 글이라 누름을 가로채지 않는다 */
+.zoom { all: unset; display: block; width: 100%; height: 100%; cursor: zoom-in; }
+.zoom:focus-visible { outline: 2px solid var(--color-on-dark); outline-offset: 2px; }
+.pc figcaption { pointer-events: none; position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 10px; font-size: 14px; line-height: 1.35; color: var(--color-on-dark); background: linear-gradient(transparent, rgba(10, 15, 31, 0.75)); }
 .pile .pc figcaption { display: none; }
 .pile .pc { z-index: 4; left: var(--x); top: var(--y); width: var(--w); height: var(--h); transform: rotate(var(--r));
   transition: left 0.9s cubic-bezier(0.65, 0, 0.35, 1), top 0.9s cubic-bezier(0.65, 0, 0.35, 1), width 0.9s cubic-bezier(0.65, 0, 0.35, 1), height 0.9s cubic-bezier(0.65, 0, 0.35, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), border-radius 0.9s, opacity 0.5s; }
@@ -76,7 +79,10 @@
 /* 장 묶음 — 데스크톱은 무대 전체를 덮는 투명 판(자식이 각자 절대 배치) */
 /* 카드 묶음 폭은 창 전체가 아니라 컨테이너 안쪽 폭의 42% — 창 폭 기준이면 넓은 화면(2560 100%)에서 글 영역이 수십 px로 쪼그라든다 */
 .chap { --pile2-w: calc((100% - 2 * var(--edge)) * 0.42); position: absolute; inset: 0; z-index: 5; pointer-events: none; }
-.pileBox { position: absolute; inset: 0; }
+/* 카드 상자는 비율을 고정해(묶음 폭 기준) 세로 가운데에 둔다 — 높이 %로 카드를 놓으면 창 높이에 따라 마지막 카드가 위 두 장과 벌어져 바닥에 붙었다 */
+.pileBox { position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%); }
+.n3 .pileBox { aspect-ratio: 100 / 74; }
+.n2 .pileBox { aspect-ratio: 100 / 67; }
 /* 과거 장 글 — 좌상단에 연도·제목(연도 위치 모든 장 동일, top 18%), 좌하단에 설명·말씀(margin-top: auto).
    오른쪽 끝은 카드 묶음(.pile2) 왼쪽 끝 + 간격으로 잡아 어떤 폭에서도 카드와 겹치지 않는다. */
 .copy { position: absolute; z-index: 5; left: var(--edge); right: calc(var(--edge) + var(--pile2-w) + var(--spacing-xl)); top: 18%; bottom: var(--spacing-xxl); display: flex; flex-direction: column; opacity: 0; transform: translateY(18px); transition: opacity 0.6s 0.25s, transform 0.6s 0.25s; word-break: keep-all; text-wrap: pretty; pointer-events: none; text-shadow: 0 1px 4px rgba(10, 15, 31, 0.55), 0 2px 24px rgba(10, 15, 31, 0.6); }
@@ -92,17 +98,24 @@
 
 /* 과거 장 카드 묶음 — 우하단(구텐베르크 종착) */
 .pile2 { position: absolute; z-index: 4; right: var(--edge); bottom: 28px; width: var(--pile2-w); height: 62%; pointer-events: none; }
-.pile2 .pc { border: 4px solid var(--color-canvas); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18); opacity: 0; transform: translateY(40px) rotate(var(--r)); transition: opacity 0.5s, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: auto; }
+/* 카드 모양·hover는 장 0 묶음(.pile)과 같다 — 테두리 없는 사진 카드, 묶음에 올리면 뒤 카드는 바깥으로 흩어지고 맨 앞 카드는 바로 서며 1.03배.
+   흩어짐은 --sx·--sy·--sr(기본 = 제자리)만 바꿔 등장 transform과 한 줄로 합친다. 보이지 않는 장의 카드는 누를 수 없다. */
+.pile2 .pc { --sx: 0%; --sy: 0%; --sr: var(--r); opacity: 0; transform: translateY(40px) rotate(var(--r)); transition: opacity 0.5s, transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .pile2 .pc img { height: auto; aspect-ratio: 4 / 3; }
-.pile2.on .pc { opacity: 1; transform: rotate(var(--r)); }
+.pile2.on .pc { opacity: 1; transform: translate(var(--sx), var(--sy)) rotate(var(--sr)); pointer-events: auto; }
 .pile2.on .pc:nth-child(2) { transition-delay: 0.12s; }
 .pile2.on .pc:nth-child(3) { transition-delay: 0.24s; }
-.pile2.on .pc:hover { transform: rotate(0) scale(1.04); z-index: 5; }
-.n2 .pc:nth-child(1) { --r: -5deg; width: 62%; left: 0; top: 10%; } /* 세 장 묶음처럼 겹쳐 쌓는다 */
-.n2 .pc:nth-child(2) { --r: 4deg; width: 60%; right: 0; top: 32%; }
-.n3 .pc:nth-child(1) { --r: -6deg; width: 54%; left: 0; top: 4%; }
-.n3 .pc:nth-child(2) { --r: 5deg; width: 52%; right: 0; top: 16%; }
-.n3 .pc:nth-child(3) { --r: -2deg; width: 58%; left: 18%; bottom: 0; }
+@media (hover: hover) {
+  .pile2.on .pileBox:hover .pc { transition-delay: 0s; }
+  .pile2.on .pileBox:hover .pc:nth-child(1) { --sx: -8%; --sy: -5%; --sr: calc(var(--r) - 4deg); }
+  .pile2.on .pileBox:hover .pc:nth-child(2) { --sx: 8%; --sy: -5%; --sr: calc(var(--r) + 4deg); }
+  .pile2.on .pileBox:hover .pc:last-child { transform: rotate(0) scale(1.03); }
+}
+.n2 .pc:nth-child(1) { --r: -5deg; width: 62%; left: 0; top: 0; } /* 세 장 묶음처럼 겹쳐 쌓는다(top은 상자 높이 기준, 카드 4:3) */
+.n2 .pc:nth-child(2) { --r: 4deg; width: 60%; right: 0; top: 33%; }
+.n3 .pc:nth-child(1) { --r: -6deg; width: 54%; left: 0; top: 0; }
+.n3 .pc:nth-child(2) { --r: 5deg; width: 52%; right: 0; top: 11%; }
+.n3 .pc:nth-child(3) { --r: -2deg; width: 58%; left: 18%; top: 40%; }
 
 .credit { position: absolute; z-index: 6; right: var(--spacing-lg); bottom: var(--spacing-base); margin: 0; color: var(--color-on-dark-soft); }
 .back { all: unset; cursor: pointer; position: absolute; z-index: 6; right: var(--spacing-xl); bottom: var(--spacing-xl); border-bottom: 1px solid currentColor; padding-bottom: 2px; text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5); opacity: 0; pointer-events: none; transition: opacity 0.5s; }
@@ -130,7 +143,7 @@
   .pile2 { position: relative; inset: auto; width: auto; height: auto; flex: 1 1 0; min-height: 0; margin-top: var(--spacing-base); container-type: size; }
   /* 카드 상자는 세로 계단 — 비율을 고정하고 남은 칸의 가로·세로 중 작은 쪽에 맞춘다(height 100% + max-width면 키 큰 화면에서
      비율이 깨져 카드가 위아래로 벌어진다). 카드 4:3 기준: 3장=폭 70%·4:5 상자, 2장=폭 74%·1:1 상자에 꼭 들어가는 top 값. */
-  .pileBox { position: relative; inset: auto; margin-inline: auto; }
+  .pileBox { position: relative; inset: auto; transform: none; margin-inline: auto; }
   .n3 .pileBox { width: min(100cqw, 100cqh * 4 / 5); aspect-ratio: 4 / 5; }
   .n2 .pileBox { width: min(100cqw, 100cqh); aspect-ratio: 1; }
   .pile2 .pc { left: auto; right: auto; bottom: auto; }
