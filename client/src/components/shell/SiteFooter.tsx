@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+import { NotebookPen } from "lucide-react";
 import { Container } from "./Container";
+import { YoutubeIcon } from "@/components/common/YoutubeIcon";
 import { typo } from "@/constants/typography";
 import { cn } from "@/lib/utils";
 import {
@@ -12,8 +13,9 @@ import {
   CHURCH_PHONE,
   CHURCH_EMAIL,
   CHURCH_BLOG_URL,
+  CHURCH_YOUTUBE_URL,
 } from "@/constants/church";
-import { FOOTER_BLOG_LABEL } from "@/constants/content";
+import { FOOTER_BLOG_LABEL, FOOTER_YOUTUBE_LABEL } from "@/constants/content";
 import { FOOTER_COLUMNS } from "@/constants/navigation";
 
 // footer-light(교회 정보 + 링크열) + legal-band(저작권). canvas 배경, 헤어라인 구분.
@@ -42,16 +44,30 @@ export function SiteFooter() {
             <br />
             {CHURCH_EMAIL}
           </address>
-          {/* 교회 블로그(#51) — 바깥 사이트라 새 탭. 주소가 비면 줄째 숨긴다. 48px 터치 타깃(고령 사용자). */}
+          {/* 교회 블로그(#51) — 바깥 사이트라 새 탭. 주소가 비면 줄째 숨긴다. 48px 터치 타깃(고령 사용자).
+              아이콘은 글자 앞에 장식으로만 둔다 — 아이콘만 두면 고령 사용자가 무엇인지 알아보기 어렵다. */}
           {CHURCH_BLOG_URL ? (
             <a
               href={CHURCH_BLOG_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className={cn(typo.bodyMd, "inline-flex min-h-12 items-center gap-xxs self-start text-body hover:text-ink")}
+              className={cn(typo.bodyMd, "inline-flex min-h-12 items-center gap-xs self-start text-body hover:text-ink")}
             >
+              <NotebookPen size={28} aria-hidden />
               {FOOTER_BLOG_LABEL}
-              <ExternalLink size={20} aria-hidden />
+              <span className="sr-only">(새 탭에서 열림)</span>
+            </a>
+          ) : null}
+          {/* 교회 유튜브 채널 — 블로그 링크와 같은 결(새 탭·48px 터치 타깃). 주소가 비면 줄째 숨긴다. */}
+          {CHURCH_YOUTUBE_URL ? (
+            <a
+              href={CHURCH_YOUTUBE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={cn(typo.bodyMd, "inline-flex min-h-12 items-center gap-xs self-start text-body hover:text-ink")}
+            >
+              <YoutubeIcon size={28} />
+              {FOOTER_YOUTUBE_LABEL}
               <span className="sr-only">(새 탭에서 열림)</span>
             </a>
           ) : null}

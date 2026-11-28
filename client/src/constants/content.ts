@@ -526,6 +526,8 @@ export const MAIN_WORSHIP = {
 
 // 푸터 교회 정보 칸의 블로그 링크 문구(#51).
 export const FOOTER_BLOG_LABEL = "네이버 블로그";
+// 푸터 교회 정보 칸의 유튜브 링크 문구.
+export const FOOTER_YOUTUBE_LABEL = "유튜브 채널";
 
 // 메인 데이터 섹션 타이틀·빈 상태 문구(가이드 13.2 빈 배열 처리) — 콘텐츠 하드코딩 금지(12장).
 export const MAIN_SECTIONS = {

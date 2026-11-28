@@ -549,7 +549,8 @@ portal로 뜨는 동작 컴포넌트(Modal·Sheet·Popover·Select·Dropdown·To
   바깥 사이트라 새 탭 + lucide `ExternalLink` 20px + sr-only "(새 탭에서 열림)". 카드 = `sermon-card` 결(16:9 대표 사진 + 제목 `{typography.title-md}` + 날짜 `{typography.datetime}` `{colors.muted}`),
   3개 — 모바일 1-up, 태블릿 2-up, 데스크톱 3-up. 카드 전체가 블로그 글 새 탭 링크. 분류·요약은 싣지 않는다. 사진 없는 글은 글만.
   글은 교회 네이버 블로그 RSS에서 읽는다(1시간 캐시). 못 읽거나 글이 없으면 **구간째 숨긴다**(빈 상태 문구 없음). 대표 사진은 네이버 서버의 것을 `referrerPolicy="no-referrer"`로 부른다(리퍼러가 붙으면 403).
-  푸터 교회 정보 칸에도 같은 블로그로 가는 텍스트 링크(`{typography.body-md}` `{colors.body}` + `ExternalLink` 20px, 48px 터치 타깃). 블로그 주소 상수가 비면 구간·링크 모두 없다.
+  푸터 교회 정보 칸에도 같은 블로그로 가는 링크(`{typography.body-md}` `{colors.body}` + 글자 앞 lucide `NotebookPen` 28px, 48px 터치 타깃). 블로그 주소 상수가 비면 구간·링크 모두 없다.
+  바로 아래 유튜브 채널 링크도 같은 결(글자 앞 유튜브 로고 28px, 새 탭 + sr-only "(새 탭에서 열림)", 주소 상수가 비면 링크 없다). lucide 1.x에는 브랜드 로고가 없어 `common/YoutubeIcon`(인라인 SVG, `currentColor` — lucide 아이콘 규약 그대로)을 쓴다. 로고는 장식(`aria-hidden`)이라 글자를 함께 둔다.
 
 ### 연출
 - **`media-collage`**: 메인 히어로(14A)와 한 몸인 스크럽 구간(`HeroReveal`). 풀스크린 영상이

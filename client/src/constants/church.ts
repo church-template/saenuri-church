@@ -70,8 +70,10 @@ export const CHURCH_GEO: { latitude: number; longitude: number } | null = {
 // 교회 대표번호 — 담임목사님 휴대폰(교회 결정, 2026-11-12).
 export const CHURCH_PHONE = "010-5415-5061";
 // 교회 대표 이메일 — 도메인 메일이 아니라 실제 사용 중인 주소라 리터럴로 둔다.
-// TODO(교회 확인): 이메일 미수령 — 배포 전 교체
-export const CHURCH_EMAIL = "contact@example.com";
+export const CHURCH_EMAIL = "snrbtc@naver.com";
+
+// 교회 유튜브 채널 — 푸터 링크가 쓴다. 빈 문자열이면 링크가 숨는다(채널 없는 교회).
+export const CHURCH_YOUTUBE_URL = "https://www.youtube.com/channel/UCZr4SBZ41LCRbE4g6UNkOUA";
 
 // 교회 네이버 블로그 — 푸터 링크와 홈 "블로그 새 글" 구간이 쓴다(#51).
 // 둘 다 빈 문자열이면 링크·구간이 통째로 숨는다(블로그 없는 교회).

@@ -1,8 +1,14 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import type { ReactNode } from "react";
-import { CHURCH_NAME, CHURCH_ADDRESS, CHURCH_PHONE, CHURCH_BLOG_URL } from "@/constants/church";
-import { FOOTER_BLOG_LABEL } from "@/constants/content";
+import {
+  CHURCH_NAME,
+  CHURCH_ADDRESS,
+  CHURCH_PHONE,
+  CHURCH_BLOG_URL,
+  CHURCH_YOUTUBE_URL,
+} from "@/constants/church";
+import { FOOTER_BLOG_LABEL, FOOTER_YOUTUBE_LABEL } from "@/constants/content";
 import { FOOTER_COLUMNS } from "@/constants/navigation";
 
 vi.mock("next/link", () => ({
@@ -44,6 +50,14 @@ describe("SiteFooter", () => {
     render(<SiteFooter />);
     const link = screen.getByText(FOOTER_BLOG_LABEL).closest("a");
     expect(link?.getAttribute("href")).toBe(CHURCH_BLOG_URL);
+    expect(link?.getAttribute("target")).toBe("_blank");
+    expect(link?.getAttribute("rel")).toContain("noopener");
+  });
+
+  it("교회 정보 칸에 유튜브 채널 링크가 새 탭으로 열린다", () => {
+    render(<SiteFooter />);
+    const link = screen.getByText(FOOTER_YOUTUBE_LABEL).closest("a");
+    expect(link?.getAttribute("href")).toBe(CHURCH_YOUTUBE_URL);
     expect(link?.getAttribute("target")).toBe("_blank");
     expect(link?.getAttribute("rel")).toContain("noopener");
   });
